@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>FluxBox - TVBox 聚合面板</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <div class="container mx-auto max-w-5xl py-10 px-4">
+        <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm">
+            <div>
+                <h1 class="text-3xl font-extrabold text-blue-600">FluxBox</h1>
+                <p class="text-gray-500">多源脱壳聚合引擎</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="aggregate()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition">同步聚合</button>
+                <button onclick="copyUrl()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition">复制配置地址</button>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <section class="md:col-span-1 bg-white p-6 rounded-xl shadow-sm h-fit">
+                <h2 class="text-xl font-bold mb-4">添加新源</h2>
+                <div class="space-y-4">
+                    <input id="nameInp" type="text" placeholder="源名称 (如: 肥猫)" class="w-full border p-2 rounded-lg focus:outline-blue-500">
+                    <input id="urlInp" type="text" placeholder="源 URL (http://...)" class="w-full border p-2 rounded-lg focus:outline-blue-500">
+                    <button onclick="addSource()" class="w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-black transition">确认添加</button>
+                </div>
+            </section>
+
+            <section class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-xl font-bold mb-4 flex justify-between">
+                    已加载源 <span id="siteCount" class="text-sm font-normal text-blue-500"></span>
+                </h2>
+                <div class="overflow-hidden">
+                    <table class="w-full">
+                        <tbody id="sourceList" class="divide-y divide-gray-100">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

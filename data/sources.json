@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1772243931,
+    "name": "肥猫",
+    "url": "http://肥猫.com/",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": ""
+  },
+  {
+    "id": 1772243954,
+    "name": "饭太硬",
+    "url": "http://www.饭太硬.com/tv",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": ""
+  },
+  {
+    "id": 1772243984,
+    "name": "摸鱼",
+    "url": "http://我不是.摸鱼儿.com/",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": ""
+  },
+  {
+    "id": 1772244015,
+    "name": "王小二",
+    "url": "http://tvbox.王二小放牛娃.top/",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": ""
+  },
+  {
+    "id": 1772255618450,
+    "name": "ok",
+    "url": "http://ok321.top/ok",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": ""
+  }
+]
