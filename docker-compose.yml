@@ -1,12 +1,12 @@
-version: '3.8'
-
 services:
   fluxbox:
-    image: ghcr.io/yourusername/fluxbox:latest
+    # 修改为你的 GitHub 用户名和仓库名（全小写）
+    image: ghcr.io/kronus09/fluxbox:latest
     container_name: fluxbox
     ports:
       - "10504:10504"
     volumes:
+      # 建议：如果想在当前目录下直接看数据，可以用 ./data:/root/data
       - fluxbox_data:/root/data
     restart: unless-stopped
     environment:
