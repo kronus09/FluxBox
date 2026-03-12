@@ -22,7 +22,7 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, "/ui/")
 	})
 
-	// 4. TVBox 聚合接口 (持久化读取)
+	// 4. 影视Box 聚合接口 (持久化读取)
 	r.GET("/config", func(c *gin.Context) {
 		api.Mu.Lock()
 		config := api.MemoryConfig
@@ -34,5 +34,5 @@ func main() {
 	api.RegisterRoutes(r)
 
 	// 6. 启动
-	r.Run(":8080")
+	r.Run(":10504")
 }

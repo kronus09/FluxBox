@@ -21,7 +21,7 @@ func CleanJSON(s string) string {
 	content := s[start : end+1]
 
 	// 3. 移除 JS 风格的单行注释 (// ...)
-	// 很多 TVBox 源为了标注日期会写 // 2024-xx-xx，这会破坏标准 JSON 解析
+	// 很多 影视Box 源为了标注日期会写 // 2024-xx-xx，这会破坏标准 JSON 解析
 	reComments := regexp.MustCompile(`(?m)^\s*//.*$`)
 	content = reComments.ReplaceAllString(content, "")
 

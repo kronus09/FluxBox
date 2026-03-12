@@ -2,46 +2,840 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>FluxBox - TVBox 聚合面板</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FluxBox - 影视Box 聚合</title>
+    <link rel="icon" href="/static/fluxbox.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        header {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        
+        .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 0.75rem;
+            object-fit: cover;
+        }
+        
+        .header-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+        
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .header-desc {
+            font-size: 0.875rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+            height: 44px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .source-list {
+            margin-top: 1rem;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            background: white;
+            transition: all 0.2s;
+        }
+        
+        .source-item:last-child {
+            border-bottom: none;
+        }
+        
+        .source-item:hover {
+            background: #f8fafc;
+        }
+        
+        .source-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+        
+        .source-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 60px;
+            font-size: 0.875rem;
+        }
+        
+        .source-url {
+            font-size: 0.75rem;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+        
+        .source-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .status-badge {
+            padding: 0.125rem 0.375rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-failed {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .error-message {
+            font-size: 0.75rem;
+            color: var(--danger);
+            margin-top: 0.25rem;
+        }
+        
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 0.75rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-delete:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        .btn-edit {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-edit:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+        
+        .site-count {
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+        
+        .config-url {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .url-display {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .aggregation-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .status-text {
+            flex: 1;
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+        
+        .spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .add-source-form {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .add-source-form input[name="name"] {
+            flex: 0 0 150px;
+            min-width: 120px;
+        }
+        
+        .add-source-form input[name="url"] {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .add-source-form button {
+            flex: 0 0 auto;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 1.5rem;
+            border: 1px solid #888;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            margin-bottom: 1rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+                height: 44px;
+                padding: 0 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .aggregation-status {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+            
+            .source-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.375rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            .source-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+            
+            .source-url {
+                width: 100%;
+                white-space: normal;
+                overflow: visible;
+                text-overflow: clip;
+            }
+            
+            .source-status {
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .config-url {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .url-display {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .add-source-form {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            
+            .add-source-form input {
+                width: 100%;
+                flex: none;
+                height: 44px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .logo {
+                width: 48px;
+                height: 48px;
+            }
+            
+            .header-text {
+                width: 100%;
+            }
+            
+            .header-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-    <div class="container mx-auto max-w-5xl py-10 px-4">
-        <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm">
-            <div>
-                <h1 class="text-3xl font-extrabold text-blue-600">FluxBox</h1>
-                <p class="text-gray-500">多源脱壳聚合引擎</p>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="aggregate()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition">同步聚合</button>
-                <button onclick="copyUrl()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition">复制配置地址</button>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="/static/fluxbox.png" alt="FluxBox Logo" class="logo">
+                <div class="header-text">
+                    <div class="header-title">
+                        <h1>FluxBox</h1>
+                        <p class="header-desc">多源脱壳聚合引擎</p>
+                    </div>
+                </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <section class="md:col-span-1 bg-white p-6 rounded-xl shadow-sm h-fit">
-                <h2 class="text-xl font-bold mb-4">添加新源</h2>
-                <div class="space-y-4">
-                    <input id="nameInp" type="text" placeholder="源名称 (如: 肥猫)" class="w-full border p-2 rounded-lg focus:outline-blue-500">
-                    <input id="urlInp" type="text" placeholder="源 URL (http://...)" class="w-full border p-2 rounded-lg focus:outline-blue-500">
-                    <button onclick="addSource()" class="w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-black transition">确认添加</button>
+        <div class="card">
+            <h2>聚合操作</h2>
+            <div class="btn-group">
+                <button onclick="aggregate()" class="btn btn-success">同步聚合</button>
+                <div class="aggregation-status" id="aggregationStatus">
+                    <div class="status-text" id="statusText">就绪 - 点击开始同步</div>
                 </div>
-            </section>
+            </div>
+            <div class="config-url">
+                <button onclick="copyUrl(this)" class="btn btn-primary">复制订阅</button>
+                <div class="url-display" id="configUrl">http://localhost:8080/config</div>
+            </div>
+        </div>
 
-            <section class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm">
-                <h2 class="text-xl font-bold mb-4 flex justify-between">
-                    已加载源 <span id="siteCount" class="text-sm font-normal text-blue-500"></span>
-                </h2>
-                <div class="overflow-hidden">
-                    <table class="w-full">
-                        <tbody id="sourceList" class="divide-y divide-gray-100">
-                            </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
+        <div class="card">
+            <h2>添加新源</h2>
+            <div class="add-source-form">
+                <input type="text" name="name" id="nameInp" placeholder="源名称 (如: 肥猫)">
+                <input type="text" name="url" id="urlInp" placeholder="源 URL (http://...)">
+                <button onclick="addSource()" class="btn btn-primary">确认添加</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                已加载源 <span id="siteCount" class="site-count">已聚合 0 个站点</span>
+            </h2>
+            <div class="source-list" id="sourceList">
+                <!-- 源列表将通过 JavaScript 动态生成 -->
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>FluxBox by kronus09 | 多源脱壳聚合引擎</p>
+        </div>
     </div>
-    <script src="/static/js/main.js"></script>
+
+    <!-- 修改源模态框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">修改源</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <input type="text" id="editName" placeholder="源名称">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="editUrl" placeholder="源 URL">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeEditModal()" class="btn btn-primary" style="background: #64748b;">取消</button>
+                <button onclick="saveSource()" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function refresh() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                document.getElementById('siteCount').innerText = `已聚合 ${data.site_count} 个站点`;
+                
+                // 更新聚合状态
+                if (data.is_running) {
+                    updateStatus('同步中 - 正在处理源数据...', true);
+                } else {
+                    updateStatus('就绪 - 点击开始同步', false);
+                }
+                
+                const list = document.getElementById('sourceList');
+                list.innerHTML = data.sources.map(s => `
+                    <div class="source-item">
+                        <div class="source-info">
+                            <div class="source-name">${s.name}</div>
+                            <div class="source-url">${s.url}</div>
+                        </div>
+                        <div class="source-status">
+                            <span class="status-badge ${s.last_status === 'success' ? 'status-success' : s.last_status === 'failed' ? 'status-failed' : 'status-pending'}">
+                                ${s.last_status === 'success' ? '在线' : s.last_status === 'failed' ? '错误' : '待同步'}
+                            </span>
+                            <button onclick="editSource(${s.id}, '${s.name}', '${s.url}')" class="btn-edit">修改</button>
+                            <button onclick="delSource(${s.id})" class="btn-delete">删除</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('刷新失败:', error);
+            }
+        }
+
+        async function addSource() {
+            const name = document.getElementById('nameInp').value;
+            const url = document.getElementById('urlInp').value;
+            if (!name || !url) {
+                alert('请填写完整');
+                return;
+            }
+            
+            try {
+                await fetch('/api/add', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name, url })
+                });
+                document.getElementById('nameInp').value = '';
+                document.getElementById('urlInp').value = '';
+                refresh();
+            } catch (error) {
+                console.error('添加失败:', error);
+                alert('添加失败，请重试');
+            }
+        }
+
+        async function delSource(id) {
+            if (!confirm('确定删除?')) return;
+            try {
+                await fetch(`/api/delete/${id}`, { method: 'DELETE' });
+                refresh();
+            } catch (error) {
+                console.error('删除失败:', error);
+                alert('删除失败，请重试');
+            }
+        }
+
+        function editSource(id, name, url) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editUrl').value = url;
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        async function saveSource() {
+            const id = parseInt(document.getElementById('editId').value);
+            const name = document.getElementById('editName').value;
+            const url = document.getElementById('editUrl').value;
+            
+            if (!name || !url) {
+                alert('请填写完整');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/update', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ id: id, name: name, url: url })
+                });
+                
+                const result = await response.json();
+                console.log('更新响应:', result);
+                
+                if (response.ok) {
+                    closeEditModal();
+                    refresh();
+                } else {
+                    alert('修改失败: ' + result.error);
+                }
+            } catch (error) {
+                console.error('修改失败:', error);
+                alert('修改失败，请重试');
+            }
+        }
+
+        async function aggregate() {
+            try {
+                updateStatus('正在启动同步 - 准备抓取源数据...', true);
+                await fetch('/api/aggregate', { method: 'POST' });
+                
+                // 定期检查同步状态
+                const checkStatus = async () => {
+                    try {
+                        const res = await fetch('/api/status');
+                        const data = await res.json();
+                        if (data.is_running) {
+                            updateStatus('同步中 - 正在聚合站点数据...', true);
+                            setTimeout(checkStatus, 1000);
+                        } else {
+                            updateStatus('同步完成 - 已更新聚合配置', false);
+                            // 延迟一下再刷新，确保数据已更新
+                            setTimeout(refresh, 500);
+                        }
+                    } catch (error) {
+                        console.error('检查状态失败:', error);
+                        updateStatus('同步失败 - 请检查网络连接', false);
+                    }
+                };
+                
+                // 开始检查状态
+                setTimeout(checkStatus, 1000);
+            } catch (error) {
+                console.error('聚合失败:', error);
+                updateStatus('同步失败 - 请检查网络连接', false);
+            }
+        }
+
+        function updateStatus(text, isLoading) {
+            const statusDiv = document.getElementById('aggregationStatus');
+            const statusText = document.getElementById('statusText');
+            
+            statusText.textContent = text;
+            
+            // 移除现有的 spinner
+            const existingSpinner = statusDiv.querySelector('.spinner');
+            if (existingSpinner) {
+                existingSpinner.remove();
+            }
+            
+            // 添加 spinner
+            if (isLoading) {
+                const spinner = document.createElement('div');
+                spinner.className = 'spinner';
+                statusDiv.appendChild(spinner);
+            }
+        }
+
+        function copyUrl(button) {
+            const url = window.location.origin + '/config';
+            
+            // 尝试使用现代剪贴板API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showCopySuccess(button);
+                }).catch(() => {
+                    // 降级到传统方法
+                    fallbackCopyTextToClipboard(url, button);
+                });
+            } else {
+                // 降级到传统方法
+                fallbackCopyTextToClipboard(url, button);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            
+            // 设置样式使其不可见
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess(button);
+                } else {
+                    showCopyError(button);
+                }
+            } catch (err) {
+                showCopyError(button);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+        
+        function showCopySuccess(button) {
+            const originalText = button.textContent;
+            button.textContent = '已复制';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 3000);
+        }
+        
+        function showCopyError(button) {
+            const originalText = button.textContent;
+            button.textContent = '复制失败';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 3000);
+        }
+
+        // 初始化配置地址显示
+        function initConfigUrl() {
+            const url = window.location.origin + '/config';
+            document.getElementById('configUrl').textContent = url;
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 初始加载和定时刷新
+        initConfigUrl();
+        refresh();
+        setInterval(refresh, 5000);
+    </script>
 </body>
 </html>

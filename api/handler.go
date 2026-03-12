@@ -222,3 +222,24 @@ func TriggerAggregate(c *gin.Context) {
 	go RunAggregation()
 	c.JSON(200, gin.H{"message": "任务已启动"})
 }
+
+// UpdateSource Handler: 更新源
+func UpdateSource(c *gin.Context) {
+	var item models.SourceItem
+	if err := c.ShouldBindJSON(&item); err != nil {
+		c.JSON(400, gin.H{"error": "无效输入"})
+		return
+	}
+	Mu.Lock()
+	defer Mu.Unlock()
+	for i, s := range MemorySources {
+		if s.ID == item.ID {
+			MemorySources[i].Name = item.Name
+			MemorySources[i].URL = item.URL
+			saveSourcesToFile()
+			c.JSON(200, gin.H{"message": "更新成功"})
+			return
+		}
+	}
+	c.JSON(404, gin.H{"error": "未找到该源"})
+}

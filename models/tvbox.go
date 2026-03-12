@@ -1,6 +1,6 @@
 package models
 
-// TVConfig 是 TVBox 配置的顶层结构
+// TVConfig 是 影视Box 配置的顶层结构
 type TVConfig struct {
 	Spider    string   `json:"spider"`
 	Wallpaper string   `json:"wallpaper"`

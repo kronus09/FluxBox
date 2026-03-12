@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  fluxbox:
+    image: ghcr.io/yourusername/fluxbox:latest
+    container_name: fluxbox
+    ports:
+      - "10504:10504"
+    volumes:
+      - fluxbox_data:/root/data
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+
+volumes:
+  fluxbox_data:

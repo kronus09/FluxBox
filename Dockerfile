@@ -20,7 +20,7 @@ COPY --from=builder /app/web ./web
 # 创建持久化目录
 RUN mkdir data
 
-EXPOSE 8080
+EXPOSE 10504
 VOLUME ["/root/data"]
 
 CMD ["./fluxbox"]

@@ -1,960 +1,14 @@
 {
-  "spider": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60",
+  "spider": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62",
   "wallpaper": "https://pic1.aj7.cloud/2024/02/14/65cc5c76c024d.jpg",
   "logo": "",
   "sites": [
     {
-      "key": "fb_1772255618450_豆瓣",
-      "name": "🤓公众号┃OK杰克 (关注不迷路)",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "Douban"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_配置中心",
-      "name": "👨‍🍳‍配置┃中心",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "Config"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_本地播放",
-      "name": "🐼本地┃播放",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "Local"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_二小",
-      "name": "🦢二小┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "ErXiao"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_双星",
-      "name": "🤩双星┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Star2"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_玩偶",
-      "name": "👽玩偶┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Wogg"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_立播版",
-      "name": "🌟立播┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Libvio"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_蜡笔",
-      "name": "👠蜡笔┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Labi"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_木偶",
-      "name": "🪵木偶┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Muou"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_多多",
-      "name": "🪅多多┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "DuoDuo"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_小飒",
-      "name": "💒小飒┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Xsayang"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_至臻",
-      "name": "💌至臻┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "ZhiZhen"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_虎斑",
-      "name": "🐯虎斑┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "HuBan"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_SeedHub",
-      "name": "🍀种子┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "SeedHub"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_光影",
-      "name": "🎥光影┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Guanying"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_云集",
-      "name": "🍊云集┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "YunJi"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_盘他",
-      "name": "🎸盘他┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Panta"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_海绵",
-      "name": "🧽海绵┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "HaiMian"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_雷鲸",
-      "name": "🐳雷鲸┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "LeiJing"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_123分享",
-      "name": "🌂123┃4K",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Time123"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_瓜子",
-      "name": "🍉瓜子┃App",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Guazi"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_文才",
-      "name": "🌺文才┃在线",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Jpys"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_糯米",
-      "name": "🍓糯米┃秒播",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Nmys"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_热播",
-      "name": "📺热播┃App",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "site": 0,
-        "sp": "TianTian"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_雄鹰",
-      "name": "🦅雄鹰┃App",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "XiongYing"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_奇奇",
-      "name": "🐵奇奇┃App",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "QiQi"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_紫金",
-      "name": "🍇紫金┃App",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "siteUrl": "https://www.zjcvod.com",
-        "sp": "AppFox"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_独播",
-      "name": "👠独播┃直连",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Duboku"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_厂长",
-      "name": "📔厂长┃直连",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Czzy"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_csp_Btt",
-      "name": "🌞比特┃在线",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "ext": {
-        "sp": "Btt"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_荐片",
-      "name": "⚔️荐片┃手机",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Jianpian"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_韩圈",
-      "name": "🦄韩圈┃App",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "HanXiaoQuan"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的夸克",
-      "name": "🗽我的┃夸克",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "MyQuark"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的UC",
-      "name": "😼我的┃UC",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "MyUc"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的百度",
-      "name": "☘️我的┃百度",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "MyBaidu"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的123",
-      "name": "🌂我的┃123",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "My123"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的天逸",
-      "name": "🧽我的┃天逸",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "My189"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的115",
-      "name": "🌷我的┃115",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "My115"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_我的阿里",
-      "name": "🐱我的┃阿里",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "MyAli"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_️爱看Bot",
-      "name": "⛅️爱看┃直连",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Ikanbot"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_电影天堂",
-      "name": "🎞️天堂┃采集",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
-        "sp": "Caiji"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_量子",
-      "name": "📷量子┃采集",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8/at/m3u8/",
-        "sp": "Caiji"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_盒马短剧",
-      "name": "🦓盒马┃短剧",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "HeMa"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_星芽短剧",
-      "name": "💖星芽┃短剧",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "AppXY"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_碎片短剧",
-      "name": "🧸碎片┃短剧",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "SuiPian"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_甜圈短剧",
-      "name": "🌸甜圈┃短剧",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "TianQuan"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_动漫巴士",
-      "name": "🚌巴士┃动漫",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Dm84"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_新6V",
-      "name": "🧲新6V┃磁力",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "ext": {
-        "sp": "Xb6v"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_快手直播",
-      "name": "😎快手┃直播",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "filterable": 1,
-      "ext": {
-        "sp": "KsLive"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_虎牙直播",
-      "name": "🐯虎牙┃直播",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "filterable": 1,
-      "ext": {
-        "sp": "Huya"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_瓜子看球",
-      "name": "⚽瓜子┃看球",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "GzSport"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_88看球",
-      "name": "⚽88┃看球",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "Kanqiu"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_爱听音乐",
-      "name": "🎧爱听┃音乐",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "AiMusic"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_易听音乐",
-      "name": "🎧易听┃音乐",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "ShiJiMusic"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_酷狗音乐",
-      "name": "🐕酷狗┃音乐",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "ext": {
-        "sp": "KuGou"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_世界听书",
-      "name": "🎸世界┃听书",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "ext": {
-        "sp": "BookTing"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_六月听书",
-      "name": "🎤六月┃听书",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "ext": {
-        "sp": "WeiTing"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_bilimd",
-      "name": "🅱哔哩┃影视",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Bilimd"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_bili",
-      "name": "🅱哔哩┃合集",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/57EAD2E_773_bili_20251204145747516newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_biliych",
-      "name": "🅱哔哩┃歌曲",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "filterable": 1,
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/28CD73E_773_biliych_20251204150624308newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_bilixs",
-      "name": "🅱哔哩┃相声",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "filterable": 1,
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/C7FB4B_773_bilixs_20251204150416832newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_bilixp",
-      "name": "🅱哔哩┃小品",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "filterable": 1,
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/41F4D38_773_bilixp_20251204150443351newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_少儿教育",
-      "name": "📚少儿┃教育",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/32EF375_773_bilisejy_20251204150311837newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_小学课堂",
-      "name": "📚小学┃课堂",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/3753221_773_bilixxkt_20251204150347660newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_初中课堂",
-      "name": "📚初中┃课堂",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/3ED04A6_773_biliczkt_20251204150157889newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_高中教育",
-      "name": "📚高中┃课堂",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/531DD35_773_biligzkt_20251204150243460newMediaFile.bmp",
-        "sp": "Bili"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_csp_AListGuard",
-      "name": "🦋AList",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "json": "file://TV/alist.json",
-        "sp": "AList"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_csp_QuPanSouGuard",
-      "name": "🤓趣盘┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "QuPanSou"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_太极",
-      "name": "☯️太极┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "TaiChi"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_糖果搜",
-      "name": "🍬糖果┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "TaiChi"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_影链",
-      "name": "🎞️影链┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "YingLian"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_音海",
-      "name": "🎸音海┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "YinHai"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_爱盘",
-      "name": "❤️爱盘┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "AiPan"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_云搜",
-      "name": "☁️云搜┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "YunPanPan"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_度搜",
-      "name": "🦈度搜┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Bdxd"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_找盘",
-      "name": "🎾找盘┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "V2Pan"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_djps",
-      "name": "🔍短剧┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Djps"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_djso",
-      "name": "🔍剧搜┃搜索",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": {
-        "sp": "Djso"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
-      "key": "fb_1772255618450_push_agent",
-      "name": "🛴手机┃推送",
-      "type": 3,
-      "api": "csp_AweSomeGuard",
-      "ext": {
-        "sp": "Push"
-      },
-      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
-    },
-    {
       "key": "fb_1772243954_点我切源",
-      "name": "新春大吉 马到成功！新公众号【太太太硬了】",
+      "name": "修复所有，新公众号【太太太硬了】",
       "type": 3,
       "api": "csp_DouDouGuard",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_MDrive",
@@ -965,7 +19,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_玩偶",
@@ -977,14 +31,14 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_YGP",
       "name": "🚀叨观荐影┃预告片",
       "type": 3,
       "api": "csp_YGPGuard",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_MTV1",
@@ -992,7 +46,7 @@
       "type": 3,
       "api": "csp_MusicGuard",
       "searchable": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_seed",
@@ -1002,7 +56,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "5++kwLhNYm9UrO9wh7Dl7eKamTee4s/5",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_ZPan",
@@ -1013,7 +67,7 @@
       "ext": {
         "siteUrl": "http://38.55.131.86:82/"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_云播",
@@ -1023,7 +77,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOIzPkSUkANv6AT2prC8en3+Trbx4j10CIoZMv3Ag4bdEYQqTMqu/Z3YPtC2NJv6n6YeZdgyWlo4WJjBL5gUt6B7LvCEDT4CKrShL75AiGhjhdkfX0cfnI/kIpThjDhEZ0lc8r7irE4mRMelQz4llfmVMCtjIFNIHP1T3XqwSmYZd34DfAtnkbgrpiMBiYW36CCI5rTkC3Rtg1wQQjazUZyVHx4Zz5bWbmPv4G8q7PfHWYStVeDannVT2lmLzKbGEDahyxvLhNZRjXO5rPlruB0ydDcR/e/g5nx8N3JhG0oucfv6xVDl0XxYy0K2bY3plgqx32kfnS63xa8sQDbGlYoPtdHQCi2cAvEOaqMb5a6r2D3yvcLXYLjk37CJgQObzK0bCggZPm3B3YenAuunxl5OQmXrzLHjys6I2isL5AwTS2YAjD/R3f4FYWBp+4RdwMBAChatxjEHcaFhCUb0nfTgYKQ4a1pZ4j6+d4YHa0GaMYHO5NZQ0tDRZfAZPcfYaWLSW8iIUx6G2e0JnI6bLAN1TR0AVer8lxfU0zAzAODbKVrt8Oafq0IQ6MeGFcFRGMu4QWrzaublQ==",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_立播",
@@ -1035,7 +89,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_奶酪",
@@ -1045,7 +99,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOIzPkSUkANv6AT2prC8en3+TzKx9TnlT8vaY37HhtYfAQe6C5xqrVuJPhQwYV6r3eRdMBGm3Qm6Th+BushR86B6KqJGXDsHazHw7alBG/7zUxkN1tK/NypRxnpBNoeUtpw4jcCGhytI75yO4g4zG6SOPA0RSwhksM0IF2friAkrHCWoW3v+0mdw6sjz4t4XB1Df7yL/R5cfaA/5LQYq3I8OkvMrJMU9Q1P7JXwx7NSF2zTyH/ANVmZ4u5m567DW1KVG7OuQjXPjZiOXTYk0+wjpfBRTf19yIq6q/C76k2Fs80joAMPw0ueDR+QHxtuDcTom2rmHkI1Fonkzi6BotbpUcbSi4PiIgmfdbvVwhG6Z+i4nvt+IYa48l5aLA7PLgDiERpuOs31aHaXlgFswT87XyTb8QaF4CuzKWJuXptwNTjvXAS9KHdxH49Ay+hfBAB2bCvUf4CMoldF2wZUv0mI2qY966erFpOFg+FOc7t88EUH8j8ACXQtHJiKC9RQ+SaLIF0=",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_厂长",
@@ -1054,7 +108,7 @@
       "api": "csp_NewCzGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_文采",
@@ -1063,7 +117,7 @@
       "api": "csp_JpysGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_原创",
@@ -1072,7 +126,7 @@
       "api": "csp_YCyzGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_比特",
@@ -1081,7 +135,7 @@
       "api": "csp_BttwooGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_热播",
@@ -1091,7 +145,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "uqGL1bNENExT7/hGxpSE5qU=",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_糯米",
@@ -1100,7 +154,7 @@
       "api": "csp_NmyswvGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_剧圈",
@@ -1110,7 +164,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOb1uAWbkRHp7hdxprG9un3+S3T18333j8hL4ryEFdPZxse8yYwoKFyJOlU2M9/q2OcL8NQxT0k5GV9Quw0AIzUurGBVyPqCLrdirfpAz+n0Qh7PVBWo8uxWhO1Bs1MCYA1oiM=",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_光影",
@@ -1119,8 +173,8 @@
       "api": "csp_AppNoxGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "ext": "rfOK0+FRORAJ7epFjN2Fu+P28G+ZmI+4lWJhI8G1X0oOORAJ9GV87aJ0e7pS1MRysGWZdpZOyWEwqycyCv8/EM/eovjVCCnyVL/Snb60T3H52VBwcwQWv43+HUeuF84cUpc9shojUwGrQqGljWWfTbQzjT8lV03wOBqSlbdOG+4zvmJFFepNRIsydhdA3eyrx7Xu+jopSKU/b8CRWR3IF9mcj/jfvoHHQdOcaitScnIxBX5xb/Ngs8dPV3J59b4ewfJJh30=",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "ext": "rfOK0+FRORAJ7epFxdCFsrm0/2nAxc70wWkxet+pQQpHMwhf/CRws7twcbpNxtN8/yjNZ8NQzGtzsy0lRr5gUtCK/bOBCDvyG/+F1ve0Bj6jmQE2NlRfv8SxRwTxU45UAvc9pBtZKX6tTayriWHgSshJhEMsXzL4QRntnc9EHu88tRxNG+g1T/dGf2o7p5ejvMua/kJQMaFEZLLlU27CHaznhfTUu4POT9SXEy0rdH1Kfw4KEPsYuMpYFA==",
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_视界",
@@ -1130,7 +184,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOK0+FRORAJ7epFjN2FsOb0+G+dnI21lWFvI8G1X0oOORAJ9GV87aJ0e7pO1NFrtWjZfNRTjiJz92xnFP1qSozOqvjICH+mT6DW1uW0R2X+2VBkbwRN8JHlF0G6Fd5MCZdG0mBWVATZOKbUiB7mOcxNiEUrUDSBQmHp7MgwFZU4ymgyH+IwTPJPAh4+opPawrLh/T1YM6tDZLjgXhrGY9bs9/7QsIu1PqvuECJRdAZEDnRzG/wRyMxOU3sE8rYTzu0M",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_播客",
@@ -1140,7 +194,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOb1uAWbkRHp7hdxprG9un3+SDcz8rnlT83d5z3FhMaeEUUqDo3pqx1fbpMycIs9SKEeN0FligzxT55OaAlO5qM0+WFfzCsCLA=",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_猫猫",
@@ -1150,7 +204,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOX1voDIQhH8epBwpmIsuStr2HSytK11WwwcM/+XB8SbkBB4XYk/L52LroCiYRhoDrRLJ4ZkCh5q2RxCb5yUs6B5aCQVGSkR6zDgKLrFSDulg==",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_爱影",
@@ -1160,7 +214,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOb1uAWbkRHp7hdxprG9un3+T/f39S8zDAiZ5+3AB0bcUIX63E2s7EhOq5X1M8s5yKOeMNFwX1htW9jAal7Rc+duvLCVGCiCPOCxu3v",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_奥特",
@@ -1169,7 +223,7 @@
       "api": "csp_AueteGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_荐片",
@@ -1178,7 +232,7 @@
       "api": "csp_JPJGuard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_新6V",
@@ -1188,7 +242,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "https://www.xb6v.com/",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_咕咕",
@@ -1198,7 +252,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "rfOX1voDIQhH8epBwpmIsuS/sSCZxc/l0mxkeoroQVYOelMAvX1kuYptSLB36YxEjVawS9p37Cgo",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_Dm84",
@@ -1207,7 +261,7 @@
       "api": "csp_Dm84Guard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_Anime1",
@@ -1216,14 +270,14 @@
       "api": "csp_Anime1Guard",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_88",
       "name": "⚽88┃看球",
       "type": 3,
       "api": "csp_Sir88Guard",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_超全",
@@ -1231,14 +285,14 @@
       "type": 3,
       "api": "csp_ZbzGuard",
       "ext": "uqGL1fpJNAUf8fdTwZCE5qSp+Q==",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_看球",
       "name": "⚽手机┃看球",
       "type": 3,
       "api": "csp_KanqiuGuard",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_MTV",
@@ -1248,21 +302,21 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/5af5fbe12a88b7c45aa1c21e6551826c.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_有声小说",
       "name": "🎧有声┃小说",
       "type": 3,
       "api": "csp_Tingshu275Guard",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_Aid",
       "name": "🚑急救┃教学",
       "type": 3,
       "api": "csp_FirstAidGuard",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_虎牙js",
@@ -1271,7 +325,7 @@
       "api": "https://gh-proxy.com/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/drpy2.min.js",
       "searchable": 1,
       "ext": "https://gh-proxy.com/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/虎牙.js",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_斗鱼js",
@@ -1280,7 +334,7 @@
       "api": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/drpy2.min.js",
       "searchable": 1,
       "ext": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/斗鱼直播.js",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_抠搜",
@@ -1292,7 +346,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_UC",
@@ -1304,20 +358,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
-    },
-    {
-      "key": "fb_1772243954_YiSo",
-      "name": "😹易搜┃三盘",
-      "type": 3,
-      "api": "csp_YiSoGuard",
-      "searchable": 1,
-      "quickSearch": 1,
-      "ext": {
-        "Cloud-drive": "tvfan/Cloud-drive.txt",
-        "yiSoCookie": "satoken=4437cb8c-a260-411b-9a0d-1fa622ab422f"
-      },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_米搜",
@@ -1329,7 +370,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_YpanSo",
@@ -1341,7 +382,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_push_agent",
@@ -1351,7 +392,7 @@
       "ext": {
         "Cloud-drive": "tvfan/Cloud-drive.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_Bili",
@@ -1362,7 +403,7 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/0075389dca9afadd4614e9713765ff17.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_Biliych",
@@ -1372,7 +413,7 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/6496356286589c68f52c2f99c0c674c7.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_dr_兔小贝",
@@ -1380,7 +421,7 @@
       "type": 3,
       "api": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/drpy2.min.js",
       "ext": "https://git.yylx.win/https://raw.githubusercontent.com/fantaiying7/EXT/refs/heads/main/%E5%85%94%E5%B0%8F%E8%B4%9D.js",
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_少儿教育",
@@ -1390,7 +431,7 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/89370c8ddf36b5e1beb4d71adb921bda.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_小学课堂",
@@ -1400,7 +441,7 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/d7a21cf34ede56f5c686ecfba5fc7e3f.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_初中课堂",
@@ -1410,7 +451,7 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/8f55d520f8d70056695740ef151744a7.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_高中教育",
@@ -1420,7 +461,7 @@
       "ext": {
         "json": "https://nos.netease.com/ysf/c66a4b5356141c49fd45ec51568017b4.txt"
       },
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_fan",
@@ -1428,7 +469,7 @@
       "type": 3,
       "api": "csp_XPathGuard",
       "searchable": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243954_cc",
@@ -1436,7 +477,7 @@
       "type": 3,
       "api": "csp_XPathGuard",
       "searchable": 1,
-      "jar": "https://oss4liview.moji.com/thd_file/2026/02/20/b5bb5a60fbb9b26fe6f59ac609fca9ce.jpg;md5;32091ed00f3c6bab72ba657bdc1599c8"
+      "jar": "https://oss4liview.moji.com/thd_file/2026/03/05/03cf80ef9827fab0712e532237d6b1fe.jpg;md5;f7b4591247c805e87dfa1fd5e2bbee62"
     },
     {
       "key": "fb_1772243984_Douban",
@@ -1444,15 +485,15 @@
       "type": 3,
       "api": "csp_Douban",
       "filterable": 1,
-      "ext": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/2026/doudou.txt",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/BdRa/douban.json",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishConfig",
       "name": "设置｜中心",
       "type": 3,
       "api": "csp_FishConfig",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_YGP",
@@ -1462,7 +503,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Wogg",
@@ -1480,7 +521,7 @@
           "https://woggpan.888484.xyz"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishMuou",
@@ -1496,7 +537,7 @@
           "https://www.muou.asia"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishPs",
@@ -1504,7 +545,7 @@
       "type": 3,
       "api": "csp_FishPs",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_bili",
@@ -1516,7 +557,7 @@
       "ext": {
         "cookie": ""
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Zwqf",
@@ -1526,9 +567,9 @@
       "searchable": 1,
       "ext": {
         "token": "moyu996",
-        "url": "https://fishapi.wya6.com/fish/zui/moyu.php"
+        "url": "https://fishapi.wya6.com/fish/qingfeng/moyu.php"
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_zhiqiu",
@@ -1537,15 +578,7 @@
       "api": "csp_zhiqiu",
       "searchable": 1,
       "ext": "https://fishapi.wya6.com/fish/zhiqiu.php",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
-    },
-    {
-      "key": "fb_1772243984_Symx",
-      "name": "山有｜木兮",
-      "type": 3,
-      "api": "csp_Symx",
-      "ext": "https://film.symx.club",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Kan360",
@@ -1560,7 +593,7 @@
           "https://jx.xmflv.com/?url="
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Rebo",
@@ -1572,77 +605,103 @@
       "ext": {
         "url": "http://v.rbotv.cn"
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
-      "key": "fb_1772243984_金牌Nox",
-      "name": "金牌｜APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "AZxQT8xfUMqFweKa1V4hqUkv/e/3ERhqqXMAhGAJj67FGQPn650EXO/awjdB0issnrNYdvWwFjG80BpTMzwZj+dahbCZ/nMD+qGLBWJPtthB/R2dhoV3qZI9IY3IpgKqngVtr5WylTOS6ehNNfQB5sfCXD+h61biz7mVZjOQb/7+QDN+yNdcEdmMx/qF+gs1Q2Fh+MpJ7pKkgF2IHkzjg0Drfz66sQqtQlRUEHTd2p4HAWJWA9V9Ls1IA5+yQSYswf8P0dhe72kh4HrOtFk33gksqipcmjcBTHnr+3dT9tgSiX9CPUIVs79NEckA7crAQ3Sg3WI7LfzOAAbm2a+S4k+xFzXRYpFNPuR/qi8Yc98vspokzONekkKjSMESB7Y6O/VMf1wjEcyMqI5d2y2v6Yo=",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
-    },
-    {
-      "key": "fb_1772243984_魔方",
-      "name": "魔方｜APP",
+      "key": "fb_1772243984_晚吟",
+      "name": "晚吟｜APP",
       "type": 3,
       "api": "csp_AppGet",
       "searchable": 1,
-      "ext": "bB1iyOjtXWh234iOsqOpQ+DjgYRZW8TG8cxUqpxxK69Bp+glCgEE/kF5sOjSfZVtInmtaWIxfpMHTQ7tRS1J46/t6qvA/G5Vo6WHm5blH6Rh7Ev5Z9sCJDAQfJhaTFVr",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "AS489lHIPXXnFM64nq+j83AKsZBAWHJxiolcdAQhVx+XVHnaLVj3OiTSytruFyLqxsmm1AhgdalU+scPnz4hkUu01Ppy9Ttysn+LieUGod/lwmSMJ4CVW/EDO33YUhidr+lqJcnx7APcA2mG4Y+5AmEYH2Wol6qcFUo1sogtH+iYZ/YXtoPKCywF1JMyBjfj7Pn83+MTjKTUrb53bT4gJlw=",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
-      "key": "fb_1772243984_驿站",
-      "name": "驿站丨APP",
+      "key": "fb_1772243984_厌离",
+      "name": "厌离｜APP",
       "type": 3,
       "api": "csp_AppGet",
       "searchable": 1,
-      "ext": "pWLjYsLv1mpiSv+WqFNaIm66mYd3wj8hTGH18iQWPMOsJQb0GzUsB8gINUmUt9ktN2asJBwog2UGrTKUT2iY8NRz8qdgv5ctIC4NHKNarxWpwJPC52QcuqpdWKb8HK5mKYzOD7hj1nFrKL2gyacGOuMvUnqtIF5tWCjfnMws2K5omAGxO4lwWXOv7klFBE5q",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "AQ8xy13uUB+vU0X5VQoLoHQ0PbaWVadAyXpMKT4lGXmz4P8/XgMiirPtAaVdXwlAm5uF7AEvL3DXQh1rGvz8VkkK/iJRxAipX1t/HMeh8FiNDuXLu5Z6IRNARKpTACYVrIClJSw/mWpypTq/VHPWokB3OA8LPPKPaOao8P8nVbJ8xyA50XNWEVFnl2cVRf3xMlAzAZVOwhnDWXYRcDjo8oE=",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
-      "key": "fb_1772243984_奇奇",
-      "name": "奇奇｜APP",
+      "key": "fb_1772243984_枫眠",
+      "name": "枫眠｜APP",
+      "type": 3,
+      "api": "csp_AppGet",
+      "searchable": 1,
+      "ext": "ASeCaY5Xxcx0BdbJGIqllhkRBuCPwC/Kv1uDvURkfncW+fNupjJjBKERvDuCKL7Nc8bCYJ/Fboktq3geJgU0aE2SxOjoiU03IEtvv1np76XEOBn7dBJNwW8toIqv9PBY9T18yzCX3DoyksVEv01kRtBDqSTgbilbqOHhtNEm+L3ti2PLM08SEhkA/nE//PAwfIVtUWhsYKorNLuB7RxQ2Egqj4D7q7Tw3sH/yNbHthqw",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
+    },
+    {
+      "key": "fb_1772243984_琼林",
+      "name": "琼林｜APP",
+      "type": 3,
+      "api": "csp_AppGet",
+      "ext": "AbxTsrfXTR/X02mKKEFlZ2mWBxkBXDz8hy/1cKUHgVgXe7rjelHgtwVvIUbOOUsniZ2R2mEZVcH1l2nV6ocpV/LkgiCf7uP+GGfv4UBgx4LJ7J9wcc3rHbSA8Fs+DAWFykFa1o37Y/mwDRr/ikbof52Zs7e+qldp4sT/ixG0tvBw7V9zMA0YD8q3rQFc0TZf83MLE+P1y7/q4J8msjy3jx4=",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
+    },
+    {
+      "key": "fb_1772243984_思追",
+      "name": "思追丨APP",
+      "type": 3,
+      "api": "csp_AppGet",
+      "searchable": 1,
+      "ext": "AZMWjtBVHqg1eqc24zPBCnp+8nUMJ1DhABffeziVNB/hZ1AHDr9HynmQ7Hea0MJa9TQvImvwo+VcBjCulptXIj6796jroFgU16XtcGODMtfDJ8RJjrEa+2QJ1eVamXkB+N3GrowCHjQsVd5GK4QAxVeW7oVMa/kmxFpF4XWFHhz5YGcXOSxIhznhRlZln5Ap8sol6sjWUfBhblNbLgjDBzKdTxu/NjbUZFhO8y6IP8SZhvrY0CxMo8/Kp6AnCYGRyA==",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
+    },
+    {
+      "key": "fb_1772243984_忘机",
+      "name": "忘机｜APP",
       "type": 3,
       "api": "csp_AppQi",
       "quickSearch": 1,
       "filterable": 1,
-      "ext": "pWLjYsLv1mpiSv+WqFNaIkNDN8GUdrdHxZ3pBjorHTjYgR7KXXNFLGVkC9G50eeOLXtQy0ZDMb5f9pwYF7Vc6Wl4MkeDSUfZOTSVUMii296I02zMM5F2ary/97eVkmT0Y6FOe5TM3GzGIIdjctS4LsH18RBl6ndQqhmjeYb08l26YdnRobA7AzNqrcIRezchhBckk7QhS8czjb/IWnV5dr7R96NcsmAAFge+4T6YH/wBcpvrGGW+35IDRLQ2o1nR",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "ARIf/javCFZrnb7bhwzDQ1I/gYi3vwqodTXDNuHLJQLoHd59j15mVOndyVuPO6QgZdzkptgM5xHcyglZVNZ5Y03yB+SaFazAu3GCkMHSzwpbm/dSSiQ8OxQeetnxiSz91ibY5976IFoMCFopDPhKbYNTr7teWVcVWi20mwhdkrg3Ul7mJ8cYHqa57ZUYzAH1Ab4ht/EMVZSnHosw6B+3jUNcHywS4S4CgRS+0BRsZFNaTcutrXgEYm7d12jGjT9cj7XmK0cj+2mV6zrCROKE+wUb6bLDVrtsxwHLykBah4DLQIlRxqKtSkCA3NU1U+Zlb800G77DrCf3g86bItws62w=",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
-      "key": "fb_1772243984_aiying",
-      "name": "爱盈｜APP",
+      "key": "fb_1772243984_曦臣",
+      "name": "曦臣｜APP",
       "type": 3,
       "api": "csp_AppQi",
       "filterable": 1,
-      "ext": "pWLjYsLv1mpiSv+WqFNaIiIe+MInC+MKo9Qp54n8L69caGGEFd0M5chE1Qtd1YwdzgI3e1uyrDVixRQBRk9RoWOhnReh6DoqtgoIwBUFAQieLIPEeSDJYjTVwvlm05+zfeSPbM/NKlCZtk7ylKXUSdj3p6UCylMo3Jdt9qDJmEPMA0zv2M8fE97v1F4BTBKQ0qgTbnMzV4MhRUEAc1ggTQ==",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "AcQgxCZJh0zfuqWhi3EWO0lHZHvcxjcjkSwh/L0j5HEY9Fq3+o2hdqQXb/2viRHayRmBY64JuCWIkKKgRdpy650qa/qp5Yx5LMXbHLNBOw7Y2ZGmPIKIXZw4s07EI1OuOTxg5Jj1a2VvZaGGrWPO5Zx84C6LNBDniS3O/XXNtDexGf7mP03SjlVcLkS00BSjgZJIy7PZA3fuP0lUeIdK+T0JzxKFrX5IxrgxOGYTCb4UUXOKaASBFqPcbpdj1SMNkCxWhqz9lcA8n+r81dRn4TMOKoyFaxJmX3DfKc1UzGgH",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
-      "key": "fb_1772243984_顾我",
-      "name": "顾我｜APP",
+      "key": "fb_1772243984_景仪",
+      "name": "景仪｜APP",
       "type": 3,
       "api": "csp_AppQi",
       "searchable": 1,
-      "ext": "AVSfR+uqlPEBHdwlcDYl8ruVekV5DXQ9AswZUxXhzdMf8il6XZZ2j5+b1nwZQOJi63jk1ndlOTjcBcY1bRL698ggfbh7mNg2ACtDb7vgPV4a6y726DBUQ/NfqPuNX/l2f+krZV89nUqZYIpAWjsyELWt7ZvFu5yEl6IxPd2cX2aRcW1NEdSBVQddbXPuTphu59vHxNc/ylOZnAEgwZ5zbww=",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "AXBlmIaXssBpd3Fa+kwjwLQb1/iS17U9n98QF7PrEQQBsrDqGYa/UHvP9eMSQFc7xxy63YaGklVEc+zsxq7CHCQEnNfRoaZdDnwsUwKmWxnYn4lRh3CRnB6gOvpRkamwTzo6Ytzy0enTk/xpedKn+Z8DUSn7CsdzN51bXQA8I2K32X7yAnnIKXwZfslGY5H8Y0eMEYSLh/Ny+xy2UQO2jT7GrWI9Ih8uT6wSdIXGXAnpjySRe5YMMXwVltzCkBw0Ow==",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_麒麟",
       "name": "麒麟｜APP",
       "type": 3,
       "api": "csp_AppFox",
-      "ext": "GvE9VjZcKAqoJldDfjF/ECcNd1RQlbzQsau0pQNOL/YWscnJYTMdB9NKsGcYtklo",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "ext": "Ac9bpM2BcSDtRFXJIKv7cKam+MagzI4MRN9VkD0cdbZYR2sdZMY+KrFlbb/4YNndRu8tZ6ryTJc7jJekLp6O4gnnRwzqwP3+4rp/r5A5u/Qt",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
-      "key": "fb_1772243984_咕噜",
-      "name": "咕噜｜APP",
+      "key": "fb_1772243984_Libvio",
+      "name": "立播｜4K",
       "type": 3,
-      "api": "csp_AppFox",
-      "ext": "AVxeJLni92C+e8/LzhaR6T2R8Pl82gBs9/Kfg/DeJ5KXV62LI4eZj+4pHIUPStS31pkh0yWUJsQ4pArrU/NwAKpKvqITDSwnRdbPmi4ktDCKLVCH1cQsIBA3Q5RZLxeQcHmG7Covdxsd++FzpaZQqThhpxwVUMFFn8HKtRvF4qbJ",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "api": "csp_Libvio",
+      "searchable": 1,
+      "ext": {
+        "site": [
+          "https://www.libvio.in",
+          "https://www.libvio.la",
+          "https://www.libvio.site",
+          "https://www.libvio.mov"
+        ]
+      },
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_gying",
@@ -1663,15 +722,7 @@
           "https://www.gyg.st"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
-    },
-    {
-      "key": "fb_1772243984_panglian1",
-      "name": "盘链｜4K",
-      "type": 3,
-      "api": "csp_PanLian",
-      "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishLabi",
@@ -1690,7 +741,7 @@
           "http://xiaocgege.shop"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishZhizhen",
@@ -1708,7 +759,7 @@
           "https://www.zhizhen8.click"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishDuoduo",
@@ -1723,7 +774,7 @@
           "https://tv.214521.xyz"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishErxiao",
@@ -1740,7 +791,7 @@
           "https://www.2xiaopan.top"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishHuban",
@@ -1753,7 +804,7 @@
           "http://103.45.162.207:20720"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_LeiJing",
@@ -1761,7 +812,7 @@
       "type": 3,
       "api": "csp_LeiJing",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_PanTa",
@@ -1769,7 +820,7 @@
       "type": 3,
       "api": "csp_PanTa",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_夸父",
@@ -1785,7 +836,7 @@
           "https://www.kfjwzz.com"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_ShuangXing",
@@ -1794,7 +845,7 @@
       "api": "csp_ShuangXing",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_DianYingYunJi",
@@ -1802,7 +853,7 @@
       "type": 3,
       "api": "csp_DianYingYunJi",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_YunPanBa",
@@ -1811,7 +862,7 @@
       "api": "csp_YunPanBa",
       "searchable": 1,
       "ext": "https://yunpan6.com/",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_YsSo",
@@ -1820,7 +871,7 @@
       "api": "csp_YsSo",
       "searchable": 1,
       "ext": "https://ysso.cc",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_SeedHub",
@@ -1828,7 +879,7 @@
       "type": 3,
       "api": "csp_SeedHub",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_fishhxq",
@@ -1836,7 +887,7 @@
       "type": 3,
       "api": "csp_FishHxq",
       "ext": "https://fishapi.wya6.com/fish/fishhxq.php",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_CupFox",
@@ -1844,17 +895,7 @@
       "type": 3,
       "api": "csp_CupFox",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
-    },
-    {
-      "key": "fb_1772243984_Fishdrive",
-      "name": "超级｜媒体库",
-      "type": 3,
-      "api": "csp_FishDrive",
-      "searchable": 1,
-      "filterable": 1,
-      "ext": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/2026/fishdrive.json",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_RenRen",
@@ -1863,7 +904,7 @@
       "api": "csp_RenRen",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_CZ",
@@ -1873,7 +914,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "ext": "https://www.czzymovie.com",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Jpys",
@@ -1882,7 +923,7 @@
       "api": "csp_Jpys",
       "searchable": 1,
       "ext": "https://y2s52n7.com,https://m.hkybqufgh.com,https://m.sizhengxt.com,https://m.9zhoukj.com,https://m.jiabaide.cn",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Guazi",
@@ -1890,7 +931,7 @@
       "type": 3,
       "api": "csp_Guazi",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Zxzj",
@@ -1899,7 +940,7 @@
       "api": "csp_Zxzj",
       "searchable": 1,
       "ext": "https://www.zxzjhd.com",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_TvDy",
@@ -1908,7 +949,7 @@
       "api": "csp_TvDy",
       "searchable": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_MqTv",
@@ -1917,7 +958,7 @@
       "api": "csp_MqTv",
       "searchable": 1,
       "ext": "https://www.mqtv.cc",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Ikanbot",
@@ -1926,7 +967,7 @@
       "api": "csp_Ikanbot",
       "searchable": 1,
       "ext": "{\"box\": \"TVBox\", \"danmu\": false}",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Hema",
@@ -1936,7 +977,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_FishDuanju",
@@ -1946,7 +987,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_HHkk",
@@ -1956,7 +997,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_番薯动漫",
@@ -1965,7 +1006,7 @@
       "api": "csp_AppGet",
       "quickSearch": 1,
       "ext": "N5u2FS3i/elUFAoSVYBzne8+r0r/kX1E+KdfHQ6FVY6/wHmWZoFfjCv2f3YfjfSbJm0/trORuqYE1PzwW9Z2IT6SnMHG1Beaes3+9Ad9p9Dy7MPFARRTA33haDFOP4SZtpBkd4utjKPyprZNVKMxvA==",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_AoWu",
@@ -1975,7 +1016,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_mifun",
@@ -1984,7 +1025,7 @@
       "api": "csp_AppGet",
       "searchable": 1,
       "ext": "GvE9VjZcKAqoJldDfjF/EFjEacvdRgP+DzKluxhIowAt7HBmxO7zYbrt98skapDAKw6Hlx1Iy+mVJuQI6FYGb7NuvCZrhayVbhmr8hS0EeOTcuCxwv7DUtbufpbgslF77hCJqv2EtYD5MpCse/KA1Q==",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_XiFan",
@@ -1996,7 +1037,7 @@
       "ext": {
         "SiteUrl": "https://dm.xifanacg.com"
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Manbo",
@@ -2007,7 +1048,7 @@
       "quickSearch": 1,
       "filterable": 1,
       "ext": "N5u2FS3i/elUFAoSVYBznRMvuK1KLSV1DN4HBOs//GWvWksCYwvNDoPf16hWOVsnftf5i6fmT2utdVhcCOZaQrECH9tmtsiG6f+4GP6h27DsVeuwTbSSbDAx+58B3Gtp",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Gugu",
@@ -2018,7 +1059,7 @@
       "quickSearch": 1,
       "filterable": 1,
       "ext": "N5u2FS3i/elUFAoSVYBznXUeEAt3X+JD9YKl5MjJCWQR4USFFmoQtTGE0mJDLVeOv00lc599YBqQsYAl+dw0i/1Jq4wgCPncJOqYhT21G0n+faZ/AOCfRq6fnnZcQCfX",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Jianpian",
@@ -2027,7 +1068,7 @@
       "api": "csp_Jianpian",
       "searchable": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Xb6v",
@@ -2036,7 +1077,7 @@
       "api": "csp_Xb6v",
       "searchable": 1,
       "filterable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_TGSou",
@@ -2044,7 +1085,7 @@
       "type": 3,
       "api": "csp_TGSou",
       "searchable": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_ChuXin",
@@ -2053,7 +1094,7 @@
       "api": "csp_ChuXin",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_aiting",
@@ -2062,7 +1103,7 @@
       "api": "csp_AiTingMusic",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Music24bit",
@@ -2079,7 +1120,7 @@
           "薛之谦"
         ]
       },
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_TuXiaoBei",
@@ -2088,14 +1129,14 @@
       "api": "csp_TuXiaoBei",
       "searchable": 1,
       "quickSearch": 1,
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_BeiLeHu",
       "name": "小虎｜少儿",
       "type": 3,
       "api": "csp_BeiLeHu",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Kanqiu",
@@ -2104,7 +1145,7 @@
       "api": "csp_Kanqiu",
       "filterable": 1,
       "ext": "http://www.88kanqiu.one",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_TingBook",
@@ -2113,7 +1154,7 @@
       "api": "csp_TingBook",
       "searchable": 1,
       "ext": "http://www.5weiting.com",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_TingBookJinXia",
@@ -2123,14 +1164,14 @@
       "searchable": 1,
       "filterable": 1,
       "ext": "https://m.ting15.com",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Local",
       "name": "文件｜浏览",
       "type": 3,
       "api": "csp_Local",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_Market",
@@ -2138,21 +1179,31 @@
       "type": 3,
       "api": "csp_Market",
       "ext": "KeJpmGBHNDNtao15t//le78AVNnA15NohxNlQzOy74KP4rP9PzNe6/JMxl2ealSMH+DMy3pMWGdoIgfZhbU6Gnwr6RCt2yx5qzhbchh4Dkea8uxJiFKZrXXX+78cGsE5xVesK28LUCDPGza58+ymXCFyviXGbf7VroGuGiCSI3O9U0RJIcWVbQWDQ2lWduKWYyFrlmEPQu3ePYFHUX8EGXDXMr15WH88JVlN7vnLqUhJv4qheq3TMcdceNQZ4e96eiWjAtdlSkOId644S2gQbHPsE1m68RxAx95ZTlMf0sGMFzsDp6MA9eQrbRP3sPWfW4I2nNxjTga+BbnLe5ES7TrsDfzJ7wCqjDAzW2LoHxxvnlJ7qrc+pWpKJARiszk+7dVLhNqhfjWY/i/GftEZiA71wbT4wul4QoPCmVrIYyaFWFxUaVHUVGrqEmw++js/87Xb8sawjnFXROsI6qK0+wRmiiGJ37nw0Dsyuxn7jUMYOpzEQFTlxq8Y3JcBGK8lGIcTrx0OTGwFH8Rhdsur4gdF4fxHM9BvKI5LFAO5wNSpAY429fskzXx97IsdI7HIeSQ+YY5Yir2ZnVeDDBK8qA==",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
-    },
-    {
-      "key": "fb_1772243984_Wallpaper",
-      "name": "摸鱼｜壁纸",
-      "type": 3,
-      "api": "csp_Wallpaper",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772243984_push_agent",
       "name": "推送｜接收",
       "type": 3,
       "api": "csp_Push",
-      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260227/GSaH/fish02272145.png;md5;8387754eb74866f3b38da991e5bb1ae4"
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
+    },
+    {
+      "key": "fb_1772243984_Fishdrive",
+      "name": "摸鱼｜媒体库",
+      "type": 3,
+      "api": "csp_FishDrive",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/2026/fishdrive.json",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
+    },
+    {
+      "key": "fb_1772243984_Wallpaper",
+      "name": "摸鱼｜壁纸库",
+      "type": 3,
+      "api": "csp_Wallpaper",
+      "jar": "https://tc-new.z.wiki/autoupload/iYHTWVx6T8RrCmqdGD6MOdiO_OyvX7mIgxFBfDMDErs/20260309/VWfh/0X0/fish03092137.png;md5;cd5f9778824ad3072244710d34477822"
     },
     {
       "key": "fb_1772244015_Douban",
@@ -2783,8 +1834,953 @@
       "jar": "https://aisearch.cdn.bcebos.com/fileManager/40aicoLgDtklAyS8-ZZBrA/17719483685809pdmDM.txt;md5;934d3d347b9810c923d3db6fbc36d148"
     },
     {
+      "key": "fb_1772255618450_豆瓣",
+      "name": "🤓公众号┃OK杰克 (关注不迷路)",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "Douban"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_配置中心",
+      "name": "👨‍🍳‍配置┃中心",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "Config"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_本地播放",
+      "name": "🐼本地┃播放",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "Local"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_二小",
+      "name": "🦢二小┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "ErXiao"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_双星",
+      "name": "🤩双星┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Star2"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_玩偶",
+      "name": "👽玩偶┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Wogg"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_立播版",
+      "name": "🌟立播┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Libvio"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_蜡笔",
+      "name": "👠蜡笔┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Labi"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_木偶",
+      "name": "🪵木偶┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Muou"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_多多",
+      "name": "🪅多多┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "DuoDuo"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_小飒",
+      "name": "💒小飒┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Xsayang"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_至臻",
+      "name": "💌至臻┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "ZhiZhen"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_虎斑",
+      "name": "🐯虎斑┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "HuBan"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_SeedHub",
+      "name": "🍀种子┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "SeedHub"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_光影",
+      "name": "🎥光影┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Guanying"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_云集",
+      "name": "🍊云集┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "YunJi"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_盘他",
+      "name": "🎸盘他┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Panta"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_海绵",
+      "name": "🧽海绵┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "HaiMian"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_雷鲸",
+      "name": "🐳雷鲸┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "LeiJing"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_123分享",
+      "name": "🌂123┃4K",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Time123"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_瓜子",
+      "name": "🍉瓜子┃App",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Guazi"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_文才",
+      "name": "🌺文才┃在线",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Jpys"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_糯米",
+      "name": "🍓糯米┃秒播",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Nmys"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_热播",
+      "name": "📺热播┃App",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "site": 0,
+        "sp": "TianTian"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_雄鹰",
+      "name": "🦅雄鹰┃App",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "XiongYing"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_奇奇",
+      "name": "🐵奇奇┃App",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "QiQi"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_独播",
+      "name": "👠独播┃直连",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Duboku"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_厂长",
+      "name": "📔厂长┃直连",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Czzy"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_csp_Btt",
+      "name": "🌞比特┃在线",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "ext": {
+        "sp": "Btt"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_荐片",
+      "name": "⚔️荐片┃手机",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Jianpian"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_韩圈",
+      "name": "🦄韩圈┃App",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "HanXiaoQuan"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的夸克",
+      "name": "🗽我的┃夸克",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "MyQuark"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的UC",
+      "name": "😼我的┃UC",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "MyUc"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的百度",
+      "name": "☘️我的┃百度",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "MyBaidu"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的123",
+      "name": "🌂我的┃123",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "My123"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的天逸",
+      "name": "🧽我的┃天逸",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "My189"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的115",
+      "name": "🌷我的┃115",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "My115"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_我的阿里",
+      "name": "🐱我的┃阿里",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "MyAli"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_️爱看Bot",
+      "name": "⛅️爱看┃直连",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Ikanbot"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_电影天堂",
+      "name": "🎞️天堂┃采集",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "api": "http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/",
+        "sp": "Caiji"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_量子",
+      "name": "📷量子┃采集",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8/at/m3u8/",
+        "sp": "Caiji"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_盒马短剧",
+      "name": "🦓盒马┃短剧",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "HeMa"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_星芽短剧",
+      "name": "💖星芽┃短剧",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "AppXY"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_碎片短剧",
+      "name": "🧸碎片┃短剧",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "SuiPian"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_甜圈短剧",
+      "name": "🌸甜圈┃短剧",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "TianQuan"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_Omofun",
+      "name": "🏖️奥陌┃动漫",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Omofuns"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_动漫巴士",
+      "name": "🚌巴士┃动漫",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Dm84"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_新6V",
+      "name": "🧲新6V┃磁力",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "ext": {
+        "sp": "Xb6v"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_快手直播",
+      "name": "😎快手┃直播",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "filterable": 1,
+      "ext": {
+        "sp": "KsLive"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_虎牙直播",
+      "name": "🐯虎牙┃直播",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "filterable": 1,
+      "ext": {
+        "sp": "Huya"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_瓜子看球",
+      "name": "⚽瓜子┃看球",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "GzSport"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_88看球",
+      "name": "⚽88┃看球",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "Kanqiu"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_爱听音乐",
+      "name": "🎧爱听┃音乐",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "AiMusic"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_易听音乐",
+      "name": "🎧易听┃音乐",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "ShiJiMusic"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_酷狗音乐",
+      "name": "🐕酷狗┃音乐",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "ext": {
+        "sp": "KuGou"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_世界听书",
+      "name": "🎸世界┃听书",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "ext": {
+        "sp": "BookTing"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_六月听书",
+      "name": "🎤六月┃听书",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "ext": {
+        "sp": "WeiTing"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_bilimd",
+      "name": "🅱哔哩┃影视",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Bilimd"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_bili",
+      "name": "🅱哔哩┃合集",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/57EAD2E_773_bili_20251204145747516newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_biliych",
+      "name": "🅱哔哩┃歌曲",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "filterable": 1,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/28CD73E_773_biliych_20251204150624308newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_bilixs",
+      "name": "🅱哔哩┃相声",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "filterable": 1,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/C7FB4B_773_bilixs_20251204150416832newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_bilixp",
+      "name": "🅱哔哩┃小品",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "filterable": 1,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/41F4D38_773_bilixp_20251204150443351newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_少儿教育",
+      "name": "📚少儿┃教育",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/32EF375_773_bilisejy_20251204150311837newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_小学课堂",
+      "name": "📚小学┃课堂",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/3753221_773_bilixxkt_20251204150347660newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_初中课堂",
+      "name": "📚初中┃课堂",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/3ED04A6_773_biliczkt_20251204150157889newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_高中教育",
+      "name": "📚高中┃课堂",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/531DD35_773_biligzkt_20251204150243460newMediaFile.bmp",
+        "sp": "Bili"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_csp_AListGuard",
+      "name": "🦋AList",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "json": "file://TV/alist.json",
+        "sp": "AList"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_csp_QuPanSouGuard",
+      "name": "🤓趣盘┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "QuPanSou"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_太极",
+      "name": "☯️太极┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "TaiChi"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_糖果搜",
+      "name": "🍬糖果┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "TaiChi"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_影链",
+      "name": "🎞️影链┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "YingLian"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_音海",
+      "name": "🎸音海┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "YinHai"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_爱盘",
+      "name": "❤️爱盘┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "AiPan"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_云搜",
+      "name": "☁️云搜┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "YunPanPan"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_度搜",
+      "name": "🦈度搜┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Bdxd"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_找盘",
+      "name": "🎾找盘┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "V2Pan"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_djps",
+      "name": "🔍短剧┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Djps"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_djso",
+      "name": "🔍剧搜┃搜索",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "searchable": 1,
+      "filterable": 1,
+      "ext": {
+        "sp": "Djso"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
+      "key": "fb_1772255618450_push_agent",
+      "name": "🛴手机┃推送",
+      "type": 3,
+      "api": "csp_AweSomeGuard",
+      "ext": {
+        "sp": "Push"
+      },
+      "jar": "http://oss4liview.moji.com/thd_file/2026/01/26/0e8629c873fea38d04bc58cbeb28c3c5.jpg;md5;127ea82cb8bf8a82f0cf64da66e39b60"
+    },
+    {
       "key": "fb_1772243931_豆瓣",
-      "name": "🐼┃闪电优汐已恢复┃加资源可艾特我",
+      "name": "🐼┃公众号：肥猫宝贝┃",
       "type": 3,
       "api": "csp_Douban",
       "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
@@ -2979,75 +2975,11 @@
       "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
     },
     {
-      "key": "fb_1772243931_零度",
-      "name": "⛄┃零度┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "Rv3aTnWMuFc4gbwuPRc+NioakhCTrys/rCkMmZz5sahtspHqbccnC1b6t00XDUcnDjY185wly0IoUsLlrHACDbg1KJp5uqFGpzrq59fGp+ihTBuiUWn3WJirpRA4gSr03jbhNzzoGSFleO17xLsOj85lf/7Ln77b7UdDG92ZmKE6lW7QS5DMFfOYu0VuMATxAtR3OtvveR49ZymdVpDBbg==",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_粉象",
-      "name": "🐘┃粉象┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "YLWJkztQiwSjuZDrZ91gisIp8P9C8kNVKvgP4cCeTzczGFTBraoBlcUjzEVkz2Rvd4jO075bezip++dvP3mWGdyMf7Y1RR3nDj1DvTEcmqut4tIy22EVKJMkQ4BEIUDtm9Y9yMn/9ZyRLbq2xPOfYXrKoBRFd08kb3YiebbAjHAzyl2Clnun3W8Sa089Su4uLhyCkcNk6CPD+wJ/ymWS5CVHJKUzPYcjO2TK9hBTWis=",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_橘猫",
-      "name": "🍊┃橘猫┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "gLOSY4PPXpZqMcSYjyj9KaGpTZa2K0chBaa7+zXellV8rIJFR5QN53FFy1ItG/Kp1hvtJL2QpdRzntoLcLtebXsOgQcOlkGcxDPx8Le4gAsTXe90DAZe58pAPWKKmvCDlnyHS3v1h9n/sSrT7yS7UKmBN0k9v2I5sKZFZoQt6kwo7MXLKu+diF0koUe2ghbtjxd9pOS7Z7AT/OiGa2d4lw==",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_片猫",
-      "name": "😺┃片猫┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "Av4EJKN4tWLBQjkfXQVfVxewTQdR5GBzHnJDPZYaLi89+CMprxxsOlp4bViiP01ErXgZJkC74jYD5MDZsRfXOgeM9mVc7ySIyDbBGs106lycbDKz9OVbsMC6ChCa8FmZEXsjbL3qlDMCEYoPEcj8R2PMhvoZio9MONIVRspwEFIvGB2rUPpF4wZ+vA5fo7RR3sBq7fRqxKwxRSCQMmxkcg==",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
       "key": "fb_1772243931_火猫",
       "name": "😻┃火猫┃APP",
       "type": 3,
       "api": "csp_AppNox",
       "ext": "K7euwjrJ27dYwEGVkeGRDLiIPbDgofNjwCk3p5BrxKe1WWueWIgazExL7KeqSINJOPRzkplAOtP+hTXxaeVDeOccRBahLmupQ3fYc6ogNk5FiENWm5pQSXsfQ6128/WfOimIH4TLkzA04Y6EFxXaLi3Wtmv9wRqBB7W7abNwXzDNx5lbJf6xgU6KLRt1d4N7NVfZCB6DW2T34TpuYagoWg==",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_幕悦",
-      "name": "🌉┃幕悦┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "OQwT73dg2rQTXxIB+qpAOzM7ck8g+2kfa/cm6eOORAYa39ue50e0nM8GVbY5U6JFALUnu53/vcAV1UAwxXkHEzQIh51/iu8XP0C1UB0IhTHkuaNQnCV/6r611km1t+nYEB67Q5lUKa8KLZ5HQjUZs2G129lZERjQdzT7j0JuM9ffCgNCuCwAPYWfC2a28fjemEgoqj/49uhfcKaTZaTk8yTODxJ9WJB3dlrV4EqtvJA=",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_随看",
-      "name": "🥃┃随看┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "VvSzxDUUs0JjdMTID5TnHKfxCxf85A2LKCWrc6j/NgkJqUI3YP29WQl2J6/xZP/SaYPMqqBuJOyBDKoKOxWs4qxIzbvHGMbKYzJntkAxJ3+FA2Q7fhncNYQWJqSLzJrY+XTxQIEofl5/YvDWN8uedYAujdaOZ0fY0xBSAKTOUKaUj6dJ0ibOf7e5vvoGPRBmy9odj59FloVF75PJk4eQsx7iZ+NHWW4+tCNUb+iBae0=",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_星影",
-      "name": "✨️┃星影┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "A6Qdnhaak1wq8VD2zoKzVQQ0FdA44FbuhcYn32hW6dxp0kiTj64DRKciftNZ8rndrs10Alu5niPiJNzMKeXcSwDhjdqGI1Ut6U5pSb0Bq+SjXYpwmB8fUKN/kPTuaW2YhmId1HjbnUteu8u4NlKEZ66BhdF3PbohrT2ZlCXQrt3xVHbGX/Ph9l60VeDvtd9UxdKUMwP7SehgFLIiC6IDntA10wMxJNK6y6BFQgYHN3c=",
-      "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
-    },
-    {
-      "key": "fb_1772243931_回响",
-      "name": "📎┃回响┃APP",
-      "type": 3,
-      "api": "csp_AppNox",
-      "ext": "4ssljNMN/eUwGSlXfYi+I+hprh/hGdq3k62oZkDdfCrzEPqNUD8Foqkl6DfOcgC2tjTPNXVDec+asnL4p2JJAEw5wt+cg7Ljbdy4abydC29WNCWn3km881iB9p558AvNqGmE7zqbKr9S1yVL+9VB7VqGopA8OoxCs9ApkEgZmPANLTaE0qpo41nyRlbThqJRvJxgy8CrGpmHoDb3Jvk8PzZxgk+CjmPF/t20GaKVtiI=",
       "jar": "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/7a3502fc0415ddd7/PandaQ260228.png;md5;96a8b5e130d6aac01a449bd006f9a460"
     },
     {
