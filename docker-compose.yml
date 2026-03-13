@@ -1,16 +1,18 @@
 services:
   fluxbox:
-    # 修改为你的 GitHub 用户名和仓库名（全小写）
+    # 镜像地址，确保与 GitHub Actions 推送的一致
     image: ghcr.io/kronus09/fluxbox:latest
     container_name: fluxbox
     ports:
       - "10504:10504"
     volumes:
-      # 建议：如果想在当前目录下直接看数据，可以用 ./data:/root/data
-      - fluxbox_data:/root/data
+      # 左边是宿主机路径（或卷名），右边是容器内路径
+      # 注意：对应 Dockerfile 中的 WORKDIR /app
+      - fluxbox_data:/app/data
     restart: unless-stopped
     environment:
       - TZ=Asia/Shanghai
+      - GIN_MODE=release
 
 volumes:
   fluxbox_data:
