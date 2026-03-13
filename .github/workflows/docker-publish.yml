@@ -7,8 +7,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # 强制将镜像名转为小写，避免 FluxBox 导致推送失败
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push:
@@ -16,17 +14,10 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # 解决 Node.js 20 废弃警告：设置强制使用 Node 24 (针对 2026 年要求)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -41,22 +32,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # 使用 lower 转换镜像名为全小写
+          # 手动指定小写的镜像名：ghcr.io/kronus09/fluxbox
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/fluxbox
           tags: |
             type=semver,pattern={{version}}
             type=raw,value=latest,enable=${{ github.ref_type == 'tag' }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6 # 升级到 v6 以支持最新特性
+      - name: Build and push
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          # 增加多架构支持
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
