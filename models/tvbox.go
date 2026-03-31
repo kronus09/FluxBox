@@ -19,8 +19,9 @@ type Site struct {
 	Searchable  int         `json:"searchable,omitempty"`
 	QuickSearch int         `json:"quickSearch,omitempty"`
 	Filterable  int         `json:"filterable,omitempty"`
-	Ext         interface{} `json:"ext,omitempty"` // 兼容字符串和对象
+	Ext         interface{} `json:"ext,omitempty"`
 	Jar         string      `json:"jar,omitempty"`
+	Speed       int         `json:"-"` // 响应时间(毫秒)，不输出到JSON
 }
 
 // Live 对应电视直播配置
@@ -36,10 +37,11 @@ type Live struct {
 // SourceItem 是 FluxBox 管理后台专用的模型
 // 用于在 data/sources.json 中存储用户录入的原始源地址及抓取状态
 type SourceItem struct {
-	ID         int    `json:"id"`
-	Name       string `json:"name"`
-	URL        string `json:"url"`
-	Enabled    bool   `json:"enabled"`
-	LastStatus string `json:"last_status"`
-	LastError  string `json:"last_error"`
+	ID           int    `json:"id"`
+	Name         string `json:"name"`
+	URL          string `json:"url"`
+	Enabled      bool   `json:"enabled"`
+	LastStatus   string `json:"last_status"`
+	LastError    string `json:"last_error"`
+	ResponseTime int    `json:"response_time"`
 }

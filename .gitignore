@@ -47,3 +47,6 @@ data/*
 *.temp
 .tmp/
 .temp/
+
+# AI 辅助总结文档
+AI_SUMMARY.md

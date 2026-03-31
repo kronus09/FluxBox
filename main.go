@@ -34,5 +34,5 @@ func main() {
 	api.RegisterRoutes(r)
 
 	// 6. 启动
-	r.Run(":10504")
+	r.Run(":20504")
 }

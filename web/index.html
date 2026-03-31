@@ -528,7 +528,7 @@
                 <img src="/static/fluxbox.png" alt="FluxBox Logo" class="logo">
                 <div class="header-text">
                     <div class="header-title">
-                        <h1>FluxBox</h1>
+                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.6</span></h1>
                         <p class="header-desc">多源脱壳聚合引擎</p>
                     </div>
                 </div>
@@ -536,11 +536,18 @@
         </header>
 
         <div class="card">
-            <h2>聚合操作</h2>
-            <div class="btn-group">
+            <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                    聚合操作
+                    <span onclick="openSettingsModal()" style="cursor: pointer; font-size: 1.25rem;" title="聚合设置">⚙️</span>
+                </span>
+                <span id="siteCount" class="site-count">已聚合 0 个站点</span>
+            </h2>
+            <div class="btn-group" style="flex-wrap: nowrap; align-items: center;">
                 <button onclick="aggregate()" class="btn btn-success">同步聚合</button>
-                <div class="aggregation-status" id="aggregationStatus">
-                    <div class="status-text" id="statusText">就绪 - 点击开始同步</div>
+                <span style="font-size: 0.75rem; color: var(--gray);">当前设置: <span id="currentSettings">最快站点 | 过滤: 加载中...</span></span>
+                <div class="aggregation-status" id="aggregationStatus" style="max-width: 100px; margin-left: auto;">
+                    <div class="status-text" id="statusText">就绪</div>
                 </div>
             </div>
             <div class="config-url">
@@ -549,18 +556,38 @@
             </div>
         </div>
 
+        <div class="card" id="filterWordsCard" style="display: none;">
+            <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                过滤关键词
+                <button onclick="resetFilterWords()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto; font-size: 0.75rem;">重置默认</button>
+            </h2>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <input type="text" id="newFilterWord" placeholder="输入关键词 (如: 直播)" style="flex: 1;">
+                <button onclick="addFilterWord()" class="btn btn-primary" style="padding: 0.5rem 1rem; min-width: auto;">添加</button>
+            </div>
+            <div class="filter-words-list" id="filterWordsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            </div>
+        </div>
+
         <div class="card">
             <h2>添加新源</h2>
-            <div class="add-source-form">
-                <input type="text" name="name" id="nameInp" placeholder="源名称 (如: 肥猫)">
-                <input type="text" name="url" id="urlInp" placeholder="源 URL (http://...)">
-                <button onclick="addSource()" class="btn btn-primary">确认添加</button>
+            <div class="add-source-form" style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="text" name="name" id="nameInp" placeholder="源名称 (如: 肥猫)" style="width: 140px;">
+                <input type="text" name="url" id="urlInp" placeholder="源 URL (http://...)" style="flex: 1;">
+                <button onclick="addSource()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto; white-space: nowrap;">确认添加</button>
             </div>
         </div>
 
         <div class="card">
             <h2 style="display: flex; justify-content: space-between; align-items: center;">
-                已加载源 <span id="siteCount" class="site-count">已聚合 0 个站点</span>
+                已加载源
+                <span style="display: flex; align-items: center; gap: 0.75rem; font-weight: 400; font-size: 0.875rem;">
+                    <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer;">
+                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 16px; height: 16px; cursor: pointer;">
+                        全选
+                    </label>
+                    <button onclick="testSelected()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto;">测试连接</button>
+                </span>
             </h2>
             <div class="source-list" id="sourceList">
                 <!-- 源列表将通过 JavaScript 动态生成 -->
@@ -568,7 +595,51 @@
         </div>
 
         <div class="footer">
-            <p>FluxBox by kronus09 | 多源脱壳聚合引擎</p>
+            <p>FluxBox v0.1.6 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a> | 多源脱壳聚合引擎</p>
+        </div>
+    </div>
+
+    <input type="radio" name="aggregateMode" value="fastest" checked style="display: none;">
+    <input type="radio" name="aggregateMode" value="all" style="display: none;">
+
+    <!-- 聚合设置模态框 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">聚合设置</h3>
+                <span class="close" onclick="closeSettingsModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--dark);">聚合模式</h4>
+                    <div style="display: flex; gap: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
+                            <input type="radio" name="settingsMode" value="fastest" checked style="cursor: pointer; width: 16px; height: 16px;">
+                            最快站点（取前120个）
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
+                            <input type="radio" name="settingsMode" value="all" style="cursor: pointer; width: 16px; height: 16px;">
+                            全部站点
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--dark);">过滤关键词</h4>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <input type="text" id="settingsNewFilterWord" placeholder="输入关键词" style="flex: 1;">
+                        <button onclick="settingsAddFilterWord()" class="btn btn-primary" style="padding: 0.5rem 1rem; min-width: auto;">添加</button>
+                    </div>
+                    <div id="settingsFilterWordsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 2rem;">
+                    </div>
+                    <div style="margin-top: 0.75rem;">
+                        <button onclick="resetFilterWords()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto; font-size: 0.75rem; background: var(--gray);">重置默认</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeSettingsModal()" class="btn btn-primary" style="background: #64748b;">取消</button>
+                <button onclick="saveSettings()" class="btn btn-primary">保存</button>
+            </div>
         </div>
     </div>
 
@@ -598,11 +669,15 @@
     <script>
         async function refresh() {
             try {
+                const checkedIds = new Set();
+                document.querySelectorAll('.source-checkbox:checked').forEach(cb => {
+                    checkedIds.add(parseInt(cb.dataset.id));
+                });
+
                 const res = await fetch('/api/status');
                 const data = await res.json();
                 document.getElementById('siteCount').innerText = `已聚合 ${data.site_count} 个站点`;
                 
-                // 更新聚合状态
                 if (data.is_running) {
                     updateStatus('同步中 - 正在处理源数据...', true);
                 } else {
@@ -613,6 +688,7 @@
                 list.innerHTML = data.sources.map(s => `
                     <div class="source-item">
                         <div class="source-info">
+                            <input type="checkbox" class="source-checkbox" data-id="${s.id}" style="width: 16px; height: 16px; cursor: pointer;">
                             <div class="source-name">${s.name}</div>
                             <div class="source-url">${s.url}</div>
                         </div>
@@ -620,13 +696,159 @@
                             <span class="status-badge ${s.last_status === 'success' ? 'status-success' : s.last_status === 'failed' ? 'status-failed' : 'status-pending'}">
                                 ${s.last_status === 'success' ? '在线' : s.last_status === 'failed' ? '错误' : '待同步'}
                             </span>
+                            <button onclick="testSource(${s.id})" class="btn-edit">测试连接</button>
                             <button onclick="editSource(${s.id}, '${s.name}', '${s.url}')" class="btn-edit">修改</button>
                             <button onclick="delSource(${s.id})" class="btn-delete">删除</button>
                         </div>
                     </div>
                 `).join('');
+
+                document.querySelectorAll('.source-checkbox').forEach(cb => {
+                    if (checkedIds.has(parseInt(cb.dataset.id))) {
+                        cb.checked = true;
+                    }
+                });
+
+                loadFilterWords();
             } catch (error) {
                 console.error('刷新失败:', error);
+            }
+        }
+
+        let currentFilterWords = [];
+
+        async function loadFilterWords() {
+            try {
+                const res = await fetch('/api/filter-words');
+                const data = await res.json();
+                currentFilterWords = data.words;
+                
+                const list = document.getElementById('filterWordsList');
+                list.innerHTML = data.words.map(w => `
+                    <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: #e2e8f0; border-radius: 9999px; font-size: 0.75rem;">
+                        ${w}
+                        <button onclick="deleteFilterWord('${w}')" style="background: none; border: none; cursor: pointer; color: #ef4444; font-size: 1rem; line-height: 1;">&times;</button>
+                    </span>
+                `).join('');
+
+                updateCurrentSettings();
+                updateSettingsModalWords();
+            } catch (error) {
+                console.error('加载过滤关键词失败:', error);
+            }
+        }
+
+        function updateCurrentSettings() {
+            const mode = document.querySelector('input[name="aggregateMode"]:checked');
+            const modeText = mode && mode.value === 'fastest' ? '最快站点' : '全部站点';
+            const filterText = currentFilterWords.length > 0 ? currentFilterWords.join(',') : '无';
+            document.getElementById('currentSettings').innerText = `${modeText} | 过滤: ${filterText}`;
+        }
+
+        function updateSettingsModalWords() {
+            const list = document.getElementById('settingsFilterWordsList');
+            if (!list) return;
+            list.innerHTML = currentFilterWords.map(w => `
+                <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: #e2e8f0; border-radius: 9999px; font-size: 0.75rem;">
+                    ${w}
+                    <button onclick="settingsDeleteFilterWord('${w}')" style="background: none; border: none; cursor: pointer; color: #ef4444; font-size: 1rem; line-height: 1;">&times;</button>
+                </span>
+            `).join('');
+        }
+
+        function openSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            modal.style.display = 'flex';
+            
+            const currentMode = document.querySelector('input[name="aggregateMode"]:checked');
+            if (currentMode) {
+                document.querySelector(`input[name="settingsMode"][value="${currentMode.value}"]`).checked = true;
+            }
+            updateSettingsModalWords();
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        async function settingsAddFilterWord() {
+            const input = document.getElementById('settingsNewFilterWord');
+            const word = input.value.trim();
+            if (!word) {
+                alert('请输入关键词');
+                return;
+            }
+            if (currentFilterWords.includes(word)) {
+                alert('该关键词已存在');
+                return;
+            }
+            currentFilterWords.push(word);
+            input.value = '';
+            updateSettingsModalWords();
+        }
+
+        function settingsDeleteFilterWord(word) {
+            currentFilterWords = currentFilterWords.filter(w => w !== word);
+            updateSettingsModalWords();
+        }
+
+        async function saveSettings() {
+            const mode = document.querySelector('input[name="settingsMode"]:checked').value;
+            document.querySelector(`input[name="aggregateMode"][value="${mode}"]`).checked = true;
+
+            try {
+                await fetch('/api/filter-words', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ words: currentFilterWords })
+                });
+            } catch (error) {
+                console.error('保存关键词失败:', error);
+            }
+
+            updateCurrentSettings();
+            closeSettingsModal();
+        }
+
+        async function addFilterWord() {
+            const input = document.getElementById('newFilterWord');
+            const word = input.value.trim();
+            if (!word) {
+                alert('请输入关键词');
+                return;
+            }
+            try {
+                await fetch('/api/filter-words', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ word: word })
+                });
+                input.value = '';
+                loadFilterWords();
+            } catch (error) {
+                console.error('添加关键词失败:', error);
+                alert('添加失败，请重试');
+            }
+        }
+
+        async function deleteFilterWord(word) {
+            try {
+                await fetch(`/api/filter-words/${encodeURIComponent(word)}`, { method: 'DELETE' });
+                loadFilterWords();
+            } catch (error) {
+                console.error('删除关键词失败:', error);
+                alert('删除失败，请重试');
+            }
+        }
+
+        async function resetFilterWords() {
+            if (!confirm('确定重置为默认关键词？')) return;
+            try {
+                await fetch('/api/filter-words/reset', { method: 'POST' });
+                loadFilterWords();
+            } catch (error) {
+                console.error('重置关键词失败:', error);
+                alert('重置失败，请重试');
             }
         }
 
@@ -661,6 +883,60 @@
             } catch (error) {
                 console.error('删除失败:', error);
                 alert('删除失败，请重试');
+            }
+        }
+
+        async function testSource(id) {
+            try {
+                const res = await fetch(`/api/test/${id}`);
+                const data = await res.json();
+                if (data.success) {
+                    alert('测试成功：源连接正常');
+                } else {
+                    alert('测试失败：' + (data.error || '未知错误'));
+                }
+                refresh();
+            } catch (error) {
+                console.error('测试失败:', error);
+                alert('测试失败，请重试');
+            }
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.source-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        }
+
+        function getSelectedIds() {
+            const checkboxes = document.querySelectorAll('.source-checkbox:checked');
+            return Array.from(checkboxes).map(cb => parseInt(cb.dataset.id));
+        }
+
+        async function testSelected() {
+            const ids = getSelectedIds();
+            if (ids.length === 0) {
+                alert('请先选择要测试的源');
+                return;
+            }
+            try {
+                const res = await fetch('/api/test', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ ids: ids })
+                });
+                const data = await res.json();
+                let successCount = 0;
+                let failCount = 0;
+                data.results.forEach(r => {
+                    if (r.success) successCount++;
+                    else failCount++;
+                });
+                alert(`测试完成：成功 ${successCount} 个，失败 ${failCount} 个`);
+                refresh();
+            } catch (error) {
+                console.error('批量测试失败:', error);
+                alert('批量测试失败，请重试');
             }
         }
 
@@ -709,33 +985,35 @@
 
         async function aggregate() {
             try {
-                updateStatus('正在启动同步 - 准备抓取源数据...', true);
-                await fetch('/api/aggregate', { method: 'POST' });
+                const mode = document.querySelector('input[name="aggregateMode"]:checked').value;
+                updateStatus('正在启动同步...', true);
+                await fetch('/api/aggregate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ mode: mode })
+                });
                 
-                // 定期检查同步状态
                 const checkStatus = async () => {
                     try {
                         const res = await fetch('/api/status');
                         const data = await res.json();
                         if (data.is_running) {
-                            updateStatus('同步中 - 正在聚合站点数据...', true);
+                            updateStatus('同步中...', true);
                             setTimeout(checkStatus, 1000);
                         } else {
-                            updateStatus('同步完成 - 已更新聚合配置', false);
-                            // 延迟一下再刷新，确保数据已更新
+                            updateStatus('同步完成', false);
                             setTimeout(refresh, 500);
                         }
                     } catch (error) {
                         console.error('检查状态失败:', error);
-                        updateStatus('同步失败 - 请检查网络连接', false);
+                        updateStatus('同步失败', false);
                     }
                 };
                 
-                // 开始检查状态
                 setTimeout(checkStatus, 1000);
             } catch (error) {
                 console.error('聚合失败:', error);
-                updateStatus('同步失败 - 请检查网络连接', false);
+                updateStatus('同步失败', false);
             }
         }
 
