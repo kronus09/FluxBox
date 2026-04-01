@@ -42,7 +42,7 @@ COPY --from=builder /app/web ./web
 RUN mkdir -p ./data && chmod -R 777 ./data
 
 # 暴露端口 (FluxBox 默认端口)
-EXPOSE 10504
+EXPOSE 20504
 
 # 启动命令
 CMD ["./fluxbox"]

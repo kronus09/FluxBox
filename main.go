@@ -34,5 +34,6 @@ func main() {
 	api.RegisterRoutes(r)
 
 	// 6. 启动
+	println("FluxBox 启动成功，访问地址: http://localhost:20504")
 	r.Run(":20504")
 }

@@ -45,3 +45,12 @@ type SourceItem struct {
 	LastError    string `json:"last_error"`
 	ResponseTime int    `json:"response_time"`
 }
+
+// ScheduleConfig 计划任务配置
+type ScheduleConfig struct {
+	Enabled   bool   `json:"enabled"`   // 是否启用
+	Frequency string `json:"frequency"` // daily / weekly
+	Time      string `json:"time"`      // HH:mm 格式
+	Days      []int  `json:"days"`      // 1=周一 ... 7=周日，weekly模式使用
+	Mode      string `json:"mode"`      // fastest / all，聚合模式
+}

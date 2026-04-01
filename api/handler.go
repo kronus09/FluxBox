@@ -20,15 +20,18 @@ var (
 	SourcesFile       = "data/sources.json"
 	CacheFile         = "data/config_cache.json"
 	FilterWordsFile   = "data/filter_words.json"
+	ScheduleFile      = "data/schedule.json"
 	MemorySources     []models.SourceItem
 	MemoryConfig      models.TVConfig
 	MemoryFilterWords []string
+	MemorySchedule    models.ScheduleConfig
 	Mu                sync.Mutex
 	IsAggregating     bool
+	SchedulerTimer    *time.Timer
 )
 
 // DefaultFilterWords 默认过滤关键词
-var DefaultFilterWords = []string{"直播", "儿童", "启蒙", "教育", "课堂", "学习", "少儿"}
+var DefaultFilterWords = []string{"直播", "儿童", "启蒙", "教育", "课堂", "学习", "少儿", "预告"}
 
 // InitData 初始化数据：从文件读取到内存
 func InitData() {
@@ -51,6 +54,23 @@ func InitData() {
 		MemoryFilterWords = append([]string{}, DefaultFilterWords...)
 		saveFilterWordsToFile()
 	}
+
+	// 加载计划任务配置
+	if data, err := os.ReadFile(ScheduleFile); err == nil && len(data) > 0 {
+		json.Unmarshal(data, &MemorySchedule)
+	} else {
+		MemorySchedule = models.ScheduleConfig{
+			Enabled:   false,
+			Frequency: "daily",
+			Time:      "04:00",
+			Days:      []int{1, 2, 3, 4, 5},
+			Mode:      "fastest",
+		}
+		saveScheduleToFile()
+	}
+
+	// 启动计划任务调度器
+	StartScheduler()
 }
 
 // saveSourcesToFile 保存源列表到文件
@@ -63,6 +83,96 @@ func saveSourcesToFile() {
 func saveFilterWordsToFile() {
 	data, _ := json.MarshalIndent(MemoryFilterWords, "", "  ")
 	os.WriteFile(FilterWordsFile, data, 0644)
+}
+
+// saveScheduleToFile 保存计划任务配置到文件
+func saveScheduleToFile() {
+	data, _ := json.MarshalIndent(MemorySchedule, "", "  ")
+	os.WriteFile(ScheduleFile, data, 0644)
+}
+
+// StartScheduler 启动计划任务调度器
+func StartScheduler() {
+	Mu.Lock()
+	defer Mu.Unlock()
+
+	if SchedulerTimer != nil {
+		SchedulerTimer.Stop()
+	}
+
+	if !MemorySchedule.Enabled {
+		return
+	}
+
+	nextTime := calculateNextRunTime()
+	if nextTime.IsZero() {
+		return
+	}
+
+	duration := time.Until(nextTime)
+	SchedulerTimer = time.AfterFunc(duration, func() {
+		Mu.Lock()
+		config := MemorySchedule
+		Mu.Unlock()
+
+		if config.Enabled {
+			RunAggregation(config.Mode)
+		}
+		StartScheduler()
+	})
+}
+
+// calculateNextRunTime 计算下次执行时间
+func calculateNextRunTime() time.Time {
+	now := time.Now()
+
+	hour, minute := 0, 0
+	fmt.Sscanf(MemorySchedule.Time, "%d:%d", &hour, &minute)
+
+	if MemorySchedule.Frequency == "daily" {
+		next := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, now.Location())
+		if next.Before(now) || next.Equal(now) {
+			next = next.Add(24 * time.Hour)
+		}
+		return next
+	}
+
+	if MemorySchedule.Frequency == "weekly" {
+		currentWeekday := int(now.Weekday())
+		if currentWeekday == 0 {
+			currentWeekday = 7
+		}
+
+		var nextDay int
+		found := false
+		for _, d := range MemorySchedule.Days {
+			if d > currentWeekday {
+				nextDay = d
+				found = true
+				break
+			}
+		}
+
+		if !found && len(MemorySchedule.Days) > 0 {
+			nextDay = MemorySchedule.Days[0]
+		} else if !found {
+			return time.Time{}
+		}
+
+		daysToAdd := nextDay - currentWeekday
+		if daysToAdd <= 0 {
+			daysToAdd += 7
+		}
+
+		next := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, now.Location())
+		next = next.Add(time.Duration(daysToAdd) * 24 * time.Hour)
+		if next.Before(now) || next.Equal(now) {
+			next = next.Add(7 * 24 * time.Hour)
+		}
+		return next
+	}
+
+	return time.Time{}
 }
 
 // shouldFilterSite 判断站点是否应该被过滤
@@ -517,4 +627,30 @@ func ResetFilterWords(c *gin.Context) {
 	MemoryFilterWords = append([]string{}, DefaultFilterWords...)
 	saveFilterWordsToFile()
 	c.JSON(200, gin.H{"message": "重置成功"})
+}
+
+// GetSchedule Handler: 获取计划任务配置
+func GetSchedule(c *gin.Context) {
+	Mu.Lock()
+	defer Mu.Unlock()
+
+	c.JSON(200, MemorySchedule)
+}
+
+// SaveSchedule Handler: 保存计划任务配置
+func SaveSchedule(c *gin.Context) {
+	var req models.ScheduleConfig
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": "无效输入"})
+		return
+	}
+
+	Mu.Lock()
+	MemorySchedule = req
+	saveScheduleToFile()
+	Mu.Unlock()
+
+	StartScheduler()
+
+	c.JSON(200, gin.H{"message": "保存成功"})
 }

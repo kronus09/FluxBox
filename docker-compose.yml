@@ -4,7 +4,7 @@ services:
     image: ghcr.io/kronus09/fluxbox:latest
     container_name: fluxbox
     ports:
-      - "10504:10504"
+      - "20504:20504"
     volumes:
       # 左边是宿主机路径（或卷名），右边是容器内路径
       # 注意：对应 Dockerfile 中的 WORKDIR /app

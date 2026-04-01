@@ -378,19 +378,24 @@
         
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto;
-            padding: 1.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0.75rem;
             border: 1px solid #888;
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             width: 90%;
-            max-width: 500px;
+            max-width: 420px;
         }
         
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: move;
+            user-select: none;
         }
         
         .modal-title {
@@ -412,7 +417,7 @@
         }
         
         .modal-body {
-            margin-bottom: 1rem;
+            margin-bottom: 0;
         }
         
         .modal-footer {
@@ -528,7 +533,7 @@
                 <img src="/static/fluxbox.png" alt="FluxBox Logo" class="logo">
                 <div class="header-text">
                     <div class="header-title">
-                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.6</span></h1>
+                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.7</span></h1>
                         <p class="header-desc">多源脱壳聚合引擎</p>
                     </div>
                 </div>
@@ -552,7 +557,7 @@
             </div>
             <div class="config-url">
                 <button onclick="copyUrl(this)" class="btn btn-primary">复制订阅</button>
-                <div class="url-display" id="configUrl">http://localhost:8080/config</div>
+                <div class="url-display" id="configUrl">http://localhost:20504/config</div>
             </div>
         </div>
 
@@ -595,7 +600,7 @@
         </div>
 
         <div class="footer">
-            <p>FluxBox v0.1.6 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a> | 多源脱壳聚合引擎</p>
+            <p>FluxBox v0.1.7 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a> | 多源脱壳聚合引擎</p>
         </div>
     </div>
 
@@ -610,35 +615,83 @@
                 <span class="close" onclick="closeSettingsModal()">&times;</span>
             </div>
             <div class="modal-body">
-                <div style="margin-bottom: 1.5rem;">
-                    <h4 style="margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--dark);">聚合模式</h4>
-                    <div style="display: flex; gap: 1.5rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
-                            <input type="radio" name="settingsMode" value="fastest" checked style="cursor: pointer; width: 16px; height: 16px;">
-                            最快站点（取前120个）
+                <div style="margin-bottom: 0.5rem;">
+                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">聚合模式</h4>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                            <input type="radio" name="settingsMode" value="fastest" checked style="cursor: pointer; width: 12px; height: 12px;">
+                            最快站点（前120个）
                         </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem;">
-                            <input type="radio" name="settingsMode" value="all" style="cursor: pointer; width: 16px; height: 16px;">
+                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                            <input type="radio" name="settingsMode" value="all" style="cursor: pointer; width: 12px; height: 12px;">
                             全部站点
                         </label>
                     </div>
                 </div>
-                <div>
-                    <h4 style="margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--dark);">过滤关键词</h4>
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
-                        <input type="text" id="settingsNewFilterWord" placeholder="输入关键词" style="flex: 1;">
-                        <button onclick="settingsAddFilterWord()" class="btn btn-primary" style="padding: 0.5rem 1rem; min-width: auto;">添加</button>
+                <div style="padding-top: 0.5rem; border-top: 1px solid var(--border); margin-bottom: 0.5rem;">
+                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">过滤关键词</h4>
+                    <div style="display: flex; gap: 0.3rem; margin-bottom: 0.35rem;">
+                        <input type="text" id="settingsNewFilterWord" placeholder="输入关键词" style="flex: 1; padding: 0.25rem 0.4rem; font-size: 0.75rem;">
+                        <button onclick="settingsAddFilterWord()" class="btn btn-primary" style="padding: 0.25rem 0.5rem; min-width: auto; font-size: 0.75rem;">添加</button>
                     </div>
-                    <div id="settingsFilterWordsList" style="display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 2rem;">
+                    <div id="settingsFilterWordsList" style="display: flex; flex-wrap: wrap; gap: 0.25rem; min-height: 1.2rem;">
                     </div>
-                    <div style="margin-top: 0.75rem;">
-                        <button onclick="resetFilterWords()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto; font-size: 0.75rem; background: var(--gray);">重置默认</button>
+                    <div style="margin-top: 0.35rem;">
+                        <button onclick="resetFilterWords()" class="btn btn-primary" style="padding: 0.2rem 0.4rem; min-width: auto; font-size: 0.65rem; background: var(--gray);">重置默认</button>
+                    </div>
+                </div>
+                <div style="padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">计划任务</h4>
+                    <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-bottom: 0.35rem;">
+                        <input type="checkbox" id="scheduleEnabled" style="cursor: pointer; width: 12px; height: 12px;">
+                        启用定时聚合
+                    </label>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.35rem;">
+                        <div>
+                            <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行频率</label>
+                            <select id="scheduleFrequency" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.6rem;">
+                                <option value="daily">每天</option>
+                                <option value="weekly">每周</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行时间</label>
+                            <input type="time" id="scheduleTime" value="04:00" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.6rem;">
+                        </div>
+                    </div>
+                    <div id="weeklyDays">
+                        <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行日期</label>
+                        <div style="display: flex; gap: 0.2rem; flex-wrap: wrap;">
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="1" style="cursor: pointer; width: 10px; height: 10px;"> 一
+                            </label>
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="2" style="cursor: pointer; width: 10px; height: 10px;"> 二
+                            </label>
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="3" style="cursor: pointer; width: 10px; height: 10px;"> 三
+                            </label>
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="4" style="cursor: pointer; width: 10px; height: 10px;"> 四
+                            </label>
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="5" style="cursor: pointer; width: 10px; height: 10px;"> 五
+                            </label>
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="6" style="cursor: pointer; width: 10px; height: 10px;"> 六
+                            </label>
+                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
+                                <input type="checkbox" class="schedule-day" value="7" style="cursor: pointer; width: 10px; height: 10px;"> 日
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button onclick="closeSettingsModal()" class="btn btn-primary" style="background: #64748b;">取消</button>
-                <button onclick="saveSettings()" class="btn btn-primary">保存</button>
+            <div style="border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.35rem;">
+                <div class="modal-footer" style="margin: 0;">
+                    <button onclick="closeSettingsModal()" class="btn btn-primary" style="background: #64748b; padding: 0.3rem 0.6rem; font-size: 0.75rem;">取消</button>
+                    <button onclick="saveSettings()" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">保存</button>
+                </div>
             </div>
         </div>
     </div>
@@ -716,6 +769,7 @@
         }
 
         let currentFilterWords = [];
+        let currentSchedule = { enabled: false, frequency: 'daily', time: '04:00', days: [], mode: 'fastest' };
 
         async function loadFilterWords() {
             try {
@@ -736,36 +790,131 @@
             } catch (error) {
                 console.error('加载过滤关键词失败:', error);
             }
+
+            try {
+                const res = await fetch('/api/schedule');
+                currentSchedule = await res.json();
+                updateCurrentSettings();
+            } catch (error) {
+                console.error('加载计划任务配置失败:', error);
+            }
         }
 
         function updateCurrentSettings() {
             const mode = document.querySelector('input[name="aggregateMode"]:checked');
             const modeText = mode && mode.value === 'fastest' ? '最快站点' : '全部站点';
             const filterText = currentFilterWords.length > 0 ? currentFilterWords.join(',') : '无';
-            document.getElementById('currentSettings').innerText = `${modeText} | 过滤: ${filterText}`;
+            const scheduleText = currentSchedule.enabled ? ` | 定时: ${currentSchedule.frequency === 'daily' ? '每天' : '每周'} ${currentSchedule.time}` : '';
+            document.getElementById('currentSettings').innerText = `${modeText} | 过滤: ${filterText}${scheduleText}`;
         }
 
         function updateSettingsModalWords() {
             const list = document.getElementById('settingsFilterWordsList');
             if (!list) return;
             list.innerHTML = currentFilterWords.map(w => `
-                <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: #e2e8f0; border-radius: 9999px; font-size: 0.75rem;">
+                <span style="display: inline-flex; align-items: center; gap: 0.1rem; padding: 0.1rem 0.3rem; background: #e2e8f0; border-radius: 9999px; font-size: 0.65rem;">
                     ${w}
-                    <button onclick="settingsDeleteFilterWord('${w}')" style="background: none; border: none; cursor: pointer; color: #ef4444; font-size: 1rem; line-height: 1;">&times;</button>
+                    <button onclick="settingsDeleteFilterWord('${w}')" style="background: none; border: none; cursor: pointer; color: #ef4444; font-size: 0.75rem; line-height: 1;">&times;</button>
                 </span>
             `).join('');
         }
 
         function openSettingsModal() {
             const modal = document.getElementById('settingsModal');
+            const modalContent = modal.querySelector('.modal-content');
             modal.style.display = 'flex';
+            modalContent.style.transform = 'translate(-50%, -50%)';
+            modalContent.style.left = '50%';
+            modalContent.style.top = '50%';
             
             const currentMode = document.querySelector('input[name="aggregateMode"]:checked');
             if (currentMode) {
                 document.querySelector(`input[name="settingsMode"][value="${currentMode.value}"]`).checked = true;
             }
             updateSettingsModalWords();
+            loadScheduleConfig();
         }
+
+        async function loadScheduleConfig() {
+            try {
+                const res = await fetch('/api/schedule');
+                const config = await res.json();
+                currentSchedule = config;
+                document.getElementById('scheduleEnabled').checked = config.enabled;
+                document.getElementById('scheduleFrequency').value = config.frequency;
+                document.getElementById('scheduleTime').value = config.time;
+                
+                updateDaysState(config.frequency, config.days);
+            } catch (error) {
+                console.error('加载计划任务配置失败:', error);
+            }
+        }
+
+        function updateDaysState(frequency, selectedDays) {
+            const dayLabels = document.querySelectorAll('.day-label');
+            const dayCheckboxes = document.querySelectorAll('.schedule-day');
+            
+            if (frequency === 'daily') {
+                dayLabels.forEach(label => {
+                    label.style.opacity = '0.5';
+                    label.style.cursor = 'not-allowed';
+                });
+                dayCheckboxes.forEach(cb => {
+                    cb.checked = true;
+                    cb.disabled = true;
+                    cb.style.cursor = 'not-allowed';
+                });
+            } else {
+                dayLabels.forEach(label => {
+                    label.style.opacity = '1';
+                    label.style.cursor = 'pointer';
+                });
+                dayCheckboxes.forEach(cb => {
+                    cb.checked = selectedDays && selectedDays.includes(parseInt(cb.value));
+                    cb.disabled = false;
+                    cb.style.cursor = 'pointer';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('scheduleFrequency').addEventListener('change', function() {
+                const frequency = this.value;
+                if (frequency === 'daily') {
+                    updateDaysState('daily', []);
+                } else {
+                    updateDaysState('weekly', [1, 2, 3, 4, 5]);
+                }
+            });
+
+            // 拖拽功能
+            const modal = document.getElementById('settingsModal');
+            const modalContent = modal.querySelector('.modal-content');
+            const header = modalContent.querySelector('.modal-header');
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            header.addEventListener('mousedown', function(e) {
+                if (e.target.classList.contains('close')) return;
+                isDragging = true;
+                const rect = modalContent.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                modalContent.style.transform = 'none';
+                modalContent.style.left = rect.left + 'px';
+                modalContent.style.top = rect.top + 'px';
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                modalContent.style.left = (e.clientX - offsetX) + 'px';
+                modalContent.style.top = (e.clientY - offsetY) + 'px';
+            });
+
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+            });
+        });
 
         function closeSettingsModal() {
             document.getElementById('settingsModal').style.display = 'none';
@@ -796,14 +945,37 @@
             const mode = document.querySelector('input[name="settingsMode"]:checked').value;
             document.querySelector(`input[name="aggregateMode"][value="${mode}"]`).checked = true;
 
+            const frequency = document.getElementById('scheduleFrequency').value;
+            let days;
+            if (frequency === 'daily') {
+                days = [1, 2, 3, 4, 5, 6, 7];
+            } else {
+                days = Array.from(document.querySelectorAll('.schedule-day:checked')).map(cb => parseInt(cb.value));
+            }
+
+            const scheduleConfig = {
+                enabled: document.getElementById('scheduleEnabled').checked,
+                frequency: frequency,
+                time: document.getElementById('scheduleTime').value,
+                days: days,
+                mode: mode
+            };
+
             try {
                 await fetch('/api/filter-words', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ words: currentFilterWords })
                 });
+
+                await fetch('/api/schedule', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(scheduleConfig)
+                });
+                currentSchedule = scheduleConfig;
             } catch (error) {
-                console.error('保存关键词失败:', error);
+                console.error('保存设置失败:', error);
             }
 
             updateCurrentSettings();

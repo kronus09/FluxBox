@@ -16,5 +16,7 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.POST("/filter-words", AddFilterWord)
 		apiGroup.DELETE("/filter-words/:word", DeleteFilterWord)
 		apiGroup.POST("/filter-words/reset", ResetFilterWords)
+		apiGroup.GET("/schedule", GetSchedule)
+		apiGroup.POST("/schedule", SaveSchedule)
 	}
 }
