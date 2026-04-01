@@ -5,7 +5,8 @@
     "url": "http://肥猫.com/",
     "enabled": true,
     "last_status": "success",
-    "last_error": ""
+    "last_error": "",
+    "response_time": 850
   },
   {
     "id": 1772243954,
@@ -13,15 +14,17 @@
     "url": "http://www.饭太硬.com/tv",
     "enabled": true,
     "last_status": "success",
-    "last_error": ""
+    "last_error": "",
+    "response_time": 1061
   },
   {
     "id": 1772243984,
     "name": "摸鱼",
     "url": "http://我不是.摸鱼儿.com/",
     "enabled": true,
-    "last_status": "success",
-    "last_error": ""
+    "last_status": "failed",
+    "last_error": "Get \"http://%E6%88%91%E4%B8%8D%E6%98%AF.%E6%91%B8%E9%B1%BC%E5%84%BF.com/\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)",
+    "response_time": 0
   },
   {
     "id": 1772244015,
@@ -29,14 +32,43 @@
     "url": "http://tvbox.王二小放牛娃.top/",
     "enabled": true,
     "last_status": "success",
-    "last_error": ""
+    "last_error": "",
+    "response_time": 847
   },
   {
     "id": 1772255618450,
     "name": "OK",
     "url": "http://ok321.top/ok",
     "enabled": true,
+    "last_status": "failed",
+    "last_error": "Get \"http://ok321.top/ok\": dial tcp: lookup ok321.top: no such host",
+    "response_time": 0
+  },
+  {
+    "id": 1775020659347,
+    "name": "欧歌",
+    "url": "http://tv.nxog.top/api.php?mz=xb\u0026id=1\u0026b=欧歌",
+    "enabled": true,
     "last_status": "success",
-    "last_error": ""
+    "last_error": "",
+    "response_time": 156
+  },
+  {
+    "id": 1775020683559,
+    "name": "小林",
+    "url": "https://ghproxy.net/https://raw.githubusercontent.com/xiaolinshao/linshao/main/1.json",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": "",
+    "response_time": 1266
+  },
+  {
+    "id": 1775020719920,
+    "name": "freed",
+    "url": "https://github.com/YuanHsing/freed/raw/master/TVBox/meow.json",
+    "enabled": true,
+    "last_status": "success",
+    "last_error": "",
+    "response_time": 1335
   }
 ]

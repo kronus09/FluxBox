@@ -30,7 +30,15 @@ func main() {
 		c.JSON(200, config)
 	})
 
-	// 5. 注册 API 路由
+	// 5. 多仓配置接口 (持久化读取)
+	r.GET("/multi-config", func(c *gin.Context) {
+		api.Mu.Lock()
+		config := api.MemoryMultiConfig
+		api.Mu.Unlock()
+		c.JSON(200, config)
+	})
+
+	// 6. 注册 API 路由
 	api.RegisterRoutes(r)
 
 	// 6. 启动

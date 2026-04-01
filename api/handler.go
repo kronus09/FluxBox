@@ -21,10 +21,12 @@ var (
 	CacheFile         = "data/config_cache.json"
 	FilterWordsFile   = "data/filter_words.json"
 	ScheduleFile      = "data/schedule.json"
+	MultiConfigFile   = "data/multi_config.json"
 	MemorySources     []models.SourceItem
 	MemoryConfig      models.TVConfig
 	MemoryFilterWords []string
 	MemorySchedule    models.ScheduleConfig
+	MemoryMultiConfig models.TVConfig
 	Mu                sync.Mutex
 	IsAggregating     bool
 	SchedulerTimer    *time.Timer
@@ -69,6 +71,11 @@ func InitData() {
 		saveScheduleToFile()
 	}
 
+	// 加载多仓配置
+	if data, err := os.ReadFile(MultiConfigFile); err == nil {
+		json.Unmarshal(data, &MemoryMultiConfig)
+	}
+
 	// 启动计划任务调度器
 	StartScheduler()
 }
@@ -89,6 +96,12 @@ func saveFilterWordsToFile() {
 func saveScheduleToFile() {
 	data, _ := json.MarshalIndent(MemorySchedule, "", "  ")
 	os.WriteFile(ScheduleFile, data, 0644)
+}
+
+// saveMultiConfigToFile 保存多仓配置到文件
+func saveMultiConfigToFile() {
+	data, _ := json.MarshalIndent(MemoryMultiConfig, "", "  ")
+	os.WriteFile(MultiConfigFile, data, 0644)
 }
 
 // StartScheduler 启动计划任务调度器
@@ -190,6 +203,7 @@ func shouldFilterSite(name string) bool {
 }
 
 // fetchAndParse 抓取并脱壳的核心函数，返回配置和响应时间(毫秒)
+// 支持单仓和多仓格式
 func fetchAndParse(url string) (*models.TVConfig, int, error) {
 	start := time.Now()
 	client := &http.Client{Timeout: 15 * time.Second}
@@ -219,9 +233,116 @@ func fetchAndParse(url string) (*models.TVConfig, int, error) {
 
 	var config models.TVConfig
 	if err := json.Unmarshal([]byte(jsonStr), &config); err != nil {
-		return nil, int(time.Since(start).Milliseconds()), fmt.Errorf("JSON 解析失败")
+		return nil, int(time.Since(start).Milliseconds()), fmt.Errorf("JSON 解析失败: %v", err)
 	}
+
+	// 检测是否为多仓格式
+	if len(config.VideoList) > 0 && len(config.Sites) == 0 {
+		return fetchMultiWarehouse(&config, start)
+	}
+
 	return &config, int(time.Since(start).Milliseconds()), nil
+}
+
+// fetchMultiWarehouse 处理多仓格式，递归获取所有子仓库配置
+func fetchMultiWarehouse(config *models.TVConfig, startTime time.Time) (*models.TVConfig, int, error) {
+	type warehouseResult struct {
+		config *models.TVConfig
+		err    error
+	}
+
+	results := make(chan warehouseResult, len(config.VideoList))
+	var wg sync.WaitGroup
+
+	for _, vw := range config.VideoList {
+		if vw.URL == "" {
+			continue
+		}
+		wg.Add(1)
+		go func(url string) {
+			defer wg.Done()
+			subConfig, _, err := fetchAndParse(url)
+			results <- warehouseResult{config: subConfig, err: err}
+		}(vw.URL)
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	merged := &models.TVConfig{
+		Wallpaper: config.Wallpaper,
+		Logo:      config.Logo,
+		Spider:    config.Spider,
+		Sites:     []models.Site{},
+		Lives:     []models.Live{},
+		Ads:       []string{},
+		Parses:    []models.Parse{},
+		Rules:     []models.Rule{},
+		Flags:     []string{},
+		Ijk:       []models.Ijk{},
+		Doh:       []models.Doh{},
+	}
+
+	for result := range results {
+		if result.err != nil || result.config == nil {
+			continue
+		}
+		sub := result.config
+
+		// 合并站点
+		if len(sub.Sites) > 0 {
+			merged.Sites = append(merged.Sites, sub.Sites...)
+		}
+
+		// 合并直播源
+		if len(sub.Lives) > 0 {
+			merged.Lives = append(merged.Lives, sub.Lives...)
+		}
+
+		// 合并广告过滤
+		if len(sub.Ads) > 0 {
+			merged.Ads = append(merged.Ads, sub.Ads...)
+		}
+
+		// 合并解析器
+		if len(sub.Parses) > 0 {
+			merged.Parses = append(merged.Parses, sub.Parses...)
+		}
+
+		// 合并规则
+		if len(sub.Rules) > 0 {
+			merged.Rules = append(merged.Rules, sub.Rules...)
+		}
+
+		// 合并 Flags
+		if len(sub.Flags) > 0 {
+			merged.Flags = append(merged.Flags, sub.Flags...)
+		}
+
+		// 合并 IJK 配置
+		if len(sub.Ijk) > 0 {
+			merged.Ijk = append(merged.Ijk, sub.Ijk...)
+		}
+
+		// 合并 DoH 配置
+		if len(sub.Doh) > 0 {
+			merged.Doh = append(merged.Doh, sub.Doh...)
+		}
+
+		// 继承第一个有效的 Spider
+		if merged.Spider == "" && sub.Spider != "" {
+			merged.Spider = sub.Spider
+		}
+
+		// 继承第一个有效的 Wallpaper
+		if merged.Wallpaper == "" && sub.Wallpaper != "" {
+			merged.Wallpaper = sub.Wallpaper
+		}
+	}
+
+	return merged, int(time.Since(startTime).Milliseconds()), nil
 }
 
 // testSiteSpeed 测试单个站点的响应速度，返回响应时间(毫秒)
@@ -466,7 +587,15 @@ func TestSource(c *gin.Context) {
 		targetSource.LastStatus = "failed"
 		targetSource.LastError = err.Error()
 		targetSource.ResponseTime = responseTime
-		Mu.Unlock()
+	} else {
+		targetSource.LastStatus = "success"
+		targetSource.LastError = ""
+		targetSource.ResponseTime = responseTime
+	}
+	saveSourcesToFile()
+	Mu.Unlock()
+
+	if err != nil {
 		c.JSON(200, gin.H{
 			"success":      false,
 			"error":        err.Error(),
@@ -474,10 +603,6 @@ func TestSource(c *gin.Context) {
 			"responseTime": responseTime,
 		})
 	} else {
-		targetSource.LastStatus = "success"
-		targetSource.LastError = ""
-		targetSource.ResponseTime = responseTime
-		Mu.Unlock()
 		c.JSON(200, gin.H{
 			"success":      true,
 			"id":           targetSource.ID,
@@ -552,6 +677,10 @@ func TestSources(c *gin.Context) {
 		}(id)
 	}
 	wg.Wait()
+
+	Mu.Lock()
+	saveSourcesToFile()
+	Mu.Unlock()
 
 	c.JSON(200, gin.H{"results": results})
 }
@@ -653,4 +782,107 @@ func SaveSchedule(c *gin.Context) {
 	StartScheduler()
 
 	c.JSON(200, gin.H{"message": "保存成功"})
+}
+
+// GenerateMultiConfig Handler: 生成多仓配置
+func GenerateMultiConfig(c *gin.Context) {
+	Mu.Lock()
+	if IsAggregating {
+		Mu.Unlock()
+		c.JSON(400, gin.H{"error": "正在聚合中，请稍后再试", "success": false})
+		return
+	}
+	IsAggregating = true
+	Mu.Unlock()
+
+	defer func() {
+		Mu.Lock()
+		IsAggregating = false
+		Mu.Unlock()
+	}()
+
+	type sourceWithSpeed struct {
+		source models.SourceItem
+		speed  int
+	}
+
+	var validSources []sourceWithSpeed
+	var wg sync.WaitGroup
+	var resultsMu sync.Mutex
+
+	for i := range MemorySources {
+		if !MemorySources[i].Enabled {
+			continue
+		}
+		wg.Add(1)
+		go func(idx int) {
+			defer wg.Done()
+			src := MemorySources[idx]
+			_, responseTime, err := fetchAndParse(src.URL)
+			if err == nil {
+				resultsMu.Lock()
+				validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime})
+				resultsMu.Unlock()
+			}
+		}(i)
+	}
+	wg.Wait()
+
+	for i := 0; i < len(validSources); i++ {
+		for j := i + 1; j < len(validSources); j++ {
+			if validSources[j].speed < validSources[i].speed {
+				validSources[i], validSources[j] = validSources[j], validSources[i]
+			}
+		}
+	}
+
+	videoList := []models.VideoSource{}
+	for _, vs := range validSources {
+		speedStr := fmt.Sprintf("%dms", vs.speed)
+		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
+		videoList = append(videoList, models.VideoSource{
+			Name: name,
+			URL:  vs.source.URL,
+		})
+	}
+
+	Mu.Lock()
+	MemoryMultiConfig = models.TVConfig{
+		VideoList: videoList,
+	}
+	saveMultiConfigToFile()
+	Mu.Unlock()
+
+	c.JSON(200, gin.H{
+		"success": true,
+		"count":   len(videoList),
+		"message": fmt.Sprintf("已生成多仓配置，共 %d 个源", len(videoList)),
+	})
+}
+
+// GetMultiConfig Handler: 返回多仓配置
+func GetMultiConfig(c *gin.Context) {
+	Mu.Lock()
+	config := MemoryMultiConfig
+	Mu.Unlock()
+
+	if len(config.VideoList) == 0 {
+		c.JSON(200, gin.H{
+			"videoList": []models.VideoSource{},
+		})
+		return
+	}
+
+	c.JSON(200, config)
+}
+
+// GetMultiConfigStatus Handler: 获取多仓配置状态
+func GetMultiConfigStatus(c *gin.Context) {
+	Mu.Lock()
+	count := len(MemoryMultiConfig.VideoList)
+	Mu.Unlock()
+
+	c.JSON(200, gin.H{
+		"count": count,
+	})
 }

@@ -18,5 +18,8 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.POST("/filter-words/reset", ResetFilterWords)
 		apiGroup.GET("/schedule", GetSchedule)
 		apiGroup.POST("/schedule", SaveSchedule)
+		apiGroup.POST("/generate-multi", GenerateMultiConfig)
+		apiGroup.GET("/multi-config", GetMultiConfig)
+		apiGroup.GET("/multi-status", GetMultiConfigStatus)
 	}
 }

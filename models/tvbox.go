@@ -2,12 +2,61 @@ package models
 
 // TVConfig 是 影视Box 配置的顶层结构
 type TVConfig struct {
-	Spider    string   `json:"spider"`
-	Wallpaper string   `json:"wallpaper"`
-	Logo      string   `json:"logo"`
-	Sites     []Site   `json:"sites"`
-	Lives     []Live   `json:"lives,omitempty"`
-	Ads       []string `json:"ads,omitempty"`
+	Spider     string        `json:"spider"`
+	Wallpaper  string        `json:"wallpaper"`
+	Logo       string        `json:"logo"`
+	Sites      []Site        `json:"sites"`
+	Lives      []Live        `json:"lives,omitempty"`
+	Ads        []string      `json:"ads,omitempty"`
+	VideoList  []VideoSource `json:"videoList,omitempty"`
+	Parses     []Parse       `json:"parses,omitempty"`
+	Rules      []Rule        `json:"rules,omitempty"`
+	Flags      []string      `json:"flags,omitempty"`
+	Ijk        []Ijk         `json:"ijk,omitempty"`
+	Doh        []Doh         `json:"doh,omitempty"`
+}
+
+// VideoSource 多仓配置中的子仓库
+type VideoSource struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+	Type string `json:"type,omitempty"`
+}
+
+// Parse 解析器配置
+type Parse struct {
+	Name string      `json:"name"`
+	Type interface{} `json:"type"`  // 可能是 int 或 string
+	URL  string      `json:"url"`
+	Ext  interface{} `json:"ext,omitempty"`
+}
+
+// Rule 解析规则
+type Rule struct {
+	Name   string   `json:"name"`
+	Hosts  []string `json:"hosts"`
+	Regex  []string `json:"regex,omitempty"`
+	Script []string `json:"script,omitempty"`
+}
+
+// Ijk 播放器配置
+type Ijk struct {
+	Group   string        `json:"group"`
+	Options []IjkOption   `json:"options"`
+}
+
+// IjkOption IJK播放器选项
+type IjkOption struct {
+	Category int    `json:"category"`
+	Name     string `json:"name"`
+	Value    string `json:"value"`
+}
+
+// Doh DNS over HTTPS 配置
+type Doh struct {
+	Name string   `json:"name"`
+	URL  string   `json:"url"`
+	Ips  []string `json:"ips,omitempty"`
 }
 
 // Site 对应配置中的每一个影视源

@@ -28,6 +28,7 @@ logs/
 # Build artifacts
 build/
 dist/
+*.exe
 
 # Dependency directories
 vendor/

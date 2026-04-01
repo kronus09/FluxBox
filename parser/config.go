@@ -20,16 +20,31 @@ func CleanJSON(s string) string {
 	}
 	content := s[start : end+1]
 
-	// 3. 移除 JS 风格的单行注释 (// ...)
-	// 很多 影视Box 源为了标注日期会写 // 2024-xx-xx，这会破坏标准 JSON 解析
-	reComments := regexp.MustCompile(`(?m)^\s*//.*$`)
+	// 3. 移除 JS 风格的多行注释 (/* ... */)
+	// 很多影视Box源使用多行注释作为分割线
+	reMultiComments := regexp.MustCompile(`/\*[\s\S]*?\*/`)
+	content = reMultiComments.ReplaceAllString(content, "")
+
+	// 4. 移除 JS 风格的单行注释 (// ...)
+	// 只匹配行首的注释，避免误匹配 URL 中的 //
+	reComments := regexp.MustCompile(`(?m)^[ \t]*//.*$`)
 	content = reComments.ReplaceAllString(content, "")
 
-	// 4. 移除多余的控制字符 (保持换行和空格，杀掉 00-08 等非法字节)
+	// 5. 移除 # 风格的注释行 (常见于配置文件)
+	// 例如: # 这是注释 或 ## 标题
+	reHashComments := regexp.MustCompile(`(?m)^[ \t]*#.*$`)
+	content = reHashComments.ReplaceAllString(content, "")
+
+	// 6. 移除多余的控制字符 (保持换行和空格，杀掉 00-08 等非法字节)
 	reDirty := regexp.MustCompile(`[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]`)
 	content = reDirty.ReplaceAllString(content, "")
 
-	// 5. 修复末尾逗号 (例如 {"a":1,} -> {"a":1})
+	// 7. 修复连续逗号 (注释移除后可能产生 ,, 或 , \n ,)
+	// 例如: [a, // comment\n, b] -> [a, , b] -> [a, b]
+	reMultiComma := regexp.MustCompile(`,(\s*,)+`)
+	content = reMultiComma.ReplaceAllString(content, ",")
+
+	// 8. 修复末尾逗号 (例如 {"a":1,} -> {"a":1} 或 [1,] -> [1])
 	reComma := regexp.MustCompile(`,(\s*[}\]])`)
 	content = reComma.ReplaceAllString(content, "$1")
 
@@ -40,6 +55,12 @@ func ParseConfig(rawContent string) (string, error) {
 	rawContent = strings.TrimSpace(rawContent)
 	if rawContent == "" {
 		return "", nil
+	}
+
+	// 0. 如果已经是标准 JSON 格式，直接清理返回
+	// 避免后续逻辑误处理 JSON 内部的 ** 等字符
+	if strings.HasPrefix(rawContent, "{") || strings.HasPrefix(rawContent, "[") {
+		return CleanJSON(rawContent), nil
 	}
 
 	// 1. 图片隐写/偏移量提取
