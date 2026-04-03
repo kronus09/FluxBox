@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"sync"
@@ -81,9 +82,12 @@ func InitData() {
 }
 
 // saveSourcesToFile 保存源列表到文件
-func saveSourcesToFile() {
-	data, _ := json.MarshalIndent(MemorySources, "", "  ")
-	os.WriteFile(SourcesFile, data, 0644)
+func saveSourcesToFile() error {
+	data, err := json.MarshalIndent(MemorySources, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(SourcesFile, data, 0644)
 }
 
 // saveFilterWordsToFile 保存过滤关键词到文件
@@ -387,8 +391,8 @@ func RunAggregation(mode string) {
 	}
 
 	type sourceResult struct {
-		idx    int
-		config *models.TVConfig
+		sourceID int
+		config   *models.TVConfig
 	}
 
 	var wg sync.WaitGroup
@@ -402,22 +406,34 @@ func RunAggregation(mode string) {
 		wg.Add(1)
 		go func(idx int) {
 			defer wg.Done()
-			src := &MemorySources[idx]
-			config, responseTime, err := fetchAndParse(src.URL)
+			
+			Mu.Lock()
+			sourceURL := MemorySources[idx].URL
+			sourceID := MemorySources[idx].ID
+			Mu.Unlock()
+			
+			config, responseTime, err := fetchAndParse(sourceURL)
 
 			Mu.Lock()
-			if err != nil {
-				src.LastStatus = "failed"
-				src.LastError = err.Error()
-				src.ResponseTime = responseTime
-				Mu.Unlock()
-			} else {
-				src.LastStatus = "success"
-				src.LastError = ""
-				src.ResponseTime = responseTime
-				Mu.Unlock()
+			for i := range MemorySources {
+				if MemorySources[i].ID == sourceID {
+					if err != nil {
+						MemorySources[i].LastStatus = "failed"
+						MemorySources[i].LastError = err.Error()
+						MemorySources[i].ResponseTime = responseTime
+					} else {
+						MemorySources[i].LastStatus = "success"
+						MemorySources[i].LastError = ""
+						MemorySources[i].ResponseTime = responseTime
+					}
+					break
+				}
+			}
+			Mu.Unlock()
+			
+			if err == nil {
 				resultsMu.Lock()
-				results = append(results, sourceResult{idx: idx, config: config})
+				results = append(results, sourceResult{sourceID: sourceID, config: config})
 				resultsMu.Unlock()
 			}
 		}(i)
@@ -426,7 +442,20 @@ func RunAggregation(mode string) {
 
 	var allSites []models.Site
 	for _, r := range results {
-		src := &MemorySources[r.idx]
+		Mu.Lock()
+		var src *models.SourceItem
+		for i := range MemorySources {
+			if MemorySources[i].ID == r.sourceID {
+				src = &MemorySources[i]
+				break
+			}
+		}
+		Mu.Unlock()
+		
+		if src == nil {
+			continue
+		}
+		
 		currentJar := r.config.Spider
 
 		for _, s := range r.config.Sites {
@@ -482,7 +511,9 @@ func RunAggregation(mode string) {
 	MemoryConfig = final
 	cacheData, _ := json.MarshalIndent(final, "", "  ")
 	os.WriteFile(CacheFile, cacheData, 0644)
-	saveSourcesToFile()
+	if err := saveSourcesToFile(); err != nil {
+		log.Printf("保存源列表失败: %v", err)
+	}
 	Mu.Unlock()
 }
 
@@ -508,7 +539,11 @@ func AddSource(c *gin.Context) {
 	item.ID = int(time.Now().UnixNano() / 1e6)
 	item.Enabled = true
 	MemorySources = append(MemorySources, item)
-	saveSourcesToFile()
+	if err := saveSourcesToFile(); err != nil {
+		c.JSON(500, gin.H{"error": "保存失败: " + err.Error()})
+		Mu.Unlock()
+		return
+	}
 	Mu.Unlock()
 	c.JSON(200, gin.H{"message": "添加成功"})
 }
@@ -521,7 +556,10 @@ func DeleteSource(c *gin.Context) {
 	for i, s := range MemorySources {
 		if fmt.Sprintf("%d", s.ID) == idStr {
 			MemorySources = append(MemorySources[:i], MemorySources[i+1:]...)
-			saveSourcesToFile()
+			if err := saveSourcesToFile(); err != nil {
+				c.JSON(500, gin.H{"error": "保存失败: " + err.Error()})
+				return
+			}
 			c.JSON(200, gin.H{"message": "删除成功"})
 			return
 		}
@@ -554,7 +592,10 @@ func UpdateSource(c *gin.Context) {
 		if s.ID == item.ID {
 			MemorySources[i].Name = item.Name
 			MemorySources[i].URL = item.URL
-			saveSourcesToFile()
+			if err := saveSourcesToFile(); err != nil {
+				c.JSON(500, gin.H{"error": "保存失败: " + err.Error()})
+				return
+			}
 			c.JSON(200, gin.H{"message": "更新成功"})
 			return
 		}
@@ -566,46 +607,59 @@ func UpdateSource(c *gin.Context) {
 func TestSource(c *gin.Context) {
 	idStr := c.Param("id")
 	Mu.Lock()
-	var targetSource *models.SourceItem
+	var sourceURL string
+	var sourceID int
+	found := false
 	for i := range MemorySources {
 		if fmt.Sprintf("%d", MemorySources[i].ID) == idStr {
-			targetSource = &MemorySources[i]
+			sourceURL = MemorySources[i].URL
+			sourceID = MemorySources[i].ID
+			found = true
 			break
 		}
 	}
 	Mu.Unlock()
 
-	if targetSource == nil {
+	if !found {
 		c.JSON(404, gin.H{"error": "未找到该源", "success": false})
 		return
 	}
 
-	_, responseTime, err := fetchAndParse(targetSource.URL)
+	_, responseTime, err := fetchAndParse(sourceURL)
 
 	Mu.Lock()
-	if err != nil {
-		targetSource.LastStatus = "failed"
-		targetSource.LastError = err.Error()
-		targetSource.ResponseTime = responseTime
-	} else {
-		targetSource.LastStatus = "success"
-		targetSource.LastError = ""
-		targetSource.ResponseTime = responseTime
+	for i := range MemorySources {
+		if MemorySources[i].ID == sourceID {
+			if err != nil {
+				MemorySources[i].LastStatus = "failed"
+				MemorySources[i].LastError = err.Error()
+				MemorySources[i].ResponseTime = responseTime
+			} else {
+				MemorySources[i].LastStatus = "success"
+				MemorySources[i].LastError = ""
+				MemorySources[i].ResponseTime = responseTime
+			}
+			break
+		}
 	}
-	saveSourcesToFile()
+	if err := saveSourcesToFile(); err != nil {
+		c.JSON(500, gin.H{"error": "保存失败: " + err.Error(), "success": false})
+		Mu.Unlock()
+		return
+	}
 	Mu.Unlock()
 
 	if err != nil {
 		c.JSON(200, gin.H{
 			"success":      false,
 			"error":        err.Error(),
-			"id":           targetSource.ID,
+			"id":           sourceID,
 			"responseTime": responseTime,
 		})
 	} else {
 		c.JSON(200, gin.H{
 			"success":      true,
-			"id":           targetSource.ID,
+			"id":           sourceID,
 			"responseTime": responseTime,
 		})
 	}
@@ -638,48 +692,58 @@ func TestSources(c *gin.Context) {
 			defer wg.Done()
 
 			Mu.Lock()
-			var targetSource *models.SourceItem
+			var sourceURL string
+			found := false
 			for i := range MemorySources {
 				if MemorySources[i].ID == sourceID {
-					targetSource = &MemorySources[i]
+					sourceURL = MemorySources[i].URL
+					found = true
 					break
 				}
 			}
 			Mu.Unlock()
 
-			if targetSource == nil {
+			if !found {
 				resultsMu.Lock()
 				results = append(results, TestResult{ID: sourceID, Success: false, Error: "未找到该源"})
 				resultsMu.Unlock()
 				return
 			}
 
-			_, responseTime, err := fetchAndParse(targetSource.URL)
+			_, responseTime, err := fetchAndParse(sourceURL)
 
 			Mu.Lock()
-			if err != nil {
-				targetSource.LastStatus = "failed"
-				targetSource.LastError = err.Error()
-				targetSource.ResponseTime = responseTime
-				Mu.Unlock()
-				resultsMu.Lock()
-				results = append(results, TestResult{ID: sourceID, Success: false, Error: err.Error(), ResponseTime: responseTime})
-				resultsMu.Unlock()
-			} else {
-				targetSource.LastStatus = "success"
-				targetSource.LastError = ""
-				targetSource.ResponseTime = responseTime
-				Mu.Unlock()
-				resultsMu.Lock()
-				results = append(results, TestResult{ID: sourceID, Success: true, ResponseTime: responseTime})
-				resultsMu.Unlock()
+			for i := range MemorySources {
+				if MemorySources[i].ID == sourceID {
+					if err != nil {
+						MemorySources[i].LastStatus = "failed"
+						MemorySources[i].LastError = err.Error()
+						MemorySources[i].ResponseTime = responseTime
+					} else {
+						MemorySources[i].LastStatus = "success"
+						MemorySources[i].LastError = ""
+						MemorySources[i].ResponseTime = responseTime
+					}
+					break
+				}
 			}
+			Mu.Unlock()
+
+			resultsMu.Lock()
+			if err != nil {
+				results = append(results, TestResult{ID: sourceID, Success: false, Error: err.Error(), ResponseTime: responseTime})
+			} else {
+				results = append(results, TestResult{ID: sourceID, Success: true, ResponseTime: responseTime})
+			}
+			resultsMu.Unlock()
 		}(id)
 	}
 	wg.Wait()
 
 	Mu.Lock()
-	saveSourcesToFile()
+	if err := saveSourcesToFile(); err != nil {
+		log.Printf("保存源列表失败: %v", err)
+	}
 	Mu.Unlock()
 
 	c.JSON(200, gin.H{"results": results})
