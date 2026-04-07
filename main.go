@@ -13,6 +13,7 @@ func main() {
 
 	// 2. 设置 Gin
 	r := gin.Default()
+	r.SetTrustedProxies(nil)
 
 	// 3. 托管静态文件 (web 目录)
 	r.Static("/ui", "./web")
@@ -37,6 +38,12 @@ func main() {
 		api.Mu.Unlock()
 		c.JSON(200, config)
 	})
+
+	// 5.5 首页虚拟站点接口
+	r.GET("/home", api.HandleHomeAPI)
+
+	// 5.6 源配置接口
+	r.GET("/source/:id", api.HandleSourceConfig)
 
 	// 6. 注册 API 路由
 	api.RegisterRoutes(r)

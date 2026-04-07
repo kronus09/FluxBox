@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -18,19 +19,22 @@ import (
 )
 
 var (
-	SourcesFile       = "data/sources.json"
-	CacheFile         = "data/config_cache.json"
-	FilterWordsFile   = "data/filter_words.json"
-	ScheduleFile      = "data/schedule.json"
-	MultiConfigFile   = "data/multi_config.json"
-	MemorySources     []models.SourceItem
-	MemoryConfig      models.TVConfig
-	MemoryFilterWords []string
-	MemorySchedule    models.ScheduleConfig
-	MemoryMultiConfig models.TVConfig
-	Mu                sync.Mutex
-	IsAggregating     bool
-	SchedulerTimer    *time.Timer
+	SourcesFile         = "data/sources.json"
+	CacheFile           = "data/config_cache.json"
+	FilterWordsFile     = "data/filter_words.json"
+	ScheduleFile        = "data/schedule.json"
+	MultiConfigFile     = "data/multi_config.json"
+	SourceCacheDir      = "data/sources/"
+	HomeMenuSourceFile  = "data/home_menu_source.json"
+	MemorySources       []models.SourceItem
+	MemoryConfig        models.TVConfig
+	MemoryFilterWords   []string
+	MemorySchedule      models.ScheduleConfig
+	MemoryMultiConfig   models.TVConfig
+	MemoryHomeMenuSource int
+	Mu                  sync.Mutex
+	IsAggregating       bool
+	SchedulerTimer      *time.Timer
 )
 
 // DefaultFilterWords 默认过滤关键词
@@ -38,6 +42,9 @@ var DefaultFilterWords = []string{"直播", "儿童", "启蒙", "教育", "课�
 
 // InitData 初始化数据：从文件读取到内存
 func InitData() {
+	os.MkdirAll("data", 0755)
+	os.MkdirAll(SourceCacheDir, 0755)
+
 	// 加载源列表
 	if data, err := os.ReadFile(SourcesFile); err == nil {
 		json.Unmarshal(data, &MemorySources)
@@ -77,6 +84,11 @@ func InitData() {
 		json.Unmarshal(data, &MemoryMultiConfig)
 	}
 
+	// 加载首页菜单源配置
+	if data, err := os.ReadFile(HomeMenuSourceFile); err == nil && len(data) > 0 {
+		json.Unmarshal(data, &MemoryHomeMenuSource)
+	}
+
 	// 启动计划任务调度器
 	StartScheduler()
 }
@@ -106,6 +118,12 @@ func saveScheduleToFile() {
 func saveMultiConfigToFile() {
 	data, _ := json.MarshalIndent(MemoryMultiConfig, "", "  ")
 	os.WriteFile(MultiConfigFile, data, 0644)
+}
+
+// saveHomeMenuSourceToFile 保存首页菜单源配置到文件
+func saveHomeMenuSourceToFile() {
+	data, _ := json.MarshalIndent(MemoryHomeMenuSource, "", "  ")
+	os.WriteFile(HomeMenuSourceFile, data, 0644)
 }
 
 // StartScheduler 启动计划任务调度器
@@ -349,7 +367,62 @@ func fetchMultiWarehouse(config *models.TVConfig, startTime time.Time) (*models.
 	return merged, int(time.Since(startTime).Milliseconds()), nil
 }
 
-// testSiteSpeed 测试单个站点的响应速度，返回响应时间(毫秒)
+func cleanExt(ext interface{}) interface{} {
+	if ext == nil {
+		return nil
+	}
+	
+	if extMap, ok := ext.(map[string]interface{}); ok {
+		cleaned := make(map[string]interface{})
+		popupFields := []string{"msg", "logo", "message", "popup", "弹窗", "提示", "公告"}
+		
+		for key, value := range extMap {
+			isPopup := false
+			for _, field := range popupFields {
+				if key == field {
+					isPopup = true
+					break
+				}
+			}
+			if !isPopup {
+				cleaned[key] = value
+			}
+		}
+		
+		if len(cleaned) == 0 {
+			return nil
+		}
+		return cleaned
+	}
+	
+	return ext
+}
+
+func getSourceCachePath(sourceID int) string {
+	return fmt.Sprintf("%s%d.json", SourceCacheDir, sourceID)
+}
+
+func saveSourceCache(sourceID int, config *models.TVConfig) error {
+	cachePath := getSourceCachePath(sourceID)
+	cacheData, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		log.Printf("缓存源配置失败 (序列化): sourceID=%d, error=%v", sourceID, err)
+		return err
+	}
+	err = os.WriteFile(cachePath, cacheData, 0644)
+	if err != nil {
+		log.Printf("缓存源配置失败 (写入): sourceID=%d, path=%s, error=%v", sourceID, cachePath, err)
+		return err
+	}
+	log.Printf("缓存源配置成功: sourceID=%d, path=%s", sourceID, cachePath)
+	return nil
+}
+
+func deleteSourceCache(sourceID int) error {
+	cachePath := getSourceCachePath(sourceID)
+	return os.Remove(cachePath)
+}
+
 func testSiteSpeed(apiUrl string) int {
 	if apiUrl == "" {
 		return 99999
@@ -441,7 +514,16 @@ func RunAggregation(mode string) {
 	wg.Wait()
 
 	var allSites []models.Site
+	globalConfigSet := false
+	var otherSites []models.Site
+	
+	Mu.Lock()
+	homeMenuSourceID := MemoryHomeMenuSource
+	Mu.Unlock()
+	
 	for _, r := range results {
+		saveSourceCache(r.sourceID, r.config)
+		
 		Mu.Lock()
 		var src *models.SourceItem
 		for i := range MemorySources {
@@ -457,6 +539,7 @@ func RunAggregation(mode string) {
 		}
 		
 		currentJar := r.config.Spider
+		isHomeMenuSource := (homeMenuSourceID != 0 && r.sourceID == homeMenuSourceID)
 
 		for _, s := range r.config.Sites {
 			if shouldFilterSite(s.Name) {
@@ -466,13 +549,53 @@ func RunAggregation(mode string) {
 			if s.Jar == "" && currentJar != "" {
 				s.Jar = currentJar
 			}
-			allSites = append(allSites, s)
+			s.Ext = cleanExt(s.Ext)
+			
+			if isHomeMenuSource {
+				allSites = append(allSites, s)
+			} else {
+				otherSites = append(otherSites, s)
+			}
 		}
 
 		if final.Spider == "" {
 			final.Spider = currentJar
 		}
+		
+		if !globalConfigSet || isHomeMenuSource {
+			if len(r.config.Lives) > 0 {
+				final.Lives = r.config.Lives
+			}
+			if len(r.config.Parses) > 0 {
+				final.Parses = r.config.Parses
+			}
+			if len(r.config.Rules) > 0 {
+				final.Rules = r.config.Rules
+			}
+			if len(r.config.Flags) > 0 {
+				final.Flags = r.config.Flags
+			}
+			if len(r.config.Doh) > 0 {
+				final.Doh = r.config.Doh
+			}
+			if len(r.config.Ads) > 0 {
+				final.Ads = r.config.Ads
+			}
+			if len(r.config.Ijk) > 0 {
+				final.Ijk = r.config.Ijk
+			}
+			if r.config.Logo != "" {
+				final.Logo = r.config.Logo
+			}
+			if isHomeMenuSource {
+				globalConfigSet = true
+			} else if !globalConfigSet {
+				globalConfigSet = true
+			}
+		}
 	}
+	
+	allSites = append(allSites, otherSites...)
 
 	uniqueSites := []models.Site{}
 	seen := make(map[string]bool)
@@ -505,7 +628,17 @@ func RunAggregation(mode string) {
 		uniqueSites = uniqueSites[:120]
 	}
 
-	final.Sites = uniqueSites
+	homeSite := models.Site{
+		Key:         "fluxbox_home",
+		Name:        "FluxBox聚合源",
+		Type:        10,
+		Api:         "http://localhost:20504/home",
+		Searchable:  0,
+		QuickSearch: 0,
+		Filterable:  1,
+	}
+
+	final.Sites = append([]models.Site{homeSite}, uniqueSites...)
 
 	Mu.Lock()
 	MemoryConfig = final
@@ -555,11 +688,13 @@ func DeleteSource(c *gin.Context) {
 	defer Mu.Unlock()
 	for i, s := range MemorySources {
 		if fmt.Sprintf("%d", s.ID) == idStr {
+			sourceID := s.ID
 			MemorySources = append(MemorySources[:i], MemorySources[i+1:]...)
 			if err := saveSourcesToFile(); err != nil {
 				c.JSON(500, gin.H{"error": "保存失败: " + err.Error()})
 				return
 			}
+			deleteSourceCache(sourceID)
 			c.JSON(200, gin.H{"message": "删除成功"})
 			return
 		}
@@ -868,6 +1003,7 @@ func GenerateMultiConfig(c *gin.Context) {
 	type sourceWithSpeed struct {
 		source models.SourceItem
 		speed  int
+		config *models.TVConfig
 	}
 
 	var validSources []sourceWithSpeed
@@ -882,10 +1018,10 @@ func GenerateMultiConfig(c *gin.Context) {
 		go func(idx int) {
 			defer wg.Done()
 			src := MemorySources[idx]
-			_, responseTime, err := fetchAndParse(src.URL)
+			config, responseTime, err := fetchAndParse(src.URL)
 			if err == nil {
 				resultsMu.Lock()
-				validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime})
+				validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
 				resultsMu.Unlock()
 			}
 		}(i)
@@ -902,11 +1038,13 @@ func GenerateMultiConfig(c *gin.Context) {
 
 	videoList := []models.VideoSource{}
 	for _, vs := range validSources {
+		saveSourceCache(vs.source.ID, vs.config)
+		
 		speedStr := fmt.Sprintf("%dms", vs.speed)
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
-			URL:  vs.source.URL,
+			URL:  fmt.Sprintf("http://localhost:20504/source/%d", vs.source.ID),
 		})
 	}
 
@@ -949,4 +1087,104 @@ func GetMultiConfigStatus(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"count": count,
 	})
+}
+
+type Category struct {
+	TypeID   string `json:"type_id"`
+	TypeName string `json:"type_name"`
+}
+
+func HandleHomeAPI(c *gin.Context) {
+	categories := []Category{
+		{TypeID: "movie", TypeName: "电影"},
+		{TypeID: "tv", TypeName: "电视剧"},
+		{TypeID: "variety", TypeName: "综艺"},
+		{TypeID: "anime", TypeName: "动漫"},
+		{TypeID: "documentary", TypeName: "纪录片"},
+	}
+
+	c.JSON(200, gin.H{
+		"class": categories,
+	})
+}
+
+func HandleSourceConfig(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "无效的源ID"})
+		return
+	}
+
+	cachePath := getSourceCachePath(id)
+	data, err := os.ReadFile(cachePath)
+	if err != nil {
+		c.JSON(404, gin.H{"error": "配置不存在或未缓存"})
+		return
+	}
+
+	c.Data(200, "application/json", data)
+}
+
+type MenuSourceItem struct {
+	ID           int    `json:"id"`
+	Name         string `json:"name"`
+	ResponseTime int    `json:"responseTime"`
+	IsFastest    bool   `json:"isFastest"`
+	IsSelected   bool   `json:"isSelected"`
+}
+
+func GetHomeMenuSources(c *gin.Context) {
+	Mu.Lock()
+	defer Mu.Unlock()
+
+	var sources []MenuSourceItem
+	fastestTime := -1
+	fastestID := 0
+
+	for _, src := range MemorySources {
+		if !src.Enabled || src.LastStatus != "success" {
+			continue
+		}
+		if fastestTime == -1 || src.ResponseTime < fastestTime {
+			fastestTime = src.ResponseTime
+			fastestID = src.ID
+		}
+	}
+
+	for _, src := range MemorySources {
+		if !src.Enabled || src.LastStatus != "success" {
+			continue
+		}
+		sources = append(sources, MenuSourceItem{
+			ID:           src.ID,
+			Name:         src.Name,
+			ResponseTime: src.ResponseTime,
+			IsFastest:    src.ID == fastestID,
+			IsSelected:   src.ID == MemoryHomeMenuSource || (MemoryHomeMenuSource == 0 && src.ID == fastestID),
+		})
+	}
+
+	c.JSON(200, gin.H{
+		"sources":         sources,
+		"currentSourceId": MemoryHomeMenuSource,
+		"fastestId":       fastestID,
+	})
+}
+
+func SetHomeMenuSource(c *gin.Context) {
+	var req struct {
+		SourceID int `json:"sourceId"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": "无效输入"})
+		return
+	}
+
+	Mu.Lock()
+	MemoryHomeMenuSource = req.SourceID
+	saveHomeMenuSourceToFile()
+	Mu.Unlock()
+
+	c.JSON(200, gin.H{"message": "保存成功", "sourceId": req.SourceID})
 }

@@ -21,5 +21,7 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.POST("/generate-multi", GenerateMultiConfig)
 		apiGroup.GET("/multi-config", GetMultiConfig)
 		apiGroup.GET("/multi-status", GetMultiConfigStatus)
+		apiGroup.GET("/home-menu-sources", GetHomeMenuSources)
+		apiGroup.POST("/home-menu-source", SetHomeMenuSource)
 	}
 }
