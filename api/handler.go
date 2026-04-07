@@ -541,6 +541,17 @@ func RunAggregation(mode string) {
 	}
 	
 	for _, r := range results {
+		Mu.Lock()
+		var srcURL string
+		for i := range MemorySources {
+			if MemorySources[i].ID == r.sourceID {
+				srcURL = MemorySources[i].URL
+				break
+			}
+		}
+		Mu.Unlock()
+		
+		CacheSourceJars(r.sourceID, srcURL, r.config)
 		saveSourceCache(r.sourceID, r.config)
 		
 		Mu.Lock()
@@ -746,6 +757,7 @@ func DeleteSource(c *gin.Context) {
 				return
 			}
 			deleteSourceCache(sourceID)
+			ClearSourceJarCache(sourceID)
 			c.JSON(200, gin.H{"message": "删除成功"})
 			return
 		}
@@ -1116,7 +1128,10 @@ func GenerateMultiConfig(c *gin.Context) {
 	}
 
 	videoList := []models.VideoSource{}
+	totalJars := 0
 	for _, vs := range validSources {
+		downloaded, _ := CacheSourceJars(vs.source.ID, vs.source.URL, vs.config)
+		totalJars += downloaded
 		saveSourceCache(vs.source.ID, vs.config)
 		
 		speedStr := fmt.Sprintf("%dms", vs.speed)
@@ -1136,9 +1151,10 @@ func GenerateMultiConfig(c *gin.Context) {
 	Mu.Unlock()
 
 	c.JSON(200, gin.H{
-		"success": true,
-		"count":   len(videoList),
-		"message": fmt.Sprintf("已生成多仓配置，共 %d 个源", len(videoList)),
+		"success":  true,
+		"count":    len(videoList),
+		"jarCount": totalJars,
+		"message":  fmt.Sprintf("已生成多仓配置，共 %d 个源，缓存 %d 个jar文件", len(videoList), totalJars),
 	})
 }
 
@@ -1232,24 +1248,6 @@ func HandleHomeAPI(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"class": categories,
 	})
-}
-
-func HandleSourceConfig(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		c.JSON(400, gin.H{"error": "无效的源ID"})
-		return
-	}
-
-	cachePath := getSourceCachePath(id)
-	data, err := os.ReadFile(cachePath)
-	if err != nil {
-		c.JSON(404, gin.H{"error": "配置不存在或未缓存"})
-		return
-	}
-
-	c.Data(200, "application/json", data)
 }
 
 type MenuSourceItem struct {

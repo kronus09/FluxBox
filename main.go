@@ -4,7 +4,10 @@ import (
 	"FluxBox/api"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,6 +42,7 @@ func main() {
 
 	r.Static("/ui", "./web")
 	r.Static("/static", "./web/static")
+	r.Static("/jar", "./data/jars")
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/ui/")
 	})
@@ -52,7 +56,7 @@ func main() {
 		configJSON, _ := json.Marshal(config)
 		configJSON = replaceHostInConfig(configJSON, baseURL)
 		
-		c.Data(200, "application/json", configJSON)
+		c.Data(200, "application/json; charset=utf-8", configJSON)
 	})
 
 	r.GET("/multi-config", func(c *gin.Context) {
@@ -76,12 +80,30 @@ func main() {
 		resultJSON, _ := json.Marshal(result)
 		resultJSON = replaceHostInConfig(resultJSON, baseURL)
 		
-		c.Data(200, "application/json", resultJSON)
+		c.Data(200, "application/json; charset=utf-8", resultJSON)
 	})
 
 	r.GET("/home", api.HandleHomeAPI)
 
-	r.GET("/source/:id", api.HandleSourceConfig)
+	r.GET("/source/:id", func(c *gin.Context) {
+		idStr := c.Param("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			c.JSON(400, gin.H{"error": "无效的源ID"})
+			return
+		}
+
+		cachePath := fmt.Sprintf("data/sources/%d.json", id)
+		data, err := os.ReadFile(cachePath)
+		if err != nil {
+			c.JSON(404, gin.H{"error": "配置不存在或未缓存"})
+			return
+		}
+
+		baseURL := getBaseURL(c)
+		data = replaceHostInConfig(data, baseURL)
+		c.Data(200, "application/json; charset=utf-8", data)
+	})
 
 	api.RegisterRoutes(r)
 
