@@ -68,6 +68,9 @@ func InitData() {
 	// 加载计划任务配置
 	if data, err := os.ReadFile(ScheduleFile); err == nil && len(data) > 0 {
 		json.Unmarshal(data, &MemorySchedule)
+		if MemorySchedule.MaxSites == 0 {
+			MemorySchedule.MaxSites = 120
+		}
 	} else {
 		MemorySchedule = models.ScheduleConfig{
 			Enabled:   false,
@@ -75,6 +78,7 @@ func InitData() {
 			Time:      "04:00",
 			Days:      []int{1, 2, 3, 4, 5},
 			Mode:      "fastest",
+			MaxSites:  120,
 		}
 		saveScheduleToFile()
 	}
@@ -514,12 +518,27 @@ func RunAggregation(mode string) {
 	wg.Wait()
 
 	var allSites []models.Site
+	var homeMenuSites []models.Site
 	globalConfigSet := false
 	var otherSites []models.Site
 	
 	Mu.Lock()
 	homeMenuSourceID := MemoryHomeMenuSource
 	Mu.Unlock()
+
+	var fastestSourceID int
+	if homeMenuSourceID == 0 {
+		fastestTime := -1
+		for _, src := range MemorySources {
+			if !src.Enabled || src.LastStatus != "success" {
+				continue
+			}
+			if fastestTime == -1 || src.ResponseTime < fastestTime {
+				fastestTime = src.ResponseTime
+				fastestSourceID = src.ID
+			}
+		}
+	}
 	
 	for _, r := range results {
 		saveSourceCache(r.sourceID, r.config)
@@ -539,22 +558,30 @@ func RunAggregation(mode string) {
 		}
 		
 		currentJar := r.config.Spider
-		isHomeMenuSource := (homeMenuSourceID != 0 && r.sourceID == homeMenuSourceID)
+		isHomeMenuSource := (homeMenuSourceID != 0 && r.sourceID == homeMenuSourceID) || 
+			(homeMenuSourceID == 0 && r.sourceID == fastestSourceID)
 
+		firstSite := true
 		for _, s := range r.config.Sites {
 			if shouldFilterSite(s.Name) {
 				continue
 			}
 			s.Key = fmt.Sprintf("fb_%d_%s", src.ID, s.Key)
-			if s.Jar == "" && currentJar != "" {
+			if s.Jar == "" && currentJar != "" && s.Type == 3 {
 				s.Jar = currentJar
 			}
 			s.Ext = cleanExt(s.Ext)
 			
 			if isHomeMenuSource {
-				allSites = append(allSites, s)
+				if firstSite {
+					s.Name = "FluxBox聚合源"
+					firstSite = false
+				}
+				homeMenuSites = append(homeMenuSites, s)
 			} else {
-				otherSites = append(otherSites, s)
+				if s.Searchable == 1 {
+					otherSites = append(otherSites, s)
+				}
 			}
 		}
 
@@ -595,7 +622,7 @@ func RunAggregation(mode string) {
 		}
 	}
 	
-	allSites = append(allSites, otherSites...)
+	allSites = append(homeMenuSites, otherSites...)
 
 	uniqueSites := []models.Site{}
 	seen := make(map[string]bool)
@@ -606,39 +633,63 @@ func RunAggregation(mode string) {
 		}
 	}
 
+	homeSiteCount := len(homeMenuSites)
+	var homeUniqueSites []models.Site
+	var otherUniqueSites []models.Site
+	
+	if homeSiteCount > 0 {
+		for _, s := range uniqueSites {
+			isHomeSite := false
+			for _, hs := range homeMenuSites {
+				if s.Key == hs.Key {
+					isHomeSite = true
+					break
+				}
+			}
+			if isHomeSite {
+				homeUniqueSites = append(homeUniqueSites, s)
+			} else {
+				otherUniqueSites = append(otherUniqueSites, s)
+			}
+		}
+	} else {
+		otherUniqueSites = uniqueSites
+	}
+
 	var speedWg sync.WaitGroup
-	for i := range uniqueSites {
+	for i := range otherUniqueSites {
 		speedWg.Add(1)
 		go func(idx int) {
 			defer speedWg.Done()
-			uniqueSites[idx].Speed = testSiteSpeed(uniqueSites[idx].Api)
+			otherUniqueSites[idx].Speed = testSiteSpeed(otherUniqueSites[idx].Api)
 		}(i)
 	}
 	speedWg.Wait()
 
-	for i := 0; i < len(uniqueSites); i++ {
-		for j := i + 1; j < len(uniqueSites); j++ {
-			if uniqueSites[j].Speed < uniqueSites[i].Speed {
-				uniqueSites[i], uniqueSites[j] = uniqueSites[j], uniqueSites[i]
+	for i := 0; i < len(otherUniqueSites); i++ {
+		for j := i + 1; j < len(otherUniqueSites); j++ {
+			if otherUniqueSites[j].Speed < otherUniqueSites[i].Speed {
+				otherUniqueSites[i], otherUniqueSites[j] = otherUniqueSites[j], otherUniqueSites[i]
 			}
 		}
 	}
 
-	if mode == "fastest" && len(uniqueSites) > 120 {
-		uniqueSites = uniqueSites[:120]
+	if mode == "fastest" {
+		Mu.Lock()
+		maxTotal := MemorySchedule.MaxSites
+		if maxTotal == 0 {
+			maxTotal = 120
+		}
+		Mu.Unlock()
+		remaining := maxTotal - len(homeUniqueSites)
+		if remaining > 0 && len(otherUniqueSites) > remaining {
+			otherUniqueSites = otherUniqueSites[:remaining]
+		} else if remaining <= 0 {
+			otherUniqueSites = nil
+		}
 	}
 
-	homeSite := models.Site{
-		Key:         "fluxbox_home",
-		Name:        "FluxBox聚合源",
-		Type:        10,
-		Api:         "http://localhost:20504/home",
-		Searchable:  0,
-		QuickSearch: 0,
-		Filterable:  1,
-	}
-
-	final.Sites = append([]models.Site{homeSite}, uniqueSites...)
+	final.Sites = append(homeUniqueSites, otherUniqueSites...)
 
 	Mu.Lock()
 	MemoryConfig = final
@@ -732,6 +783,34 @@ func UpdateSource(c *gin.Context) {
 				return
 			}
 			c.JSON(200, gin.H{"message": "更新成功"})
+			return
+		}
+	}
+	c.JSON(404, gin.H{"error": "未找到该源"})
+}
+
+// ToggleSource Handler: 切换源启用状态
+func ToggleSource(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "无效ID"})
+		return
+	}
+	Mu.Lock()
+	defer Mu.Unlock()
+	for i, s := range MemorySources {
+		if s.ID == id {
+			MemorySources[i].Enabled = !s.Enabled
+			if err := saveSourcesToFile(); err != nil {
+				c.JSON(500, gin.H{"error": "保存失败: " + err.Error()})
+				return
+			}
+			status := "启用"
+			if !MemorySources[i].Enabled {
+				status = "禁用"
+			}
+			c.JSON(200, gin.H{"message": "切换成功", "enabled": MemorySources[i].Enabled, "status": status})
 			return
 		}
 	}
@@ -1044,12 +1123,13 @@ func GenerateMultiConfig(c *gin.Context) {
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
-			URL:  fmt.Sprintf("http://localhost:20504/source/%d", vs.source.ID),
+			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
 		})
 	}
 
 	Mu.Lock()
 	MemoryMultiConfig = models.TVConfig{
+		Urls:      videoList,
 		VideoList: videoList,
 	}
 	saveMultiConfigToFile()
@@ -1070,12 +1150,16 @@ func GetMultiConfig(c *gin.Context) {
 
 	if len(config.VideoList) == 0 {
 		c.JSON(200, gin.H{
+			"urls":      []models.VideoSource{},
 			"videoList": []models.VideoSource{},
 		})
 		return
 	}
 
-	c.JSON(200, config)
+	c.JSON(200, gin.H{
+		"urls":      config.VideoList,
+		"videoList": config.VideoList,
+	})
 }
 
 // GetMultiConfigStatus Handler: 获取多仓配置状态
@@ -1095,12 +1179,54 @@ type Category struct {
 }
 
 func HandleHomeAPI(c *gin.Context) {
-	categories := []Category{
-		{TypeID: "movie", TypeName: "电影"},
-		{TypeID: "tv", TypeName: "电视剧"},
-		{TypeID: "variety", TypeName: "综艺"},
-		{TypeID: "anime", TypeName: "动漫"},
-		{TypeID: "documentary", TypeName: "纪录片"},
+	Mu.Lock()
+	homeMenuSourceID := MemoryHomeMenuSource
+	sources := MemorySources
+	Mu.Unlock()
+
+	targetSourceID := homeMenuSourceID
+	if targetSourceID == 0 {
+		fastestTime := -1
+		fastestID := 0
+		for _, src := range sources {
+			if !src.Enabled || src.LastStatus != "success" {
+				continue
+			}
+			if fastestTime == -1 || src.ResponseTime < fastestTime {
+				fastestTime = src.ResponseTime
+				fastestID = src.ID
+			}
+		}
+		targetSourceID = fastestID
+	}
+
+	var categories []Category
+	if targetSourceID > 0 {
+		cachePath := getSourceCachePath(targetSourceID)
+		data, err := os.ReadFile(cachePath)
+		if err == nil {
+			var config models.TVConfig
+			if err := json.Unmarshal(data, &config); err == nil {
+				for _, site := range config.Sites {
+					if site.Type == 0 || site.Type == 1 || site.Type == 3 {
+						categories = append(categories, Category{
+							TypeID:   site.Key,
+							TypeName: site.Name,
+						})
+					}
+				}
+			}
+		}
+	}
+
+	if len(categories) == 0 {
+		categories = []Category{
+			{TypeID: "movie", TypeName: "电影"},
+			{TypeID: "tv", TypeName: "电视剧"},
+			{TypeID: "variety", TypeName: "综艺"},
+			{TypeID: "anime", TypeName: "动漫"},
+			{TypeID: "documentary", TypeName: "纪录片"},
+		}
 	}
 
 	c.JSON(200, gin.H{

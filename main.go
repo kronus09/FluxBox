@@ -2,53 +2,89 @@ package main
 
 import (
 	"FluxBox/api"
+	"bytes"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+func getBaseURL(c *gin.Context) string {
+	scheme := "http"
+	if c.Request.TLS != nil {
+		scheme = "https"
+	}
+	if c.GetHeader("X-Forwarded-Proto") == "https" {
+		scheme = "https"
+	}
+	if c.GetHeader("X-Forwarded-Ssl") == "on" {
+		scheme = "https"
+	}
+	host := c.Request.Host
+	if host == "" {
+		host = "localhost:20504"
+	}
+	return scheme + "://" + host
+}
+
+func replaceHostInConfig(configJSON []byte, baseURL string) []byte {
+	return bytes.ReplaceAll(configJSON, []byte("__HOST__"), []byte(baseURL))
+}
+
 func main() {
-	// 1. 初始化数据
 	api.InitData()
 
-	// 2. 设置 Gin
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
 
-	// 3. 托管静态文件 (web 目录)
 	r.Static("/ui", "./web")
 	r.Static("/static", "./web/static")
-	// 根路径自动跳转到 UI
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/ui/")
 	})
 
-	// 4. 影视Box 聚合接口 (持久化读取)
 	r.GET("/config", func(c *gin.Context) {
+		baseURL := getBaseURL(c)
 		api.Mu.Lock()
 		config := api.MemoryConfig
 		api.Mu.Unlock()
-		c.JSON(200, config)
+		
+		configJSON, _ := json.Marshal(config)
+		configJSON = replaceHostInConfig(configJSON, baseURL)
+		
+		c.Data(200, "application/json", configJSON)
 	})
 
-	// 5. 多仓配置接口 (持久化读取)
 	r.GET("/multi-config", func(c *gin.Context) {
+		baseURL := getBaseURL(c)
 		api.Mu.Lock()
 		config := api.MemoryMultiConfig
 		api.Mu.Unlock()
-		c.JSON(200, config)
+		
+		if len(config.VideoList) == 0 {
+			c.JSON(200, map[string]interface{}{
+				"urls":      []interface{}{},
+				"videoList": []interface{}{},
+			})
+			return
+		}
+		
+		result := map[string]interface{}{
+			"urls":      config.VideoList,
+			"videoList": config.VideoList,
+		}
+		resultJSON, _ := json.Marshal(result)
+		resultJSON = replaceHostInConfig(resultJSON, baseURL)
+		
+		c.Data(200, "application/json", resultJSON)
 	})
 
-	// 5.5 首页虚拟站点接口
 	r.GET("/home", api.HandleHomeAPI)
 
-	// 5.6 源配置接口
 	r.GET("/source/:id", api.HandleSourceConfig)
 
-	// 6. 注册 API 路由
 	api.RegisterRoutes(r)
 
-	// 6. 启动
 	println("FluxBox 启动成功，访问地址: http://localhost:20504")
 	r.Run(":20504")
 }

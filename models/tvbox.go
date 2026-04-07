@@ -2,12 +2,13 @@ package models
 
 // TVConfig 是 影视Box 配置的顶层结构
 type TVConfig struct {
-	Spider     string        `json:"spider"`
-	Wallpaper  string        `json:"wallpaper"`
-	Logo       string        `json:"logo"`
-	Sites      []Site        `json:"sites"`
+	Spider     string        `json:"spider,omitempty"`
+	Wallpaper  string        `json:"wallpaper,omitempty"`
+	Logo       string        `json:"logo,omitempty"`
+	Sites      []Site        `json:"sites,omitempty"`
 	Lives      []Live        `json:"lives,omitempty"`
 	Ads        []string      `json:"ads,omitempty"`
+	Urls       []VideoSource `json:"urls,omitempty"`
 	VideoList  []VideoSource `json:"videoList,omitempty"`
 	Parses     []Parse       `json:"parses,omitempty"`
 	Rules      []Rule        `json:"rules,omitempty"`
@@ -102,4 +103,5 @@ type ScheduleConfig struct {
 	Time      string `json:"time"`      // HH:mm 格式
 	Days      []int  `json:"days"`      // 1=周一 ... 7=周日，weekly模式使用
 	Mode      string `json:"mode"`      // fastest / all，聚合模式
+	MaxSites  int    `json:"max_sites"` // 最快模式下最大站点数，默认120
 }
