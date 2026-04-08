@@ -36,6 +36,8 @@ func extractJarName(jarURL string) string {
 	if name == "" {
 		name = "spider.jar"
 	}
+	name = strings.ReplaceAll(name, "/", "_")
+	name = strings.ReplaceAll(name, "\\", "_")
 	if !strings.HasSuffix(strings.ToLower(name), ".jar") {
 		name = name + ".jar"
 	}
@@ -128,7 +130,7 @@ func downloadJar(jarURL, localPath string) error {
 		return err
 	}
 
-	if isImageFile(localPath) {
+	if isImageFile(localPath) || DetectImageJar(body) {
 		if err := decryptImageJar(localPath); err != nil {
 			log.Printf("图片jar解密失败: %s, error: %v", localPath, err)
 			os.Remove(localPath)
@@ -143,21 +145,20 @@ func downloadJar(jarURL, localPath string) error {
 
 func CacheSourceJars(sourceID int, sourceURL string, config *models.TVConfig) (int, int) {
 	jarDir := getJarCacheDir(sourceID)
-	downloaded := 0
-	failed := 0
+	replaced := 0
+	skipped := 0
 
 	if config.Spider != "" {
 		jarURL := resolveJarURL(sourceURL, config.Spider)
 		if jarURL != "" {
-			jarName := extractJarName(config.Spider)
+			jarName := extractJarName(jarURL)
 			localPath := filepath.Join(jarDir, jarName)
 
-			if err := downloadJar(jarURL, localPath); err != nil {
-				log.Printf("下载spider失败: sourceID=%d, url=%s, error: %v", sourceID, jarURL, err)
-				failed++
-			} else {
+			if _, err := os.Stat(localPath); err == nil {
 				config.Spider = getJarServiceURL(sourceID, jarName)
-				downloaded++
+				replaced++
+			} else {
+				skipped++
 			}
 		}
 	}
@@ -166,21 +167,20 @@ func CacheSourceJars(sourceID int, sourceURL string, config *models.TVConfig) (i
 		if config.Sites[i].Jar != "" {
 			jarURL := resolveJarURL(sourceURL, config.Sites[i].Jar)
 			if jarURL != "" {
-				jarName := extractJarName(config.Sites[i].Jar)
+				jarName := extractJarName(jarURL)
 				localPath := filepath.Join(jarDir, jarName)
 
-				if err := downloadJar(jarURL, localPath); err != nil {
-					log.Printf("下载站点jar失败: sourceID=%d, site=%s, url=%s, error: %v", sourceID, config.Sites[i].Name, jarURL, err)
-					failed++
-				} else {
+				if _, err := os.Stat(localPath); err == nil {
 					config.Sites[i].Jar = getJarServiceURL(sourceID, jarName)
-					downloaded++
+					replaced++
+				} else {
+					skipped++
 				}
 			}
 		}
 	}
 
-	return downloaded, failed
+	return replaced, skipped
 }
 
 func ClearSourceJarCache(sourceID int) error {

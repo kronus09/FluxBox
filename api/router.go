@@ -13,6 +13,8 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.POST("/aggregate", TriggerAggregate)
 		apiGroup.GET("/test/:id", TestSource)
 		apiGroup.POST("/test", TestSources)
+		apiGroup.GET("/health/:id", CheckSingleHealth)
+		apiGroup.POST("/health", CheckAllHealth)
 		apiGroup.GET("/filter-words", GetFilterWords)
 		apiGroup.POST("/filter-words", AddFilterWord)
 		apiGroup.DELETE("/filter-words/:word", DeleteFilterWord)
@@ -24,5 +26,7 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.GET("/multi-status", GetMultiConfigStatus)
 		apiGroup.GET("/home-menu-sources", GetHomeMenuSources)
 		apiGroup.POST("/home-menu-source", SetHomeMenuSource)
+		apiGroup.GET("/global-config", GetGlobalConfig)
+		apiGroup.POST("/global-config", SaveGlobalConfig)
 	}
 }

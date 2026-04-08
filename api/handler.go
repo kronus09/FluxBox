@@ -26,15 +26,18 @@ var (
 	MultiConfigFile     = "data/multi_config.json"
 	SourceCacheDir      = "data/sources/"
 	HomeMenuSourceFile  = "data/home_menu_source.json"
+	GlobalConfigFile    = "data/global_config.json"
 	MemorySources       []models.SourceItem
 	MemoryConfig        models.TVConfig
 	MemoryFilterWords   []string
 	MemorySchedule      models.ScheduleConfig
 	MemoryMultiConfig   models.TVConfig
 	MemoryHomeMenuSource int
+	MemoryGlobalConfig  models.GlobalConfig
 	Mu                  sync.Mutex
 	IsAggregating       bool
 	SchedulerTimer      *time.Timer
+	HealthSchedulerTimer *time.Timer
 )
 
 // DefaultFilterWords 默认过滤关键词
@@ -93,6 +96,40 @@ func InitData() {
 		json.Unmarshal(data, &MemoryHomeMenuSource)
 	}
 
+	// 加载全局配置
+	if data, err := os.ReadFile(GlobalConfigFile); err == nil && len(data) > 0 {
+		json.Unmarshal(data, &MemoryGlobalConfig)
+		// 同步 filter_words 到 MemoryFilterWords
+		if len(MemoryGlobalConfig.FilterWords) > 0 {
+			MemoryFilterWords = MemoryGlobalConfig.FilterWords
+			saveFilterWordsToFile()
+		}
+	} else {
+		MemoryGlobalConfig = models.GlobalConfig{
+			AggMode:              "fastest",
+			MaxSites:             120,
+			FilterWords:          append([]string{}, DefaultFilterWords...),
+			HomeMenuSource:       0,
+			MultiIncludeWarning:  false,
+			AutoDisableUnhealthy: true,
+			AutoDisableWarning:   false,
+			AutoDisableFailed:    true,
+			ScheduleEnabled:      false,
+			AggSingleEnabled:     true,
+			AggMultiEnabled:      true,
+			AggScheduleFreq:      "daily",
+			AggScheduleTime:      "05:00",
+			AggScheduleDays:      []int{1, 2, 3, 4, 5},
+			HealthScheduleEnabled: false,
+			HealthScheduleFreq:    "daily",
+			HealthScheduleTime:    "04:00",
+			HealthScheduleDays:    []int{1, 2, 3, 4, 5},
+		}
+		MemoryFilterWords = MemoryGlobalConfig.FilterWords
+		saveGlobalConfigToFile()
+		saveFilterWordsToFile()
+	}
+
 	// 启动计划任务调度器
 	StartScheduler()
 }
@@ -118,6 +155,15 @@ func saveScheduleToFile() {
 	os.WriteFile(ScheduleFile, data, 0644)
 }
 
+// saveGlobalConfigToFile 保存全局配置到文件
+func saveGlobalConfigToFile() error {
+	data, err := json.MarshalIndent(MemoryGlobalConfig, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(GlobalConfigFile, data, 0644)
+}
+
 // saveMultiConfigToFile 保存多仓配置到文件
 func saveMultiConfigToFile() {
 	data, _ := json.MarshalIndent(MemoryMultiConfig, "", "  ")
@@ -135,40 +181,73 @@ func StartScheduler() {
 	Mu.Lock()
 	defer Mu.Unlock()
 
+	// 停止现有的定时器
 	if SchedulerTimer != nil {
 		SchedulerTimer.Stop()
+		SchedulerTimer = nil
+	}
+	if HealthSchedulerTimer != nil {
+		HealthSchedulerTimer.Stop()
+		HealthSchedulerTimer = nil
 	}
 
-	if !MemorySchedule.Enabled {
+	// 如果计划任务总开关未开启，直接返回
+	if !MemoryGlobalConfig.ScheduleEnabled {
 		return
 	}
 
-	nextTime := calculateNextRunTime()
-	if nextTime.IsZero() {
-		return
-	}
+	// 启动聚合任务调度器
+	if MemoryGlobalConfig.AggSingleEnabled || MemoryGlobalConfig.AggMultiEnabled {
+		nextTime := calculateNextAggRunTime()
+		if !nextTime.IsZero() {
+			duration := time.Until(nextTime)
+			SchedulerTimer = time.AfterFunc(duration, func() {
+				Mu.Lock()
+				config := MemoryGlobalConfig
+				Mu.Unlock()
 
-	duration := time.Until(nextTime)
-	SchedulerTimer = time.AfterFunc(duration, func() {
-		Mu.Lock()
-		config := MemorySchedule
-		Mu.Unlock()
-
-		if config.Enabled {
-			RunAggregation(config.Mode)
+				if config.ScheduleEnabled {
+					// 执行单仓聚合
+					if config.AggSingleEnabled {
+						RunAggregation(config.AggMode)
+					}
+					// 执行多仓生成
+					if config.AggMultiEnabled {
+						GenerateMultiConfigInternal()
+					}
+				}
+				StartScheduler()
+			})
 		}
-		StartScheduler()
-	})
+	}
+
+	// 启动健康检查任务调度器
+	if MemoryGlobalConfig.HealthScheduleEnabled {
+		nextTime := calculateNextHealthRunTime()
+		if !nextTime.IsZero() {
+			duration := time.Until(nextTime)
+			HealthSchedulerTimer = time.AfterFunc(duration, func() {
+				Mu.Lock()
+				config := MemoryGlobalConfig
+				Mu.Unlock()
+
+				if config.HealthScheduleEnabled {
+					CheckAllHealthInternal()
+				}
+				StartScheduler()
+			})
+		}
+	}
 }
 
-// calculateNextRunTime 计算下次执行时间
-func calculateNextRunTime() time.Time {
+// calculateNextAggRunTime 计算聚合任务下次执行时间
+func calculateNextAggRunTime() time.Time {
 	now := time.Now()
 
 	hour, minute := 0, 0
-	fmt.Sscanf(MemorySchedule.Time, "%d:%d", &hour, &minute)
+	fmt.Sscanf(MemoryGlobalConfig.AggScheduleTime, "%d:%d", &hour, &minute)
 
-	if MemorySchedule.Frequency == "daily" {
+	if MemoryGlobalConfig.AggScheduleFreq == "daily" {
 		next := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, now.Location())
 		if next.Before(now) || next.Equal(now) {
 			next = next.Add(24 * time.Hour)
@@ -176,7 +255,7 @@ func calculateNextRunTime() time.Time {
 		return next
 	}
 
-	if MemorySchedule.Frequency == "weekly" {
+	if MemoryGlobalConfig.AggScheduleFreq == "weekly" {
 		currentWeekday := int(now.Weekday())
 		if currentWeekday == 0 {
 			currentWeekday = 7
@@ -184,7 +263,7 @@ func calculateNextRunTime() time.Time {
 
 		var nextDay int
 		found := false
-		for _, d := range MemorySchedule.Days {
+		for _, d := range MemoryGlobalConfig.AggScheduleDays {
 			if d > currentWeekday {
 				nextDay = d
 				found = true
@@ -192,8 +271,61 @@ func calculateNextRunTime() time.Time {
 			}
 		}
 
-		if !found && len(MemorySchedule.Days) > 0 {
-			nextDay = MemorySchedule.Days[0]
+		if !found && len(MemoryGlobalConfig.AggScheduleDays) > 0 {
+			nextDay = MemoryGlobalConfig.AggScheduleDays[0]
+		} else if !found {
+			return time.Time{}
+		}
+
+		daysToAdd := nextDay - currentWeekday
+		if daysToAdd <= 0 {
+			daysToAdd += 7
+		}
+
+		next := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, now.Location())
+		next = next.Add(time.Duration(daysToAdd) * 24 * time.Hour)
+		if next.Before(now) || next.Equal(now) {
+			next = next.Add(7 * 24 * time.Hour)
+		}
+		return next
+	}
+
+	return time.Time{}
+}
+
+// calculateNextHealthRunTime 计算健康检查任务下次执行时间
+func calculateNextHealthRunTime() time.Time {
+	now := time.Now()
+
+	hour, minute := 0, 0
+	fmt.Sscanf(MemoryGlobalConfig.HealthScheduleTime, "%d:%d", &hour, &minute)
+
+	if MemoryGlobalConfig.HealthScheduleFreq == "daily" {
+		next := time.Date(now.Year(), now.Month(), now.Day(), hour, minute, 0, 0, now.Location())
+		if next.Before(now) || next.Equal(now) {
+			next = next.Add(24 * time.Hour)
+		}
+		return next
+	}
+
+	if MemoryGlobalConfig.HealthScheduleFreq == "weekly" {
+		currentWeekday := int(now.Weekday())
+		if currentWeekday == 0 {
+			currentWeekday = 7
+		}
+
+		var nextDay int
+		found := false
+		for _, d := range MemoryGlobalConfig.HealthScheduleDays {
+			if d > currentWeekday {
+				nextDay = d
+				found = true
+				break
+			}
+		}
+
+		if !found && len(MemoryGlobalConfig.HealthScheduleDays) > 0 {
+			nextDay = MemoryGlobalConfig.HealthScheduleDays[0]
 		} else if !found {
 			return time.Time{}
 		}
@@ -470,6 +602,7 @@ func RunAggregation(mode string) {
 	type sourceResult struct {
 		sourceID int
 		config   *models.TVConfig
+		source   *models.SourceItem
 	}
 
 	var wg sync.WaitGroup
@@ -485,15 +618,26 @@ func RunAggregation(mode string) {
 			defer wg.Done()
 			
 			Mu.Lock()
-			sourceURL := MemorySources[idx].URL
-			sourceID := MemorySources[idx].ID
+			src := MemorySources[idx]
 			Mu.Unlock()
 			
-			config, responseTime, err := fetchAndParse(sourceURL)
+			if NeedHealthCheck(&src) {
+				result := CheckSourceHealth(&src)
+				Mu.Lock()
+				for i := range MemorySources {
+					if MemorySources[i].ID == src.ID {
+						UpdateSourceHealth(&MemorySources[i], result)
+						break
+					}
+				}
+				Mu.Unlock()
+			}
+			
+			config, responseTime, err := fetchAndParse(src.URL)
 
 			Mu.Lock()
 			for i := range MemorySources {
-				if MemorySources[i].ID == sourceID {
+				if MemorySources[i].ID == src.ID {
 					if err != nil {
 						MemorySources[i].LastStatus = "failed"
 						MemorySources[i].LastError = err.Error()
@@ -510,12 +654,16 @@ func RunAggregation(mode string) {
 			
 			if err == nil {
 				resultsMu.Lock()
-				results = append(results, sourceResult{sourceID: sourceID, config: config})
+				results = append(results, sourceResult{sourceID: src.ID, config: config})
 				resultsMu.Unlock()
 			}
 		}(i)
 	}
 	wg.Wait()
+
+	Mu.Lock()
+	saveSourcesToFile()
+	Mu.Unlock()
 
 	var allSites []models.Site
 	var homeMenuSites []models.Site
@@ -551,7 +699,10 @@ func RunAggregation(mode string) {
 		}
 		Mu.Unlock()
 		
-		CacheSourceJars(r.sourceID, srcURL, r.config)
+		replaced, skipped := CacheSourceJars(r.sourceID, srcURL, r.config)
+		if skipped > 0 {
+			log.Printf("聚合源有jar缺失: sourceID=%d replaced=%d skipped=%d", r.sourceID, replaced, skipped)
+		}
 		saveSourceCache(r.sourceID, r.config)
 		
 		Mu.Lock()
@@ -577,6 +728,11 @@ func RunAggregation(mode string) {
 			if shouldFilterSite(s.Name) {
 				continue
 			}
+			
+			if !ShouldIncludeSite(&s, src, r.config) {
+				continue
+			}
+			
 			s.Key = fmt.Sprintf("fb_%d_%s", src.ID, s.Key)
 			if s.Jar == "" && currentJar != "" && s.Type == 3 {
 				s.Jar = currentJar
@@ -621,9 +777,6 @@ func RunAggregation(mode string) {
 			}
 			if len(r.config.Ijk) > 0 {
 				final.Ijk = r.config.Ijk
-			}
-			if r.config.Logo != "" {
-				final.Logo = r.config.Logo
 			}
 			if isHomeMenuSource {
 				globalConfigSet = true
@@ -975,6 +1128,149 @@ func TestSources(c *gin.Context) {
 	c.JSON(200, gin.H{"results": results})
 }
 
+// CheckSingleHealth Handler: 检查单个源的健康状态
+func CheckSingleHealth(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "无效ID"})
+		return
+	}
+
+	Mu.Lock()
+	var src *models.SourceItem
+	for i := range MemorySources {
+		if MemorySources[i].ID == id {
+			src = &MemorySources[i]
+			break
+		}
+	}
+	Mu.Unlock()
+
+	if src == nil {
+		c.JSON(404, gin.H{"error": "未找到该源"})
+		return
+	}
+
+	result := CheckSourceHealth(src)
+
+	Mu.Lock()
+	for i := range MemorySources {
+		if MemorySources[i].ID == id {
+			UpdateSourceHealth(&MemorySources[i], result)
+			break
+		}
+	}
+	saveSourcesToFile()
+	Mu.Unlock()
+
+	c.JSON(200, gin.H{
+		"success":      true,
+		"healthScore":  result.HealthScore,
+		"healthStatus": result.HealthStatus,
+		"siteTotal":    result.SiteTotal,
+		"siteCrawler":  result.SiteCrawler,
+		"siteCollector": result.SiteCollector,
+		"jarTotal":     result.JarTotal,
+		"jarSuccess":   result.JarSuccess,
+		"jarFailed":    result.JarFailed,
+		"error":        result.Error,
+	})
+}
+
+// CheckAllHealth Handler: 检查所有源的健康状态
+func CheckAllHealth(c *gin.Context) {
+	var req struct {
+		IDs []int `json:"ids"`
+		Force bool `json:"force"`
+	}
+	c.ShouldBindJSON(&req)
+
+	type HealthResult struct {
+		ID           int    `json:"id"`
+		Name         string `json:"name"`
+		HealthScore  int    `json:"healthScore"`
+		HealthStatus string `json:"healthStatus"`
+		SiteTotal    int    `json:"siteTotal"`
+		SiteCrawler  int    `json:"siteCrawler"`
+		JarTotal     int    `json:"jarTotal"`
+		JarSuccess   int    `json:"jarSuccess"`
+		JarFailed    int    `json:"jarFailed"`
+		Error        string `json:"error,omitempty"`
+	}
+
+	results := make([]HealthResult, 0)
+	var wg sync.WaitGroup
+	var resultsMu sync.Mutex
+
+	idsToCheck := req.IDs
+	if len(idsToCheck) == 0 {
+		Mu.Lock()
+		for _, src := range MemorySources {
+			idsToCheck = append(idsToCheck, src.ID)
+		}
+		Mu.Unlock()
+	}
+
+	for _, id := range idsToCheck {
+		Mu.Lock()
+		var src *models.SourceItem
+		for i := range MemorySources {
+			if MemorySources[i].ID == id {
+				src = &MemorySources[i]
+				break
+			}
+		}
+		Mu.Unlock()
+
+		if src == nil {
+			continue
+		}
+
+		wg.Add(1)
+		go func(source *models.SourceItem) {
+			defer wg.Done()
+
+			result := CheckSourceHealth(source)
+
+			Mu.Lock()
+			for i := range MemorySources {
+				if MemorySources[i].ID == source.ID {
+					UpdateSourceHealth(&MemorySources[i], result)
+					break
+				}
+			}
+			Mu.Unlock()
+
+			resultsMu.Lock()
+			results = append(results, HealthResult{
+				ID:           source.ID,
+				Name:         source.Name,
+				HealthScore:  result.HealthScore,
+				HealthStatus: result.HealthStatus,
+				SiteTotal:    result.SiteTotal,
+				SiteCrawler:  result.SiteCrawler,
+				JarTotal:     result.JarTotal,
+				JarSuccess:   result.JarSuccess,
+				JarFailed:    result.JarFailed,
+				Error:        result.Error,
+			})
+			resultsMu.Unlock()
+		}(src)
+	}
+	wg.Wait()
+
+	Mu.Lock()
+	saveSourcesToFile()
+	Mu.Unlock()
+
+	c.JSON(200, gin.H{
+		"success": true,
+		"results": results,
+		"count":   len(results),
+	})
+}
+
 // GetFilterWords Handler: 获取过滤关键词列表
 func GetFilterWords(c *gin.Context) {
 	Mu.Lock()
@@ -1109,15 +1405,146 @@ func GenerateMultiConfig(c *gin.Context) {
 		go func(idx int) {
 			defer wg.Done()
 			src := MemorySources[idx]
+			
+			if NeedHealthCheck(&src) {
+				result := CheckSourceHealth(&src)
+				Mu.Lock()
+				for i := range MemorySources {
+					if MemorySources[i].ID == src.ID {
+						UpdateSourceHealth(&MemorySources[i], result)
+						break
+					}
+				}
+				Mu.Unlock()
+			}
+			
 			config, responseTime, err := fetchAndParse(src.URL)
 			if err == nil {
-				resultsMu.Lock()
-				validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
-				resultsMu.Unlock()
+				if ShouldIncludeSource(&src, config) {
+					resultsMu.Lock()
+					validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
+					resultsMu.Unlock()
+				}
 			}
 		}(i)
 	}
 	wg.Wait()
+
+	Mu.Lock()
+	saveSourcesToFile()
+	Mu.Unlock()
+
+	for i := 0; i < len(validSources); i++ {
+		for j := i + 1; j < len(validSources); j++ {
+			if validSources[j].speed < validSources[i].speed {
+				validSources[i], validSources[j] = validSources[j], validSources[i]
+			}
+		}
+	}
+
+	videoList := []models.VideoSource{}
+	totalJars := 0
+	for _, vs := range validSources {
+		replaced, skipped := CacheSourceJars(vs.source.ID, vs.source.URL, vs.config)
+		totalJars += replaced
+		
+		if skipped > 0 && vs.source.HealthStatus == "healthy" {
+			log.Printf("多仓排除绿灯源(缺失jar): %s", vs.source.Name)
+			continue
+		}
+		
+		if skipped > 0 && vs.source.HealthStatus == "warning" {
+			log.Printf("多仓黄灯源保留原始jar URL: %s", vs.source.Name)
+		}
+		
+		saveSourceCache(vs.source.ID, vs.config)
+		
+		speedStr := fmt.Sprintf("%dms", vs.speed)
+		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
+		videoList = append(videoList, models.VideoSource{
+			Name: name,
+			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
+		})
+	}
+
+	Mu.Lock()
+	MemoryMultiConfig = models.TVConfig{
+		Urls:      videoList,
+		VideoList: videoList,
+	}
+	saveMultiConfigToFile()
+	Mu.Unlock()
+
+	c.JSON(200, gin.H{
+		"success":  true,
+		"count":    len(videoList),
+		"jarCount": totalJars,
+		"message":  fmt.Sprintf("已生成多仓配置，共 %d 个源，缓存 %d 个jar文件", len(videoList), totalJars),
+	})
+}
+
+// GenerateMultiConfigInternal 内部调用的多仓生成函数
+func GenerateMultiConfigInternal() {
+	Mu.Lock()
+	if IsAggregating {
+		Mu.Unlock()
+		return
+	}
+	IsAggregating = true
+	Mu.Unlock()
+
+	defer func() {
+		Mu.Lock()
+		IsAggregating = false
+		Mu.Unlock()
+	}()
+
+	type sourceWithSpeed struct {
+		source models.SourceItem
+		speed  int
+		config *models.TVConfig
+	}
+
+	var validSources []sourceWithSpeed
+	var wg sync.WaitGroup
+	var resultsMu sync.Mutex
+
+	for i := range MemorySources {
+		if !MemorySources[i].Enabled {
+			continue
+		}
+		wg.Add(1)
+		go func(idx int) {
+			defer wg.Done()
+			src := MemorySources[idx]
+			
+			if NeedHealthCheck(&src) {
+				result := CheckSourceHealth(&src)
+				Mu.Lock()
+				for i := range MemorySources {
+					if MemorySources[i].ID == src.ID {
+						UpdateSourceHealth(&MemorySources[i], result)
+						break
+					}
+				}
+				Mu.Unlock()
+			}
+			
+			config, responseTime, err := fetchAndParse(src.URL)
+			if err == nil {
+				if ShouldIncludeSource(&src, config) {
+					resultsMu.Lock()
+					validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
+					resultsMu.Unlock()
+				}
+			}
+		}(i)
+	}
+	wg.Wait()
+
+	Mu.Lock()
+	saveSourcesToFile()
+	Mu.Unlock()
 
 	for i := 0; i < len(validSources); i++ {
 		for j := i + 1; j < len(validSources); j++ {
@@ -1150,12 +1577,43 @@ func GenerateMultiConfig(c *gin.Context) {
 	saveMultiConfigToFile()
 	Mu.Unlock()
 
-	c.JSON(200, gin.H{
-		"success":  true,
-		"count":    len(videoList),
-		"jarCount": totalJars,
-		"message":  fmt.Sprintf("已生成多仓配置，共 %d 个源，缓存 %d 个jar文件", len(videoList), totalJars),
-	})
+	log.Printf("计划任务：已生成多仓配置，共 %d 个源，缓存 %d 个jar文件", len(videoList), totalJars)
+}
+
+// CheckAllHealthInternal 内部调用的健康检查函数
+func CheckAllHealthInternal() {
+	var wg sync.WaitGroup
+
+	Mu.Lock()
+	sources := make([]models.SourceItem, len(MemorySources))
+	copy(sources, MemorySources)
+	Mu.Unlock()
+
+	for i := range sources {
+		wg.Add(1)
+		go func(idx int) {
+			defer wg.Done()
+			src := sources[idx]
+			
+			result := CheckSourceHealth(&src)
+			
+			Mu.Lock()
+			for i := range MemorySources {
+				if MemorySources[i].ID == src.ID {
+					UpdateSourceHealth(&MemorySources[i], result)
+					break
+				}
+			}
+			Mu.Unlock()
+		}(i)
+	}
+	wg.Wait()
+
+	Mu.Lock()
+	saveSourcesToFile()
+	Mu.Unlock()
+
+	log.Printf("计划任务：已完成所有源的健康检查")
 }
 
 // GetMultiConfig Handler: 返回多仓配置
@@ -1311,4 +1769,41 @@ func SetHomeMenuSource(c *gin.Context) {
 	Mu.Unlock()
 
 	c.JSON(200, gin.H{"message": "保存成功", "sourceId": req.SourceID})
+}
+
+// GetGlobalConfig Handler: 获取全局配置
+func GetGlobalConfig(c *gin.Context) {
+	Mu.Lock()
+	defer Mu.Unlock()
+	c.JSON(200, MemoryGlobalConfig)
+}
+
+// SaveGlobalConfig Handler: 保存全局配置
+func SaveGlobalConfig(c *gin.Context) {
+	var config models.GlobalConfig
+	if err := c.ShouldBindJSON(&config); err != nil {
+		c.JSON(400, gin.H{"error": "无效输入"})
+		return
+	}
+
+	Mu.Lock()
+	MemoryGlobalConfig = config
+	
+	// 同步更新其他配置
+	MemoryFilterWords = config.FilterWords
+	MemorySchedule.Enabled = config.ScheduleEnabled
+	MemorySchedule.Mode = config.AggMode
+	MemorySchedule.MaxSites = config.MaxSites
+	MemoryHomeMenuSource = config.HomeMenuSource
+	
+	saveGlobalConfigToFile()
+	saveFilterWordsToFile()
+	saveScheduleToFile()
+	saveHomeMenuSourceToFile()
+	Mu.Unlock()
+
+	// 重新启动计划任务调度器
+	StartScheduler()
+
+	c.JSON(200, gin.H{"message": "保存成功"})
 }

@@ -189,12 +189,12 @@
         }
         
         .source-name {
-            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--gray);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             min-width: 50px;
-            font-size: 0.85rem;
         }
         
         .source-url {
@@ -233,6 +233,11 @@
         .status-pending {
             background: #fef3c7;
             color: #92400e;
+        }
+        
+        .status-warning {
+            background: #fef3c7;
+            color: #d97706;
         }
         
         .status-info {
@@ -447,6 +452,22 @@
             margin-bottom: 0;
         }
         
+        .settings-section {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-section-title {
+            font-size: 0.8rem;
+            color: var(--dark);
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+        
         .modal-footer {
             display: flex;
             gap: 0.35rem;
@@ -555,22 +576,22 @@
                 <img src="/static/fluxbox.png" alt="FluxBox Logo" class="logo">
                 <div class="header-text">
                     <div class="header-title">
-                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.12</span></h1>
+                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.14</span></h1>
                         <p class="header-desc">多源脱壳聚合引擎</p>
                     </div>
                 </div>
-                <div class="global-status" id="globalStatus">
-                    <span class="global-status-text" id="globalStatusText">就绪</span>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <button onclick="openSettingsModal()" class="btn" style="padding: 0.3rem 0.6rem; min-width: auto; background: transparent; color: var(--gray); border: 1px solid var(--border); font-size: 0.8rem;">⚙️ 全局设置</button>
+                    <div class="global-status" id="globalStatus">
+                        <span class="global-status-text" id="globalStatusText">就绪</span>
+                    </div>
                 </div>
             </div>
         </header>
 
         <div class="card">
             <h2 style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="display: flex; align-items: center; gap: 0.5rem;">
-                    聚合操作
-                    <span onclick="openSettingsModal()" style="cursor: pointer; font-size: 1.25rem;" title="聚合设置">⚙️</span>
-                </span>
+                <span>聚合操作</span>
                 <span id="siteCount" class="site-count">已聚合 0 个站点</span>
             </h2>
             <div class="btn-group" style="flex-wrap: nowrap; align-items: center;">
@@ -593,8 +614,8 @@
             </h2>
             <div class="btn-group" style="flex-wrap: wrap; align-items: center; gap: 0.75rem;">
                 <button onclick="generateMulti()" class="btn btn-success">生成多仓</button>
-                <span style="font-size: 0.75rem; color: var(--gray); line-height: 1.4;">
-                    <b>生成规则:</b> 按响应速度排序，仅包含测试成功的源。<br>
+                <span id="multiRuleHint" style="font-size: 0.75rem; color: var(--gray); line-height: 1.4;">
+                    <b>生成规则:</b> 按响应速度排序，仅包含🟢健康的源。<br>
                     <b>使用说明:</b> 生成多仓配置，可在影视Box中自由切换源。
                 </span>
             </div>
@@ -628,13 +649,21 @@
 
         <div class="card">
             <h2 style="display: flex; justify-content: space-between; align-items: center;">
-                已加载源
+                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                    已加载源 <span id="sourceCount" style="font-size: 0.7em; color: var(--primary); font-weight: normal;"></span>
+                    <select id="sourceSortSelect" onchange="sortAndRenderSources()" style="font-size: 0.7rem; padding: 0.2rem 0.4rem; border: 1px solid var(--border); border-radius: 0.25rem; background: var(--light); color: var(--dark); cursor: pointer;">
+                        <option value="health">健康状态</option>
+                        <option value="id">加入时间</option>
+                        <option value="response">响应速度</option>
+                        <option value="name">名称</option>
+                    </select>
+                </span>
                 <span style="display: flex; align-items: center; gap: 0.75rem; font-weight: 400; font-size: 0.875rem;">
                     <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer;">
-                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 16px; height: 16px; cursor: pointer;">
+                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 14px; height: 14px; cursor: pointer;">
                         全选
                     </label>
-                    <button onclick="testSelected()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto;">测试连接</button>
+                    <button onclick="checkAllHealth()" class="btn btn-primary" style="padding: 0.375rem 0.75rem; min-width: auto;">健康检查</button>
                 </span>
             </h2>
             <div class="source-list" id="sourceList">
@@ -643,7 +672,7 @@
         </div>
 
         <div class="footer">
-            <p>FluxBox v0.1.12 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-0z"></path></svg></a> | 多源脱壳聚合引擎</p>
+            <p>FluxBox v0.1.14 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-0z"></path></svg></a> | 多源脱壳聚合引擎</p>
         </div>
     </div>
 
@@ -652,102 +681,193 @@
 
     <!-- 聚合设置模态框 -->
     <div id="settingsModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 500px;">
             <div class="modal-header">
-                <h3 class="modal-title">聚合设置</h3>
+                <h3 class="modal-title">⚙️ 全局设置</h3>
                 <span class="close" onclick="closeSettingsModal()">&times;</span>
             </div>
             <div class="modal-body">
-                <div style="margin-bottom: 0.5rem;">
-                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">聚合模式</h4>
-                    <div style="display: flex; gap: 0.75rem; align-items: center;">
-                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
-                            <input type="radio" name="settingsMode" value="fastest" checked style="cursor: pointer; width: 12px; height: 12px;">
-                            最快站点（前
-                        </label>
-                        <select id="maxSitesSelect" style="padding: 0.15rem 0.3rem; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 0.2rem; height: 1.5rem;">
-                            <option value="60">60</option>
-                            <option value="80">80</option>
-                            <option value="100">100</option>
-                            <option value="120" selected>120</option>
-                            <option value="140">140</option>
-                            <option value="160">160</option>
-                            <option value="180">180</option>
-                            <option value="200">200</option>
-                        </select>
-                        <span style="font-size: 0.75rem;">个）</span>
-                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-left: 0.5rem;">
-                            <input type="radio" name="settingsMode" value="all" style="cursor: pointer; width: 12px; height: 12px;">
-                            全部站点
-                        </label>
+                <!-- 单仓聚合设置 -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">📦 单仓聚合</h4>
+                    <div style="margin-bottom: 0.5rem;">
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                                <input type="radio" name="settingsMode" value="fastest" checked style="cursor: pointer; width: 12px; height: 12px;">
+                                最快站点（前
+                            </label>
+                            <select id="maxSitesSelect" style="padding: 0.15rem 0.3rem; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 0.2rem; height: 1.5rem;">
+                                <option value="60">60</option>
+                                <option value="80">80</option>
+                                <option value="100">100</option>
+                                <option value="120" selected>120</option>
+                                <option value="140">140</option>
+                                <option value="160">160</option>
+                                <option value="180">180</option>
+                                <option value="200">200</option>
+                            </select>
+                            <span style="font-size: 0.75rem;">个）</span>
+                            <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-left: 0.5rem;">
+                                <input type="radio" name="settingsMode" value="all" style="cursor: pointer; width: 12px; height: 12px;">
+                                全部站点
+                            </label>
+                        </div>
                     </div>
-                    <div style="font-size: 0.65rem; color: var(--gray); margin-top: 0.25rem;">提示：站点数量过多可能导致搜索时并发请求过高，影响性能</div>
-                </div>
-                <div style="padding-top: 0.5rem; border-top: 1px solid var(--border); margin-bottom: 0.5rem;">
-                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">过滤关键词</h4>
-                    <div style="display: flex; gap: 0.3rem; margin-bottom: 0.35rem;">
-                        <input type="text" id="settingsNewFilterWord" placeholder="输入关键词" style="flex: 1; padding: 0.25rem 0.4rem; font-size: 0.75rem;">
-                        <button onclick="settingsAddFilterWord()" class="btn btn-primary" style="padding: 0.25rem 0.5rem; min-width: auto; font-size: 0.75rem;">添加</button>
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.7rem; color: var(--gray); display: block; margin-bottom: 0.2rem;">过滤关键词</label>
+                        <div style="display: flex; gap: 0.3rem; margin-bottom: 0.25rem;">
+                            <input type="text" id="settingsNewFilterWord" placeholder="输入关键词" style="flex: 1; padding: 0.25rem 0.4rem; font-size: 0.75rem;">
+                            <button onclick="settingsAddFilterWord()" class="btn btn-primary" style="padding: 0.25rem 0.5rem; min-width: auto; font-size: 0.75rem;">添加</button>
+                        </div>
+                        <div id="settingsFilterWordsList" style="display: flex; flex-wrap: wrap; gap: 0.25rem; min-height: 1.2rem;"></div>
+                        <button onclick="resetFilterWords()" class="btn btn-primary" style="padding: 0.15rem 0.3rem; min-width: auto; font-size: 0.65rem; background: var(--gray); margin-top: 0.25rem;">重置默认</button>
                     </div>
-                    <div id="settingsFilterWordsList" style="display: flex; flex-wrap: wrap; gap: 0.25rem; min-height: 1.2rem;">
-                    </div>
-                    <div style="margin-top: 0.35rem;">
-                        <button onclick="resetFilterWords()" class="btn btn-primary" style="padding: 0.2rem 0.4rem; min-width: auto; font-size: 0.65rem; background: var(--gray);">重置默认</button>
-                    </div>
-                </div>
-                <div style="padding-top: 0.5rem; border-top: 1px solid var(--border); margin-bottom: 0.5rem;">
-                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">首页菜单来源</h4>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <select id="homeMenuSourceSelect" style="width: 180px; padding: 0.25rem 0.4rem; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 0.2rem; height: 1.6rem;">
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--gray); display: block; margin-bottom: 0.2rem;">首页菜单来源</label>
+                        <select id="homeMenuSourceSelect" style="width: 100%; padding: 0.25rem 0.4rem; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 0.2rem; height: 1.6rem;">
                             <option value="0">自动选择（最快响应）</option>
                         </select>
-                        <span style="font-size: 0.65rem; color: var(--gray);">保存后请重新聚合</span>
                     </div>
-                    <div id="homeMenuSourceHint" style="font-size: 0.65rem; color: var(--primary); margin-top: 0.15rem;"></div>
                 </div>
-                <div style="padding-top: 0.5rem; border-top: 1px solid var(--border);">
-                    <h4 style="margin-bottom: 0.35rem; font-size: 0.8rem; color: var(--dark);">计划任务</h4>
-                    <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-bottom: 0.35rem;">
-                        <input type="checkbox" id="scheduleEnabled" style="cursor: pointer; width: 12px; height: 12px;">
-                        启用定时聚合
+
+                <!-- 多仓配置 -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">🏪 多仓配置</h4>
+                    <label style="display: flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.75rem;">
+                        <input type="checkbox" id="multiIncludeWarning" style="cursor: pointer; width: 14px; height: 14px;">
+                        包含警告源（🟡）
                     </label>
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.35rem;">
-                        <div>
-                            <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行频率</label>
-                            <select id="scheduleFrequency" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.6rem;">
-                                <option value="daily">每天</option>
-                                <option value="weekly">每周</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行时间</label>
-                            <input type="time" id="scheduleTime" value="04:00" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.6rem;">
-                        </div>
+                    <div style="font-size: 0.65rem; color: var(--gray); margin-top: 0.15rem; margin-left: 1.5rem;">勾选后，多仓将包含健康状态为警告的源</div>
+                </div>
+
+                <!-- 健康检查 -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">🏥 健康检查</h4>
+                    <label style="font-size: 0.7rem; color: var(--gray); display: block; margin-bottom: 0.25rem;">自动禁用</label>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                            <input type="checkbox" id="autoDisableWarning" style="cursor: pointer; width: 14px; height: 14px;">
+                            🟡 警告
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                            <input type="checkbox" id="autoDisableUnhealthy" checked style="cursor: pointer; width: 14px; height: 14px;">
+                            🔴 不健康
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                            <input type="checkbox" id="autoDisableFailed" checked style="cursor: pointer; width: 14px; height: 14px;">
+                            ⚫ 失效
+                        </label>
                     </div>
-                    <div id="weeklyDays">
-                        <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行日期</label>
-                        <div style="display: flex; gap: 0.2rem; flex-wrap: wrap;">
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="1" style="cursor: pointer; width: 10px; height: 10px;"> 一
+                </div>
+
+                <!-- 计划任务 -->
+                <div class="settings-section">
+                    <h4 class="settings-section-title">⏰ 计划任务</h4>
+                    <label style="display: flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.75rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" id="scheduleEnabled" style="cursor: pointer; width: 14px; height: 14px;">
+                        启用计划任务
+                    </label>
+                    
+                    <div id="scheduleSettings" style="margin-left: 1.5rem;">
+                        <!-- 聚合任务 -->
+                        <div style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--light); border-radius: 0.3rem;">
+                            <label style="font-size: 0.7rem; color: var(--dark); display: block; margin-bottom: 0.25rem; font-weight: 500;">聚合任务</label>
+                            <div style="display: flex; gap: 0.75rem; margin-bottom: 0.35rem;">
+                                <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                                    <input type="checkbox" id="aggSingleEnabled" checked style="cursor: pointer; width: 12px; height: 12px;">
+                                    单仓聚合
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem;">
+                                    <input type="checkbox" id="aggMultiEnabled" checked style="cursor: pointer; width: 12px; height: 12px;">
+                                    多仓生成
+                                </label>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <div>
+                                    <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">频率</label>
+                                    <select id="aggScheduleFreq" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.5rem;">
+                                        <option value="daily">每天</option>
+                                        <option value="weekly">每周</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">时间</label>
+                                    <input type="time" id="aggScheduleTime" value="05:00" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.5rem;">
+                                </div>
+                            </div>
+                            <div id="aggWeeklyDays" style="margin-top: 0.35rem; display: none;">
+                                <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行日期</label>
+                                <div style="display: flex; gap: 0.15rem; flex-wrap: wrap;">
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="1" style="cursor: pointer; width: 10px; height: 10px;"> 一
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="2" style="cursor: pointer; width: 10px; height: 10px;"> 二
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="3" style="cursor: pointer; width: 10px; height: 10px;"> 三
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="4" style="cursor: pointer; width: 10px; height: 10px;"> 四
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="5" style="cursor: pointer; width: 10px; height: 10px;"> 五
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="6" style="cursor: pointer; width: 10px; height: 10px;"> 六
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="agg-schedule-day" value="7" style="cursor: pointer; width: 10px; height: 10px;"> 日
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 健康检查任务 -->
+                        <div style="padding: 0.5rem; background: var(--light); border-radius: 0.3rem;">
+                            <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-bottom: 0.25rem;">
+                                <input type="checkbox" id="healthScheduleEnabled" style="cursor: pointer; width: 12px; height: 12px;">
+                                <span style="font-size: 0.7rem; color: var(--dark); font-weight: 500;">健康检查任务</span>
                             </label>
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="2" style="cursor: pointer; width: 10px; height: 10px;"> 二
-                            </label>
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="3" style="cursor: pointer; width: 10px; height: 10px;"> 三
-                            </label>
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="4" style="cursor: pointer; width: 10px; height: 10px;"> 四
-                            </label>
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="5" style="cursor: pointer; width: 10px; height: 10px;"> 五
-                            </label>
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="6" style="cursor: pointer; width: 10px; height: 10px;"> 六
-                            </label>
-                            <label class="day-label" style="display: flex; align-items: center; gap: 0.15rem; cursor: pointer; font-size: 0.65rem; padding: 0.15rem 0.3rem; background: var(--light); border-radius: 0.15rem;">
-                                <input type="checkbox" class="schedule-day" value="7" style="cursor: pointer; width: 10px; height: 10px;"> 日
-                            </label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <div>
+                                    <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">频率</label>
+                                    <select id="healthScheduleFreq" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.5rem;">
+                                        <option value="daily">每天</option>
+                                        <option value="weekly">每周</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">时间</label>
+                                    <input type="time" id="healthScheduleTime" value="04:00" style="padding: 0.2rem 0.3rem; border: 1px solid var(--border); border-radius: 0.2rem; font-size: 0.75rem; height: 1.5rem;">
+                                </div>
+                            </div>
+                            <div id="healthWeeklyDays" style="margin-top: 0.35rem; display: none;">
+                                <label style="font-size: 0.65rem; color: var(--gray); display: block; margin-bottom: 0.1rem;">执行日期</label>
+                                <div style="display: flex; gap: 0.15rem; flex-wrap: wrap;">
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="1" style="cursor: pointer; width: 10px; height: 10px;"> 一
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="2" style="cursor: pointer; width: 10px; height: 10px;"> 二
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="3" style="cursor: pointer; width: 10px; height: 10px;"> 三
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="4" style="cursor: pointer; width: 10px; height: 10px;"> 四
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="5" style="cursor: pointer; width: 10px; height: 10px;"> 五
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="6" style="cursor: pointer; width: 10px; height: 10px;"> 六
+                                    </label>
+                                    <label class="day-label" style="display: flex; align-items: center; gap: 0.1rem; cursor: pointer; font-size: 0.65rem; padding: 0.1rem 0.25rem; background: white; border-radius: 0.15rem; border: 1px solid var(--border);">
+                                        <input type="checkbox" class="health-schedule-day" value="7" style="cursor: pointer; width: 10px; height: 10px;"> 日
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -824,44 +944,19 @@
         
         async function refresh() {
             try {
-                const checkedIds = new Set();
-                document.querySelectorAll('.source-checkbox:checked').forEach(cb => {
-                    checkedIds.add(parseInt(cb.dataset.id));
-                });
-
                 const res = await fetch('/api/status');
                 const data = await res.json();
                 document.getElementById('siteCount').innerText = `已聚合 ${data.site_count} 个站点`;
+                document.getElementById('sourceCount').innerText = `(${data.sources.length})`;
                 
                 if (data.is_running) {
                     showGlobalStatus('同步中...', 'loading', 0);
                 }
                 
-                const list = document.getElementById('sourceList');
-                list.innerHTML = data.sources.map(s => `
-                    <div class="source-item" style="${s.enabled ? '' : 'opacity: 0.6;'}">
-                        <div class="source-info">
-                            <input type="checkbox" class="source-checkbox" data-id="${s.id}" style="width: 16px; height: 16px; cursor: pointer;">
-                            <div class="source-name">${s.name}</div>
-                            <div class="source-url">${s.url}</div>
-                        </div>
-                        <div class="source-status">
-                            <span class="status-badge ${s.last_status === 'success' ? 'status-success' : s.last_status === 'failed' ? 'status-failed' : 'status-pending'}">
-                                ${s.last_status === 'success' ? '在线' : s.last_status === 'failed' ? '错误' : '待同步'}
-                            </span>
-                            <button onclick="toggleSource(${s.id})" class="btn-edit" style="${s.enabled ? 'color: #10b981;' : 'color: #ef4444;'}">${s.enabled ? '启用' : '禁用'}</button>
-                            <button onclick="testSource(${s.id})" class="btn-edit">测试连接</button>
-                            <button onclick="editSource(${s.id}, '${s.name}', '${s.url}')" class="btn-edit">修改</button>
-                            <button onclick="delSource(${s.id})" class="btn-delete">删除</button>
-                        </div>
-                    </div>
-                `).join('');
-
-                document.querySelectorAll('.source-checkbox').forEach(cb => {
-                    if (checkedIds.has(parseInt(cb.dataset.id))) {
-                        cb.checked = true;
-                    }
-                });
+                currentSources = data.sources;
+                
+                const sortBy = document.getElementById('sourceSortSelect').value;
+                renderSources(data.sources, sortBy);
 
                 loadFilterWords();
                 loadMultiStatus();
@@ -872,6 +967,87 @@
 
         let currentFilterWords = [];
         let currentSchedule = { enabled: false, frequency: 'daily', time: '04:00', days: [], mode: 'fastest' };
+        let currentSources = [];
+        
+        function getHealthSortValue(status) {
+            switch(status) {
+                case 'healthy': return 1;
+                case 'warning': return 2;
+                case 'unhealthy': return 3;
+                case 'failed': return 4;
+                default: return 5;
+            }
+        }
+        
+        function sortSources(sources, sortBy) {
+            const sorted = [...sources];
+            switch(sortBy) {
+                case 'health':
+                    sorted.sort((a, b) => {
+                        const statusA = getHealthSortValue(a.health_status);
+                        const statusB = getHealthSortValue(b.health_status);
+                        if (statusA !== statusB) return statusA - statusB;
+                        return (b.health_score || 0) - (a.health_score || 0);
+                    });
+                    break;
+                case 'response':
+                    sorted.sort((a, b) => (a.response_time || 99999) - (b.response_time || 99999));
+                    break;
+                case 'name':
+                    sorted.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+                    break;
+                default:
+                    sorted.sort((a, b) => a.id - b.id);
+            }
+            return sorted;
+        }
+        
+        function sortAndRenderSources() {
+            const sortBy = document.getElementById('sourceSortSelect').value;
+            localStorage.setItem('sourceSortBy', sortBy);
+            renderSources(currentSources, sortBy);
+        }
+        
+        function renderSources(sources, sortBy) {
+            const sorted = sortSources(sources, sortBy || 'id');
+            const checkedIds = new Set();
+            document.querySelectorAll('.source-checkbox:checked').forEach(cb => {
+                checkedIds.add(parseInt(cb.dataset.id));
+            });
+            
+            const list = document.getElementById('sourceList');
+            list.innerHTML = sorted.map(s => {
+                const healthIcon = getHealthIcon(s.health_status);
+                const healthText = getHealthText(s.health_status, s.health_score);
+                const jarInfo = s.jar_total > 0 ? `jar:${s.jar_success}/${s.jar_total}` : '';
+                const lastCheck = s.last_check_time ? formatTimeAgo(s.last_check_time) : '未检查';
+                
+                return `
+                <div class="source-item" style="${s.enabled ? '' : 'opacity: 0.6;'}">
+                    <div class="source-info">
+                        <input type="checkbox" class="source-checkbox" data-id="${s.id}" style="width: 14px; height: 14px; cursor: pointer;">
+                        <div class="source-name">${s.name}</div>
+                        <div class="source-url">${s.url}</div>
+                    </div>
+                    <div class="source-status">
+                        <span class="status-badge ${getHealthClass(s.health_status)}" title="${healthText} ${jarInfo}">
+                            ${healthIcon}
+                        </span>
+                        <span style="font-size: 0.65rem; color: var(--gray); display: inline-block; min-width: 4.5em; text-align: right;">${lastCheck}</span>
+                        <button onclick="toggleSource(${s.id})" class="btn-edit" style="${s.enabled ? 'color: #10b981;' : 'color: #ef4444;'}">${s.enabled ? '启用' : '禁用'}</button>
+                        <button onclick="checkHealth(${s.id})" class="btn-edit">检查</button>
+                        <button onclick="editSource(${s.id}, '${s.name}', '${s.url}')" class="btn-edit">修改</button>
+                        <button onclick="delSource(${s.id})" class="btn-delete">删除</button>
+                    </div>
+                </div>
+            `}).join('');
+
+            document.querySelectorAll('.source-checkbox').forEach(cb => {
+                if (checkedIds.has(parseInt(cb.dataset.id))) {
+                    cb.checked = true;
+                }
+            });
+        }
 
         async function loadFilterWords() {
             try {
@@ -923,7 +1099,7 @@
             `).join('');
         }
 
-        function openSettingsModal() {
+        async function openSettingsModal() {
             const modal = document.getElementById('settingsModal');
             const modalContent = modal.querySelector('.modal-content');
             modal.style.display = 'flex';
@@ -931,21 +1107,52 @@
             modalContent.style.left = '50%';
             modalContent.style.top = '50%';
             
-            const currentMode = document.querySelector('input[name="aggregateMode"]:checked');
-            if (currentMode) {
-                document.querySelector(`input[name="settingsMode"][value="${currentMode.value}"]`).checked = true;
+            try {
+                const res = await fetch('/api/global-config');
+                const config = await res.json();
+                
+                const currentMode = document.querySelector('input[name="aggregateMode"]:checked');
+                if (currentMode) {
+                    document.querySelector(`input[name="settingsMode"][value="${currentMode.value}"]`).checked = true;
+                }
+                
+                if (config.max_sites) {
+                    document.getElementById('maxSitesSelect').value = config.max_sites;
+                }
+                
+                currentFilterWords = config.filter_words || [];
+                updateSettingsModalWords();
+                
+                document.getElementById('multiIncludeWarning').checked = config.multi_include_warning || false;
+                document.getElementById('autoDisableUnhealthy').checked = config.auto_disable_unhealthy !== false;
+                document.getElementById('autoDisableWarning').checked = config.auto_disable_warning || false;
+                document.getElementById('autoDisableFailed').checked = config.auto_disable_failed !== false;
+                
+                document.getElementById('scheduleEnabled').checked = config.schedule_enabled || false;
+                document.getElementById('aggSingleEnabled').checked = config.agg_single_enabled !== false;
+                document.getElementById('aggMultiEnabled').checked = config.agg_multi_enabled !== false;
+                document.getElementById('aggScheduleFreq').value = config.agg_schedule_freq || 'daily';
+                document.getElementById('aggScheduleTime').value = config.agg_schedule_time || '05:00';
+                document.getElementById('healthScheduleEnabled').checked = config.health_schedule_enabled || false;
+                document.getElementById('healthScheduleFreq').value = config.health_schedule_freq || 'daily';
+                document.getElementById('healthScheduleTime').value = config.health_schedule_time || '04:00';
+                
+                updateScheduleDaysState('agg', config.agg_schedule_freq, config.agg_schedule_days);
+                updateScheduleDaysState('health', config.health_schedule_freq, config.health_schedule_days);
+                updateScheduleSettingsVisibility();
+                updateMultiRuleHint(config.multi_include_warning);
+                
+                loadHomeMenuSources(config.home_menu_source);
+            } catch (error) {
+                console.error('加载全局配置失败:', error);
             }
-            updateSettingsModalWords();
-            loadScheduleConfig();
-            loadHomeMenuSources();
         }
 
-        async function loadHomeMenuSources() {
+        async function loadHomeMenuSources(selectedId) {
             try {
                 const res = await fetch('/api/home-menu-sources');
                 const data = await res.json();
                 const select = document.getElementById('homeMenuSourceSelect');
-                const hint = document.getElementById('homeMenuSourceHint');
                 
                 select.innerHTML = '<option value="0">自动选择（最快响应）</option>';
                 
@@ -953,77 +1160,63 @@
                     const option = document.createElement('option');
                     option.value = src.id;
                     option.textContent = `${src.name} (${src.responseTime}ms)${src.isFastest ? ' - 最快' : ''}`;
-                    if (src.isSelected) {
+                    if (selectedId && src.id === selectedId) {
+                        option.selected = true;
+                    } else if (!selectedId && src.isSelected) {
                         option.selected = true;
                     }
                     select.appendChild(option);
                 });
-                
-                if (data.sources.length === 0) {
-                    hint.textContent = '暂无可用源，请先添加源并执行聚合';
-                } else {
-                    const selectedOption = select.options[select.selectedIndex];
-                    hint.textContent = `当前: ${selectedOption.textContent}`;
-                }
             } catch (error) {
                 console.error('加载首页菜单来源失败:', error);
             }
         }
 
-        async function loadScheduleConfig() {
-            try {
-                const res = await fetch('/api/schedule');
-                const config = await res.json();
-                currentSchedule = config;
-                document.getElementById('scheduleEnabled').checked = config.enabled;
-                document.getElementById('scheduleFrequency').value = config.frequency;
-                document.getElementById('scheduleTime').value = config.time;
-                
-                if (config.max_sites) {
-                    document.getElementById('maxSitesSelect').value = config.max_sites;
-                }
-                
-                updateDaysState(config.frequency, config.days);
-            } catch (error) {
-                console.error('加载计划任务配置失败:', error);
-            }
-        }
-
-        function updateDaysState(frequency, selectedDays) {
-            const dayLabels = document.querySelectorAll('.day-label');
-            const dayCheckboxes = document.querySelectorAll('.schedule-day');
+        function updateScheduleDaysState(prefix, frequency, selectedDays) {
+            const weeklyDays = document.getElementById(`${prefix}WeeklyDays`);
+            const dayCheckboxes = document.querySelectorAll(`.${prefix}-schedule-day`);
             
-            if (frequency === 'daily') {
-                dayLabels.forEach(label => {
-                    label.style.opacity = '0.5';
-                    label.style.cursor = 'not-allowed';
-                });
-                dayCheckboxes.forEach(cb => {
-                    cb.checked = true;
-                    cb.disabled = true;
-                    cb.style.cursor = 'not-allowed';
-                });
-            } else {
-                dayLabels.forEach(label => {
-                    label.style.opacity = '1';
-                    label.style.cursor = 'pointer';
-                });
+            if (frequency === 'weekly') {
+                weeklyDays.style.display = 'block';
                 dayCheckboxes.forEach(cb => {
                     cb.checked = selectedDays && selectedDays.includes(parseInt(cb.value));
                     cb.disabled = false;
-                    cb.style.cursor = 'pointer';
                 });
+            } else {
+                weeklyDays.style.display = 'none';
+            }
+        }
+
+        function updateScheduleSettingsVisibility() {
+            const enabled = document.getElementById('scheduleEnabled').checked;
+            const settings = document.getElementById('scheduleSettings');
+            settings.style.opacity = enabled ? '1' : '0.5';
+            settings.style.pointerEvents = enabled ? 'auto' : 'none';
+        }
+
+        function updateMultiRuleHint(includeWarning) {
+            const hint = document.getElementById('multiRuleHint');
+            if (includeWarning) {
+                hint.innerHTML = '<b>生成规则:</b> 按响应速度排序，仅包含🟢健康和🟡警告的源。<br><b>使用说明:</b> 生成多仓配置，可在影视Box中自由切换源。';
+            } else {
+                hint.innerHTML = '<b>生成规则:</b> 按响应速度排序，仅包含🟢健康的源。<br><b>使用说明:</b> 生成多仓配置，可在影视Box中自由切换源。';
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('scheduleFrequency').addEventListener('change', function() {
-                const frequency = this.value;
-                if (frequency === 'daily') {
-                    updateDaysState('daily', []);
-                } else {
-                    updateDaysState('weekly', [1, 2, 3, 4, 5]);
-                }
+            const savedSortBy = localStorage.getItem('sourceSortBy');
+            if (savedSortBy) {
+                document.getElementById('sourceSortSelect').value = savedSortBy;
+            }
+            
+            document.getElementById('scheduleEnabled').addEventListener('change', updateScheduleSettingsVisibility);
+            
+            document.getElementById('aggScheduleFreq').addEventListener('change', function() {
+                updateScheduleDaysState('agg', this.value, [1, 2, 3, 4, 5]);
+            });
+            
+            document.getElementById('healthScheduleFreq').addEventListener('change', function() {
+                updateScheduleDaysState('health', this.value, [1, 2, 3, 4, 5]);
             });
 
             // 拖拽功能
@@ -1073,58 +1266,86 @@
             currentFilterWords.push(word);
             input.value = '';
             updateSettingsModalWords();
+            
+            try {
+                await fetch('/api/filter-words', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ word: word })
+                });
+                showGlobalStatus('关键词已保存', 'success', 2000);
+            } catch (error) {
+                console.error('保存关键词失败:', error);
+                showGlobalStatus('保存失败', 'error', 3000);
+            }
         }
 
-        function settingsDeleteFilterWord(word) {
+        async function settingsDeleteFilterWord(word) {
             currentFilterWords = currentFilterWords.filter(w => w !== word);
             updateSettingsModalWords();
+            
+            try {
+                await fetch(`/api/filter-words/${encodeURIComponent(word)}`, {
+                    method: 'DELETE'
+                });
+                showGlobalStatus('关键词已删除', 'success', 2000);
+            } catch (error) {
+                console.error('删除关键词失败:', error);
+                showGlobalStatus('删除失败', 'error', 3000);
+            }
         }
 
         async function saveSettings() {
             const mode = document.querySelector('input[name="settingsMode"]:checked').value;
             document.querySelector(`input[name="aggregateMode"][value="${mode}"]`).checked = true;
 
-            const frequency = document.getElementById('scheduleFrequency').value;
-            let days;
-            if (frequency === 'daily') {
-                days = [1, 2, 3, 4, 5, 6, 7];
+            const maxSites = parseInt(document.getElementById('maxSitesSelect').value);
+            const homeMenuSourceId = parseInt(document.getElementById('homeMenuSourceSelect').value);
+            
+            const aggFreq = document.getElementById('aggScheduleFreq').value;
+            let aggDays;
+            if (aggFreq === 'daily') {
+                aggDays = [1, 2, 3, 4, 5, 6, 7];
             } else {
-                days = Array.from(document.querySelectorAll('.schedule-day:checked')).map(cb => parseInt(cb.value));
+                aggDays = Array.from(document.querySelectorAll('.agg-schedule-day:checked')).map(cb => parseInt(cb.value));
+            }
+            
+            const healthFreq = document.getElementById('healthScheduleFreq').value;
+            let healthDays;
+            if (healthFreq === 'daily') {
+                healthDays = [1, 2, 3, 4, 5, 6, 7];
+            } else {
+                healthDays = Array.from(document.querySelectorAll('.health-schedule-day:checked')).map(cb => parseInt(cb.value));
             }
 
-            const maxSites = parseInt(document.getElementById('maxSitesSelect').value);
-
-            const scheduleConfig = {
-                enabled: document.getElementById('scheduleEnabled').checked,
-                frequency: frequency,
-                time: document.getElementById('scheduleTime').value,
-                days: days,
-                mode: mode,
-                max_sites: maxSites
+            const globalConfig = {
+                agg_mode: mode,
+                max_sites: maxSites,
+                filter_words: currentFilterWords,
+                home_menu_source: homeMenuSourceId,
+                multi_include_warning: document.getElementById('multiIncludeWarning').checked,
+                auto_disable_unhealthy: document.getElementById('autoDisableUnhealthy').checked,
+                auto_disable_warning: document.getElementById('autoDisableWarning').checked,
+                auto_disable_failed: document.getElementById('autoDisableFailed').checked,
+                schedule_enabled: document.getElementById('scheduleEnabled').checked,
+                agg_single_enabled: document.getElementById('aggSingleEnabled').checked,
+                agg_multi_enabled: document.getElementById('aggMultiEnabled').checked,
+                agg_schedule_freq: aggFreq,
+                agg_schedule_time: document.getElementById('aggScheduleTime').value,
+                agg_schedule_days: aggDays,
+                health_schedule_enabled: document.getElementById('healthScheduleEnabled').checked,
+                health_schedule_freq: healthFreq,
+                health_schedule_time: document.getElementById('healthScheduleTime').value,
+                health_schedule_days: healthDays
             };
 
-            const homeMenuSourceId = parseInt(document.getElementById('homeMenuSourceSelect').value);
-
             try {
-                await fetch('/api/filter-words', {
+                await fetch('/api/global-config', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ words: currentFilterWords })
+                    body: JSON.stringify(globalConfig)
                 });
 
-                await fetch('/api/schedule', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(scheduleConfig)
-                });
-
-                await fetch('/api/home-menu-source', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sourceId: homeMenuSourceId })
-                });
-
-                currentSchedule = scheduleConfig;
                 showGlobalStatus('设置已保存', 'success', 2000);
             } catch (error) {
                 console.error('保存设置失败:', error);
@@ -1229,6 +1450,100 @@
             } catch (error) {
                 console.error('切换状态失败:', error);
                 showGlobalStatus('操作失败，请重试', 'error', 3000);
+            }
+        }
+
+        function getHealthIcon(status) {
+            switch(status) {
+                case 'healthy': return '🟢';
+                case 'warning': return '🟡';
+                case 'unhealthy': return '🔴';
+                case 'failed': return '⚫';
+                default: return '⚪';
+            }
+        }
+
+        function getHealthClass(status) {
+            switch(status) {
+                case 'healthy': return 'status-success';
+                case 'warning': return 'status-warning';
+                case 'unhealthy': return 'status-failed';
+                case 'failed': return 'status-failed';
+                default: return 'status-pending';
+            }
+        }
+
+        function getHealthText(status, score) {
+            const text = {
+                'healthy': '健康',
+                'warning': '一般',
+                'unhealthy': '不健康',
+                'failed': '失效'
+            }[status] || '未检查';
+            return `${text}(${score || 0}分)`;
+        }
+
+        function formatTimeAgo(timeStr) {
+            if (!timeStr) return '';
+            const time = new Date(timeStr);
+            const now = new Date();
+            const diffMs = now - time;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return '刚刚';
+            if (diffMins < 60) return `${diffMins}分钟前`;
+            if (diffHours < 24) return `${diffHours}小时前`;
+            if (diffDays < 7) return `${diffDays}天前`;
+            return time.toLocaleDateString();
+        }
+
+        async function checkHealth(id) {
+            showGlobalStatus('健康检查中...', 'loading', 0);
+            try {
+                const res = await fetch(`/api/health/${id}`);
+                const data = await res.json();
+                if (data.success) {
+                    const icon = getHealthIcon(data.healthStatus);
+                    const text = getHealthText(data.healthStatus, data.healthScore);
+                    const jarInfo = data.jarTotal > 0 ? ` jar:${data.jarSuccess}/${data.jarTotal}` : '';
+                    showGlobalStatus(`${icon} ${text}${jarInfo}`, data.healthStatus === 'healthy' ? 'success' : 'warning', 4000);
+                } else {
+                    showGlobalStatus('检查失败: ' + (data.error || '未知错误'), 'error', 4000);
+                }
+                refresh();
+            } catch (error) {
+                console.error('健康检查失败:', error);
+                showGlobalStatus('检查失败，请重试', 'error', 3000);
+            }
+        }
+
+        async function checkAllHealth() {
+            showGlobalStatus('批量健康检查中...', 'loading', 0);
+            try {
+                const res = await fetch('/api/health', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    let healthy = 0, warning = 0, unhealthy = 0, failed = 0;
+                    data.results.forEach(r => {
+                        if (r.healthStatus === 'healthy') healthy++;
+                        else if (r.healthStatus === 'warning') warning++;
+                        else if (r.healthStatus === 'unhealthy') unhealthy++;
+                        else if (r.healthStatus === 'failed') failed++;
+                    });
+                    showGlobalStatus(`检查完成: 🟢${healthy} 🟡${warning} 🔴${unhealthy} ⚫${failed}`, 'success', 5000);
+                } else {
+                    showGlobalStatus('检查失败', 'error', 3000);
+                }
+                refresh();
+            } catch (error) {
+                console.error('批量健康检查失败:', error);
+                showGlobalStatus('检查失败，请重试', 'error', 3000);
             }
         }
 
@@ -1492,6 +1807,12 @@
         initConfigUrl();
         refresh();
         setInterval(refresh, 5000);
+        
+        // 初始化多仓规则提示
+        fetch('/api/global-config')
+            .then(res => res.json())
+            .then(config => updateMultiRuleHint(config.multi_include_warning))
+            .catch(err => console.error('加载全局配置失败:', err));
     </script>
 </body>
 </html>
