@@ -105,6 +105,12 @@ type SourceItem struct {
 	JarFailed     int    `json:"jar_failed"`
 	JarCached     int    `json:"jar_cached"`
 	LastCheckTime string `json:"last_check_time"`
+	
+	// 本地化相关
+	Localized   bool   `json:"localized"`    // 是否已本地化
+	LocalStatus string `json:"local_status"` // success / failed / pending
+	LocalTime   string `json:"local_time"`   // 本地化时间
+	LocalError  string `json:"local_error"`  // 失败原因
 }
 
 // ScheduleConfig 计划任务配置
@@ -127,6 +133,7 @@ type GlobalConfig struct {
 
 	// 多仓配置
 	MultiIncludeWarning bool `json:"multi_include_warning"` // 包含警告源（60-80分）
+	MultiPreferLocal    bool `json:"multi_prefer_local"`    // 优先使用本地化源
 
 	// 健康检查 - 自动禁用
 	AutoDisableUnhealthy bool `json:"auto_disable_unhealthy"` // 🔴 不健康（<60分）

@@ -245,6 +245,27 @@
             color: #1e40af;
         }
         
+        .localize-success {
+            color: #10b981;
+        }
+        
+        .localize-failed {
+            color: #ef4444;
+        }
+        
+        .localize-pending {
+            color: #f59e0b;
+        }
+        
+        .localize-available:hover {
+            opacity: 1 !important;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
         .error-message {
             font-size: 0.75rem;
             color: var(--danger);
@@ -576,7 +597,7 @@
                 <img src="/static/fluxbox.png" alt="FluxBox Logo" class="logo">
                 <div class="header-text">
                     <div class="header-title">
-                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.14</span></h1>
+                        <h1>FluxBox <span style="font-size: 0.6em; font-weight: normal; color: var(--gray);">v0.1.15</span></h1>
                         <p class="header-desc">多源脱壳聚合引擎</p>
                     </div>
                 </div>
@@ -659,6 +680,7 @@
                     </select>
                 </span>
                 <span style="display: flex; align-items: center; gap: 0.75rem; font-weight: 400; font-size: 0.875rem;">
+                    <span id="batchLocalizeBtn" onclick="batchLocalize()" style="cursor: pointer; font-size: 1rem; opacity: 0.5;" title="批量本地化所有绿色源">💾</span>
                     <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer;">
                         <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 14px; height: 14px; cursor: pointer;">
                         全选
@@ -672,7 +694,7 @@
         </div>
 
         <div class="footer">
-            <p>FluxBox v0.1.14 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-0z"></path></svg></a> | 多源脱壳聚合引擎</p>
+            <p>FluxBox v0.1.15 by <a href="https://github.com/kronus09/FluxBox" target="_blank" style="color: inherit; text-decoration: none;">kronus09 <svg height="14" width="14" viewBox="0 0 16 16" style="vertical-align: middle; fill: currentColor;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-0z"></path></svg></a> | 多源脱壳聚合引擎</p>
         </div>
     </div>
 
@@ -738,6 +760,11 @@
                         包含警告源（🟡）
                     </label>
                     <div style="font-size: 0.65rem; color: var(--gray); margin-top: 0.15rem; margin-left: 1.5rem;">勾选后，多仓将包含健康状态为警告的源</div>
+                    <label style="display: flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.75rem; margin-top: 0.5rem;">
+                        <input type="checkbox" id="multiPreferLocal" style="cursor: pointer; width: 14px; height: 14px;">
+                        优先使用本地化源
+                    </label>
+                    <div style="font-size: 0.65rem; color: var(--gray); margin-top: 0.15rem; margin-left: 1.5rem;">勾选后，多仓生成时优先使用已本地化的源配置</div>
                 </div>
 
                 <!-- 健康检查 -->
@@ -1022,6 +1049,34 @@
                 const jarInfo = s.jar_total > 0 ? `jar:${s.jar_success}/${s.jar_total}` : '';
                 const lastCheck = s.last_check_time ? formatTimeAgo(s.last_check_time) : '未检查';
                 
+                let localizeIcon = '';
+                let localizeClass = '';
+                let localizeTitle = '';
+                if (s.localized && s.local_status === 'success') {
+                    localizeClass = 'localize-success';
+                    if (s.local_error) {
+                        localizeTitle = `已本地化 ${s.local_time || ''} (${s.local_error}) - 点击更新`;
+                    } else {
+                        localizeTitle = `已本地化 ${s.local_time || ''} - 点击更新`;
+                    }
+                    localizeIcon = `<span class="${localizeClass}" onclick="localizeSource(${s.id})" title="${localizeTitle}" style="cursor: pointer;">💾</span>`;
+                } else if (s.localized && s.local_status === 'failed') {
+                    localizeClass = 'localize-failed';
+                    localizeTitle = `失败: ${s.local_error || '未知'} - 点击重试`;
+                    localizeIcon = `<span class="${localizeClass}" onclick="localizeSource(${s.id})" title="${localizeTitle}" style="cursor: pointer; opacity: 0.5;">💾</span>`;
+                } else if (s.localized && s.local_status === 'pending') {
+                    localizeClass = 'localize-pending';
+                    localizeTitle = '本地化中...';
+                    localizeIcon = `<span class="${localizeClass}" title="${localizeTitle}" style="cursor: default; animation: pulse 1s infinite;">💾</span>`;
+                } else if (s.health_status === 'healthy') {
+                    localizeClass = 'localize-available';
+                    localizeTitle = '点击本地化';
+                    localizeIcon = `<span class="${localizeClass}" onclick="localizeSource(${s.id})" title="${localizeTitle}" style="cursor: pointer; opacity: 0.5;">💾</span>`;
+                } else {
+                    localizeTitle = '需绿色源才能本地化';
+                    localizeIcon = `<span title="${localizeTitle}" style="cursor: not-allowed; opacity: 0.2;">💾</span>`;
+                }
+                
                 return `
                 <div class="source-item" style="${s.enabled ? '' : 'opacity: 0.6;'}">
                     <div class="source-info">
@@ -1033,6 +1088,7 @@
                         <span class="status-badge ${getHealthClass(s.health_status)}" title="${healthText} ${jarInfo}">
                             ${healthIcon}
                         </span>
+                        ${localizeIcon}
                         <span style="font-size: 0.65rem; color: var(--gray); display: inline-block; min-width: 4.5em; text-align: right;">${lastCheck}</span>
                         <button onclick="toggleSource(${s.id})" class="btn-edit" style="${s.enabled ? 'color: #10b981;' : 'color: #ef4444;'}">${s.enabled ? '启用' : '禁用'}</button>
                         <button onclick="checkHealth(${s.id})" class="btn-edit">检查</button>
@@ -1124,6 +1180,7 @@
                 updateSettingsModalWords();
                 
                 document.getElementById('multiIncludeWarning').checked = config.multi_include_warning || false;
+                document.getElementById('multiPreferLocal').checked = config.multi_prefer_local !== false;
                 document.getElementById('autoDisableUnhealthy').checked = config.auto_disable_unhealthy !== false;
                 document.getElementById('autoDisableWarning').checked = config.auto_disable_warning || false;
                 document.getElementById('autoDisableFailed').checked = config.auto_disable_failed !== false;
@@ -1324,6 +1381,7 @@
                 filter_words: currentFilterWords,
                 home_menu_source: homeMenuSourceId,
                 multi_include_warning: document.getElementById('multiIncludeWarning').checked,
+                multi_prefer_local: document.getElementById('multiPreferLocal').checked,
                 auto_disable_unhealthy: document.getElementById('autoDisableUnhealthy').checked,
                 auto_disable_warning: document.getElementById('autoDisableWarning').checked,
                 auto_disable_failed: document.getElementById('autoDisableFailed').checked,
@@ -1434,6 +1492,35 @@
             } catch (error) {
                 console.error('删除失败:', error);
                 showGlobalStatus('删除失败，请重试', 'error', 3000);
+            }
+        }
+
+        async function localizeSource(id) {
+            try {
+                const res = await fetch(`/api/localize/${id}`, { method: 'POST' });
+                const data = await res.json();
+                if (data.message) {
+                    showGlobalStatus('开始本地化...', 'info', 2000);
+                    setTimeout(refresh, 3000);
+                } else {
+                    showGlobalStatus('本地化失败: ' + (data.error || '未知错误'), 'error', 3000);
+                }
+            } catch (error) {
+                console.error('本地化失败:', error);
+                showGlobalStatus('本地化失败，请重试', 'error', 3000);
+            }
+        }
+
+        async function batchLocalize() {
+            showGlobalStatus('批量本地化中...', 'info', 0);
+            try {
+                const res = await fetch('/api/localize', { method: 'POST' });
+                const data = await res.json();
+                showGlobalStatus(data.message, 'success', 3000);
+                setTimeout(refresh, 1000);
+            } catch (error) {
+                console.error('批量本地化失败:', error);
+                showGlobalStatus('批量本地化失败，请重试', 'error', 3000);
             }
         }
 

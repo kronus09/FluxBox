@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -103,6 +104,31 @@ func main() {
 		baseURL := getBaseURL(c)
 		data = replaceHostInConfig(data, baseURL)
 		c.Data(200, "application/json; charset=utf-8", data)
+	})
+
+	r.GET("/asset/:id/*path", func(c *gin.Context) {
+		idStr := c.Param("id")
+		assetPath := c.Param("path")
+		
+		assetPath = strings.TrimPrefix(assetPath, "/")
+		localPath := fmt.Sprintf("data/local_sources/%s/assets/%s", idStr, assetPath)
+		
+		data, err := os.ReadFile(localPath)
+		if err != nil {
+			c.JSON(404, gin.H{"error": "资源不存在"})
+			return
+		}
+		
+		contentType := "application/octet-stream"
+		if strings.HasSuffix(assetPath, ".js") {
+			contentType = "application/javascript"
+		} else if strings.HasSuffix(assetPath, ".json") {
+			contentType = "application/json"
+		} else if strings.HasSuffix(assetPath, ".jar") {
+			contentType = "application/java-archive"
+		}
+		
+		c.Data(200, contentType, data)
 	})
 
 	api.RegisterRoutes(r)

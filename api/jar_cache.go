@@ -149,32 +149,40 @@ func CacheSourceJars(sourceID int, sourceURL string, config *models.TVConfig) (i
 	skipped := 0
 
 	if config.Spider != "" {
-		jarURL := resolveJarURL(sourceURL, config.Spider)
-		if jarURL != "" {
-			jarName := extractJarName(jarURL)
-			localPath := filepath.Join(jarDir, jarName)
+		if strings.HasPrefix(config.Spider, "__HOST__/asset/") {
+			replaced++
+		} else {
+			jarURL := resolveJarURL(sourceURL, config.Spider)
+			if jarURL != "" {
+				jarName := extractJarName(jarURL)
+				localPath := filepath.Join(jarDir, jarName)
 
-			if _, err := os.Stat(localPath); err == nil {
-				config.Spider = getJarServiceURL(sourceID, jarName)
-				replaced++
-			} else {
-				skipped++
+				if _, err := os.Stat(localPath); err == nil {
+					config.Spider = getJarServiceURL(sourceID, jarName)
+					replaced++
+				} else {
+					skipped++
+				}
 			}
 		}
 	}
 
 	for i := range config.Sites {
 		if config.Sites[i].Jar != "" {
-			jarURL := resolveJarURL(sourceURL, config.Sites[i].Jar)
-			if jarURL != "" {
-				jarName := extractJarName(jarURL)
-				localPath := filepath.Join(jarDir, jarName)
+			if strings.HasPrefix(config.Sites[i].Jar, "__HOST__/asset/") {
+				replaced++
+			} else {
+				jarURL := resolveJarURL(sourceURL, config.Sites[i].Jar)
+				if jarURL != "" {
+					jarName := extractJarName(jarURL)
+					localPath := filepath.Join(jarDir, jarName)
 
-				if _, err := os.Stat(localPath); err == nil {
-					config.Sites[i].Jar = getJarServiceURL(sourceID, jarName)
-					replaced++
-				} else {
-					skipped++
+					if _, err := os.Stat(localPath); err == nil {
+						config.Sites[i].Jar = getJarServiceURL(sourceID, jarName)
+						replaced++
+					} else {
+						skipped++
+					}
 				}
 			}
 		}

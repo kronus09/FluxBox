@@ -28,5 +28,7 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.POST("/home-menu-source", SetHomeMenuSource)
 		apiGroup.GET("/global-config", GetGlobalConfig)
 		apiGroup.POST("/global-config", SaveGlobalConfig)
+		apiGroup.POST("/localize/:id", LocalizeSourceHandler)
+		apiGroup.POST("/localize", BatchLocalizeHandler)
 	}
 }

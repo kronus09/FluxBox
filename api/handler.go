@@ -111,6 +111,7 @@ func InitData() {
 			FilterWords:          append([]string{}, DefaultFilterWords...),
 			HomeMenuSource:       0,
 			MultiIncludeWarning:  false,
+			MultiPreferLocal:     true,
 			AutoDisableUnhealthy: true,
 			AutoDisableWarning:   false,
 			AutoDisableFailed:    true,
@@ -911,6 +912,7 @@ func DeleteSource(c *gin.Context) {
 			}
 			deleteSourceCache(sourceID)
 			ClearSourceJarCache(sourceID)
+			DeleteLocalSource(sourceID)
 			c.JSON(200, gin.H{"message": "删除成功"})
 			return
 		}
@@ -1530,7 +1532,21 @@ func GenerateMultiConfigInternal() {
 				Mu.Unlock()
 			}
 			
-			config, responseTime, err := fetchAndParse(src.URL)
+			var config *models.TVConfig
+			var responseTime int
+			var err error
+			
+			if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
+				config, err = GetLocalConfig(src.ID)
+				if err == nil {
+					responseTime = 0
+				} else {
+					config, responseTime, err = fetchAndParse(src.URL)
+				}
+			} else {
+				config, responseTime, err = fetchAndParse(src.URL)
+			}
+			
 			if err == nil {
 				if ShouldIncludeSource(&src, config) {
 					resultsMu.Lock()
@@ -1563,6 +1579,9 @@ func GenerateMultiConfigInternal() {
 		
 		speedStr := fmt.Sprintf("%dms", vs.speed)
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
+		if vs.speed == 0 && vs.source.Localized {
+			name = fmt.Sprintf("🚀 %s (本地)", vs.source.Name)
+		}
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
 			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
@@ -1806,4 +1825,60 @@ func SaveGlobalConfig(c *gin.Context) {
 	StartScheduler()
 
 	c.JSON(200, gin.H{"message": "保存成功"})
+}
+
+// LocalizeSourceHandler Handler: 本地化单个源
+func LocalizeSourceHandler(c *gin.Context) {
+	idStr := c.Param("id")
+	sourceID := 0
+	fmt.Sscanf(idStr, "%d", &sourceID)
+
+	if sourceID == 0 {
+		c.JSON(400, gin.H{"error": "无效的源ID"})
+		return
+	}
+
+	go func() {
+		err := LocalizeSource(sourceID)
+		if err != nil {
+			log.Printf("本地化失败: sourceID=%d, error=%v", sourceID, err)
+		}
+	}()
+
+	c.JSON(200, gin.H{"message": "开始本地化"})
+}
+
+// BatchLocalizeHandler Handler: 批量本地化
+func BatchLocalizeHandler(c *gin.Context) {
+	Mu.Lock()
+	var greenUnlocalized []int
+	for _, s := range MemorySources {
+		if s.Enabled && s.HealthStatus == "healthy" && !s.Localized {
+			greenUnlocalized = append(greenUnlocalized, s.ID)
+		}
+	}
+	Mu.Unlock()
+
+	if len(greenUnlocalized) == 0 {
+		c.JSON(200, gin.H{"message": "没有需要本地化的绿色源"})
+		return
+	}
+
+	successCount := 0
+	failCount := 0
+
+	for _, id := range greenUnlocalized {
+		err := LocalizeSource(id)
+		if err != nil {
+			failCount++
+		} else {
+			successCount++
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"message":      fmt.Sprintf("批量本地化完成：成功 %d 个，失败 %d 个", successCount, failCount),
+		"success":      successCount,
+		"failed":        failCount,
+	})
 }
