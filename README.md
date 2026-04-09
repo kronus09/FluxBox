@@ -258,6 +258,9 @@ MIT License
 - 本地化资源独立访问：`/asset/{id}/jars|js|json/xxx` 路由
 - 删除源时自动清理对应的本地化资源
 
+<details>
+<summary>📜 查看历史版本</summary>
+
 ### v0.1.14 (2026-04-08)
 
 **✨ 新功能**
@@ -395,3 +398,5 @@ MIT License
 - 新增聚合设置
 - 新增关键词过滤
 - 新增站点测速功能
+
+</details>
