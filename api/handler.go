@@ -597,6 +597,7 @@ func RunAggregation(mode string) {
 
 	final := models.TVConfig{
 		Wallpaper: "https://pic1.aj7.cloud/2024/02/14/65cc5c76c024d.jpg",
+		Logo:      "",
 		Sites:     []models.Site{},
 	}
 
@@ -634,7 +635,20 @@ func RunAggregation(mode string) {
 				Mu.Unlock()
 			}
 			
-			config, responseTime, err := fetchAndParse(src.URL)
+			var config *models.TVConfig
+			var responseTime int
+			var err error
+			
+			if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
+				config, err = GetLocalConfig(src.ID)
+				if err == nil {
+					responseTime = 0
+				} else {
+					config, responseTime, err = fetchAndParse(src.URL)
+				}
+			} else {
+				config, responseTime, err = fetchAndParse(src.URL)
+			}
 
 			Mu.Lock()
 			for i := range MemorySources {
@@ -1400,36 +1414,50 @@ func GenerateMultiConfig(c *gin.Context) {
 	var resultsMu sync.Mutex
 
 	for i := range MemorySources {
-		if !MemorySources[i].Enabled {
-			continue
-		}
-		wg.Add(1)
-		go func(idx int) {
-			defer wg.Done()
-			src := MemorySources[idx]
-			
-			if NeedHealthCheck(&src) {
-				result := CheckSourceHealth(&src)
-				Mu.Lock()
-				for i := range MemorySources {
-					if MemorySources[i].ID == src.ID {
-						UpdateSourceHealth(&MemorySources[i], result)
-						break
+			if !MemorySources[i].Enabled {
+				continue
+			}
+			wg.Add(1)
+			go func(idx int) {
+				defer wg.Done()
+				src := MemorySources[idx]
+				
+				if NeedHealthCheck(&src) {
+					result := CheckSourceHealth(&src)
+					Mu.Lock()
+					for i := range MemorySources {
+						if MemorySources[i].ID == src.ID {
+							UpdateSourceHealth(&MemorySources[i], result)
+							break
+						}
+					}
+					Mu.Unlock()
+				}
+				
+				var config *models.TVConfig
+				var responseTime int
+				var err error
+				
+				if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
+					config, err = GetLocalConfig(src.ID)
+					if err == nil {
+						responseTime = 0
+					} else {
+						config, responseTime, err = fetchAndParse(src.URL)
+					}
+				} else {
+					config, responseTime, err = fetchAndParse(src.URL)
+				}
+				
+				if err == nil {
+					if ShouldIncludeSource(&src, config) {
+						resultsMu.Lock()
+						validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
+						resultsMu.Unlock()
 					}
 				}
-				Mu.Unlock()
-			}
-			
-			config, responseTime, err := fetchAndParse(src.URL)
-			if err == nil {
-				if ShouldIncludeSource(&src, config) {
-					resultsMu.Lock()
-					validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
-					resultsMu.Unlock()
-				}
-			}
-		}(i)
-	}
+			}(i)
+		}
 	wg.Wait()
 
 	Mu.Lock()
@@ -1447,6 +1475,18 @@ func GenerateMultiConfig(c *gin.Context) {
 	videoList := []models.VideoSource{}
 	totalJars := 0
 	for _, vs := range validSources {
+		// 优先本地化模式下，本地化的源跳过jar检查，直接纳入
+		if MemoryGlobalConfig.MultiPreferLocal && vs.source.Localized && vs.source.LocalStatus == "success" {
+			saveSourceCache(vs.source.ID, vs.config)
+			speedStr := fmt.Sprintf("%dms", vs.speed)
+			name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
+			videoList = append(videoList, models.VideoSource{
+				Name: name,
+				URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
+			})
+			continue
+		}
+
 		replaced, skipped := CacheSourceJars(vs.source.ID, vs.source.URL, vs.config)
 		totalJars += replaced
 		
@@ -1880,5 +1920,106 @@ func BatchLocalizeHandler(c *gin.Context) {
 		"message":      fmt.Sprintf("批量本地化完成：成功 %d 个，失败 %d 个", successCount, failCount),
 		"success":      successCount,
 		"failed":        failCount,
+	})
+}
+
+func ExportSources(c *gin.Context) {
+	Mu.Lock()
+	defer Mu.Unlock()
+
+	type ExportSource struct {
+		Name    string `json:"name"`
+		URL     string `json:"url"`
+		Enabled bool   `json:"enabled"`
+	}
+
+	var exportList []ExportSource
+	for _, s := range MemorySources {
+		exportList = append(exportList, ExportSource{
+			Name:    s.Name,
+			URL:     s.URL,
+			Enabled: s.Enabled,
+		})
+	}
+
+	filename := fmt.Sprintf("fluxbox_sources_%s.json", time.Now().Format("20060102_150405"))
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	c.Header("Content-Type", "application/json")
+	c.JSON(200, gin.H{
+		"version":   "1.0",
+		"exported":  time.Now().Format(time.RFC3339),
+		"count":     len(exportList),
+		"sources":   exportList,
+	})
+}
+
+func ImportSources(c *gin.Context) {
+	type ImportSource struct {
+		Name    string `json:"name"`
+		URL     string `json:"url"`
+		Enabled bool   `json:"enabled"`
+	}
+
+	type ImportData struct {
+		Sources []ImportSource `json:"sources"`
+	}
+
+	var data ImportData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(400, gin.H{"error": "数据格式错误: " + err.Error()})
+		return
+	}
+
+	if len(data.Sources) == 0 {
+		c.JSON(400, gin.H{"error": "没有可导入的源"})
+		return
+	}
+
+	Mu.Lock()
+	defer Mu.Unlock()
+
+	maxID := 0
+	for _, s := range MemorySources {
+		if s.ID > maxID {
+			maxID = s.ID
+		}
+	}
+
+	urlMap := make(map[string]bool)
+	for _, s := range MemorySources {
+		urlMap[s.URL] = true
+	}
+
+	added := 0
+	skipped := 0
+	for _, is := range data.Sources {
+		if urlMap[is.URL] {
+			skipped++
+			continue
+		}
+
+		maxID++
+		newSource := models.SourceItem{
+			ID:           maxID,
+			Name:         is.Name,
+			URL:          is.URL,
+			Enabled:      is.Enabled,
+			LastStatus:   "pending",
+			LastError:    "",
+			ResponseTime: 0,
+			HealthScore:  0,
+			HealthStatus: "pending",
+		}
+
+		MemorySources = append(MemorySources, newSource)
+		urlMap[is.URL] = true
+		added++
+	}
+
+	saveSourcesToFile()
+	c.JSON(200, gin.H{
+		"message": fmt.Sprintf("导入完成：新增 %d 个，跳过重复 %d 个", added, skipped),
+		"added":   added,
+		"skipped": skipped,
 	})
 }

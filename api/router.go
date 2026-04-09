@@ -30,5 +30,7 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.POST("/global-config", SaveGlobalConfig)
 		apiGroup.POST("/localize/:id", LocalizeSourceHandler)
 		apiGroup.POST("/localize", BatchLocalizeHandler)
+		apiGroup.GET("/sources/export", ExportSources)
+		apiGroup.POST("/sources/import", ImportSources)
 	}
 }

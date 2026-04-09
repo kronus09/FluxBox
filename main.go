@@ -53,10 +53,11 @@ func main() {
 		api.Mu.Lock()
 		config := api.MemoryConfig
 		api.Mu.Unlock()
-		
+
+		config.Logo = ""
 		configJSON, _ := json.Marshal(config)
 		configJSON = replaceHostInConfig(configJSON, baseURL)
-		
+
 		c.Data(200, "application/json; charset=utf-8", configJSON)
 	})
 
@@ -65,7 +66,7 @@ func main() {
 		api.Mu.Lock()
 		config := api.MemoryMultiConfig
 		api.Mu.Unlock()
-		
+
 		if len(config.VideoList) == 0 {
 			c.JSON(200, map[string]interface{}{
 				"urls":      []interface{}{},
@@ -73,14 +74,14 @@ func main() {
 			})
 			return
 		}
-		
+
 		result := map[string]interface{}{
 			"urls":      config.VideoList,
 			"videoList": config.VideoList,
 		}
 		resultJSON, _ := json.Marshal(result)
 		resultJSON = replaceHostInConfig(resultJSON, baseURL)
-		
+
 		c.Data(200, "application/json; charset=utf-8", resultJSON)
 	})
 
@@ -94,12 +95,25 @@ func main() {
 			return
 		}
 
+		localConfigPath := fmt.Sprintf("data/local_sources/%d/config.json", id)
 		cachePath := fmt.Sprintf("data/sources/%d.json", id)
-		data, err := os.ReadFile(cachePath)
+
+		var data []byte
+		if _, err := os.Stat(localConfigPath); err == nil {
+			data, err = os.ReadFile(localConfigPath)
+		} else {
+			data, err = os.ReadFile(cachePath)
+		}
+
 		if err != nil {
 			c.JSON(404, gin.H{"error": "配置不存在或未缓存"})
 			return
 		}
+
+		var config map[string]interface{}
+		json.Unmarshal(data, &config)
+		config["logo"] = ""
+		data, _ = json.Marshal(config)
 
 		baseURL := getBaseURL(c)
 		data = replaceHostInConfig(data, baseURL)
@@ -109,16 +123,16 @@ func main() {
 	r.GET("/asset/:id/*path", func(c *gin.Context) {
 		idStr := c.Param("id")
 		assetPath := c.Param("path")
-		
+
 		assetPath = strings.TrimPrefix(assetPath, "/")
 		localPath := fmt.Sprintf("data/local_sources/%s/assets/%s", idStr, assetPath)
-		
+
 		data, err := os.ReadFile(localPath)
 		if err != nil {
 			c.JSON(404, gin.H{"error": "资源不存在"})
 			return
 		}
-		
+
 		contentType := "application/octet-stream"
 		if strings.HasSuffix(assetPath, ".js") {
 			contentType = "application/javascript"
@@ -127,7 +141,7 @@ func main() {
 		} else if strings.HasSuffix(assetPath, ".jar") {
 			contentType = "application/java-archive"
 		}
-		
+
 		c.Data(200, contentType, data)
 	})
 
