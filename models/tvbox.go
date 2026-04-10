@@ -1,20 +1,40 @@
 package models
 
+import "strconv"
+
+func ToInt(v interface{}) int {
+	switch val := v.(type) {
+	case int:
+		return val
+	case float64:
+		return int(val)
+	case string:
+		if n, err := strconv.Atoi(val); err == nil {
+			return n
+		}
+	}
+	return 0
+}
+
+func EqInt(v interface{}, n int) bool {
+	return ToInt(v) == n
+}
+
 // TVConfig 是 影视Box 配置的顶层结构
 type TVConfig struct {
-	Spider     string        `json:"spider,omitempty"`
-	Wallpaper  string        `json:"wallpaper,omitempty"`
-	Logo       string        `json:"logo,omitempty"`
-	Sites      []Site        `json:"sites,omitempty"`
-	Lives      []Live        `json:"lives,omitempty"`
-	Ads        []string      `json:"ads,omitempty"`
-	Urls       []VideoSource `json:"urls,omitempty"`
-	VideoList  []VideoSource `json:"videoList,omitempty"`
-	Parses     []Parse       `json:"parses,omitempty"`
-	Rules      []Rule        `json:"rules,omitempty"`
-	Flags      []string      `json:"flags,omitempty"`
-	Ijk        []Ijk         `json:"ijk,omitempty"`
-	Doh        []Doh         `json:"doh,omitempty"`
+	Spider    string        `json:"spider,omitempty"`
+	Wallpaper string        `json:"wallpaper,omitempty"`
+	Logo      string        `json:"logo,omitempty"`
+	Sites     []Site        `json:"sites,omitempty"`
+	Lives     []Live        `json:"lives,omitempty"`
+	Ads       []string      `json:"ads,omitempty"`
+	Urls      []VideoSource `json:"urls,omitempty"`
+	VideoList []VideoSource `json:"videoList,omitempty"`
+	Parses    []Parse       `json:"parses,omitempty"`
+	Rules     []Rule        `json:"rules,omitempty"`
+	Flags     []string      `json:"flags,omitempty"`
+	Ijk       []Ijk         `json:"ijk,omitempty"`
+	Doh       []Doh         `json:"doh,omitempty"`
 }
 
 // VideoSource 多仓配置中的子仓库
@@ -27,7 +47,7 @@ type VideoSource struct {
 // Parse 解析器配置
 type Parse struct {
 	Name string      `json:"name"`
-	Type interface{} `json:"type"`  // 可能是 int 或 string
+	Type interface{} `json:"type"` // 可能是 int 或 string
 	URL  string      `json:"url"`
 	Ext  interface{} `json:"ext,omitempty"`
 }
@@ -42,8 +62,8 @@ type Rule struct {
 
 // Ijk 播放器配置
 type Ijk struct {
-	Group   string        `json:"group"`
-	Options []IjkOption   `json:"options"`
+	Group   string      `json:"group"`
+	Options []IjkOption `json:"options"`
 }
 
 // IjkOption IJK播放器选项
@@ -64,11 +84,11 @@ type Doh struct {
 type Site struct {
 	Key         string      `json:"key"`
 	Name        string      `json:"name"`
-	Type        int         `json:"type"`
+	Type        interface{} `json:"type"`
 	Api         string      `json:"api"`
-	Searchable  int         `json:"searchable,omitempty"`
-	QuickSearch int         `json:"quickSearch,omitempty"`
-	Filterable  int         `json:"filterable,omitempty"`
+	Searchable  interface{} `json:"searchable,omitempty"`
+	QuickSearch interface{} `json:"quickSearch,omitempty"`
+	Filterable  interface{} `json:"filterable,omitempty"`
 	Ext         interface{} `json:"ext,omitempty"`
 	Jar         string      `json:"jar,omitempty"`
 	Speed       int         `json:"-"` // 响应时间(毫秒)，不输出到JSON
@@ -76,12 +96,12 @@ type Site struct {
 
 // Live 对应电视直播配置
 type Live struct {
-	Name       string `json:"name"`
-	Type       int    `json:"type"`
-	Url        string `json:"url"`
-	PlayerType int    `json:"playerType,omitempty"`
-	UA         string `json:"ua,omitempty"`
-	Group      string `json:"group,omitempty"`
+	Name       string      `json:"name"`
+	Type       interface{} `json:"type"`
+	Url        string      `json:"url"`
+	PlayerType interface{} `json:"playerType,omitempty"`
+	UA         string      `json:"ua,omitempty"`
+	Group      string      `json:"group,omitempty"`
 }
 
 // SourceItem 是 FluxBox 管理后台专用的模型
@@ -94,7 +114,7 @@ type SourceItem struct {
 	LastStatus   string `json:"last_status"`
 	LastError    string `json:"last_error"`
 	ResponseTime int    `json:"response_time"`
-	
+
 	HealthScore   int    `json:"health_score"`
 	HealthStatus  string `json:"health_status"`
 	SiteTotal     int    `json:"site_total"`
@@ -105,7 +125,7 @@ type SourceItem struct {
 	JarFailed     int    `json:"jar_failed"`
 	JarCached     int    `json:"jar_cached"`
 	LastCheckTime string `json:"last_check_time"`
-	
+
 	// 本地化相关
 	Localized   bool   `json:"localized"`    // 是否已本地化
 	LocalStatus string `json:"local_status"` // success / failed / pending
@@ -126,9 +146,9 @@ type ScheduleConfig struct {
 // GlobalConfig 全局配置
 type GlobalConfig struct {
 	// 单仓聚合（保持现有字段）
-	AggMode        string   `json:"agg_mode"`        // fastest / all
-	MaxSites       int      `json:"max_sites"`       // 60-200
-	FilterWords    []string `json:"filter_words"`    // 过滤关键词
+	AggMode        string   `json:"agg_mode"`         // fastest / all
+	MaxSites       int      `json:"max_sites"`        // 60-200
+	FilterWords    []string `json:"filter_words"`     // 过滤关键词
 	HomeMenuSource int      `json:"home_menu_source"` // 首页菜单来源，0表示自动选择
 
 	// 多仓配置
@@ -140,15 +160,19 @@ type GlobalConfig struct {
 	AutoDisableWarning   bool `json:"auto_disable_warning"`   // 🟡 警告（60-80分）
 	AutoDisableFailed    bool `json:"auto_disable_failed"`    // ⚫ 失效（<30分）
 
+	// 健康检查 - 自动启用
+	AutoEnableHealthy   bool `json:"auto_enable_healthy"`   // ✅ 健康源（绿色图标）
+	AutoEnableLocalized bool `json:"auto_enable_localized"` // 💾 本地源（磁盘图标）
+
 	// 计划任务
 	ScheduleEnabled bool `json:"schedule_enabled"` // 计划任务总开关
 
 	// 聚合任务（单仓+多仓）
-	AggSingleEnabled    bool   `json:"agg_single_enabled"`    // 单仓聚合开关
-	AggMultiEnabled     bool   `json:"agg_multi_enabled"`     // 多仓生成开关
-	AggScheduleFreq     string `json:"agg_schedule_freq"`     // daily / weekly
-	AggScheduleTime     string `json:"agg_schedule_time"`     // HH:mm
-	AggScheduleDays     []int  `json:"agg_schedule_days"`     // 周几
+	AggSingleEnabled bool   `json:"agg_single_enabled"` // 单仓聚合开关
+	AggMultiEnabled  bool   `json:"agg_multi_enabled"`  // 多仓生成开关
+	AggScheduleFreq  string `json:"agg_schedule_freq"`  // daily / weekly
+	AggScheduleTime  string `json:"agg_schedule_time"`  // HH:mm
+	AggScheduleDays  []int  `json:"agg_schedule_days"`  // 周几
 
 	// 健康检查任务
 	HealthScheduleEnabled bool   `json:"health_schedule_enabled"` // 健康检查开关

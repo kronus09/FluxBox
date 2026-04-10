@@ -51,3 +51,7 @@ data/*
 
 # AI 辅助总结文档
 AI_SUMMARY.md
+# 编译二进制
+FluxBox
+fluxbox
+*.exe

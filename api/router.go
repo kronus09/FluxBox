@@ -8,6 +8,7 @@ func RegisterRoutes(r *gin.Engine) {
 		apiGroup.GET("/status", GetStatus)
 		apiGroup.POST("/add", AddSource)
 		apiGroup.DELETE("/delete/:id", DeleteSource)
+		apiGroup.DELETE("/delete-localization/:id", DeleteLocalization)
 		apiGroup.POST("/update", UpdateSource)
 		apiGroup.POST("/toggle/:id", ToggleSource)
 		apiGroup.POST("/aggregate", TriggerAggregate)

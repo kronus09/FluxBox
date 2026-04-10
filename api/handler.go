@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -19,24 +20,24 @@ import (
 )
 
 var (
-	SourcesFile         = "data/sources.json"
-	CacheFile           = "data/config_cache.json"
-	FilterWordsFile     = "data/filter_words.json"
-	ScheduleFile        = "data/schedule.json"
-	MultiConfigFile     = "data/multi_config.json"
-	SourceCacheDir      = "data/sources/"
-	HomeMenuSourceFile  = "data/home_menu_source.json"
-	GlobalConfigFile    = "data/global_config.json"
-	MemorySources       []models.SourceItem
-	MemoryConfig        models.TVConfig
-	MemoryFilterWords   []string
-	MemorySchedule      models.ScheduleConfig
-	MemoryMultiConfig   models.TVConfig
+	SourcesFile          = "data/sources.json"
+	CacheFile            = "data/config_cache.json"
+	FilterWordsFile      = "data/filter_words.json"
+	ScheduleFile         = "data/schedule.json"
+	MultiConfigFile      = "data/multi_config.json"
+	SourceCacheDir       = "data/sources/"
+	HomeMenuSourceFile   = "data/home_menu_source.json"
+	GlobalConfigFile     = "data/global_config.json"
+	MemorySources        []models.SourceItem
+	MemoryConfig         models.TVConfig
+	MemoryFilterWords    []string
+	MemorySchedule       models.ScheduleConfig
+	MemoryMultiConfig    models.TVConfig
 	MemoryHomeMenuSource int
-	MemoryGlobalConfig  models.GlobalConfig
-	Mu                  sync.Mutex
-	IsAggregating       bool
-	SchedulerTimer      *time.Timer
+	MemoryGlobalConfig   models.GlobalConfig
+	Mu                   sync.Mutex
+	IsAggregating        bool
+	SchedulerTimer       *time.Timer
 	HealthSchedulerTimer *time.Timer
 )
 
@@ -53,6 +54,31 @@ func InitData() {
 		json.Unmarshal(data, &MemorySources)
 	} else {
 		MemorySources = []models.SourceItem{}
+	}
+
+	// 清理中断后遗留的僵尸本地化pending状态 + 统一清理URL前后空格
+	cleanupCount := 0
+	urlTrimmed := 0
+	for i := range MemorySources {
+		if MemorySources[i].LocalStatus == "pending" {
+			MemorySources[i].LocalStatus = ""
+			MemorySources[i].Localized = false
+			cleanupCount++
+		}
+		cleanURL := strings.TrimSpace(MemorySources[i].URL)
+		if cleanURL != MemorySources[i].URL {
+			MemorySources[i].URL = cleanURL
+			urlTrimmed++
+		}
+	}
+	if cleanupCount > 0 || urlTrimmed > 0 {
+		if cleanupCount > 0 {
+			log.Printf("清理了 %d 个僵尸本地化pending状态", cleanupCount)
+		}
+		if urlTrimmed > 0 {
+			log.Printf("清理了 %d 个源URL的前后空格", urlTrimmed)
+		}
+		saveSourcesToFile()
 	}
 
 	// 加载缓存配置
@@ -106,21 +132,23 @@ func InitData() {
 		}
 	} else {
 		MemoryGlobalConfig = models.GlobalConfig{
-			AggMode:              "fastest",
-			MaxSites:             120,
-			FilterWords:          append([]string{}, DefaultFilterWords...),
-			HomeMenuSource:       0,
-			MultiIncludeWarning:  false,
-			MultiPreferLocal:     true,
-			AutoDisableUnhealthy: true,
-			AutoDisableWarning:   false,
-			AutoDisableFailed:    true,
-			ScheduleEnabled:      false,
-			AggSingleEnabled:     true,
-			AggMultiEnabled:      true,
-			AggScheduleFreq:      "daily",
-			AggScheduleTime:      "05:00",
-			AggScheduleDays:      []int{1, 2, 3, 4, 5},
+			AggMode:               "fastest",
+			MaxSites:              120,
+			FilterWords:           append([]string{}, DefaultFilterWords...),
+			HomeMenuSource:        0,
+			MultiIncludeWarning:   false,
+			MultiPreferLocal:      true,
+			AutoDisableUnhealthy:  true,
+			AutoDisableWarning:    true,
+			AutoDisableFailed:     true,
+			AutoEnableHealthy:     true,
+			AutoEnableLocalized:   true,
+			ScheduleEnabled:       false,
+			AggSingleEnabled:      true,
+			AggMultiEnabled:       true,
+			AggScheduleFreq:       "daily",
+			AggScheduleTime:       "05:00",
+			AggScheduleDays:       []int{1, 2, 3, 4, 5},
 			HealthScheduleEnabled: false,
 			HealthScheduleFreq:    "daily",
 			HealthScheduleTime:    "04:00",
@@ -364,19 +392,50 @@ func shouldFilterSite(name string) bool {
 // fetchAndParse 抓取并脱壳的核心函数，返回配置和响应时间(毫秒)
 // 支持单仓和多仓格式
 func fetchAndParse(url string) (*models.TVConfig, int, error) {
+	url = strings.TrimSpace(url)
 	start := time.Now()
-	client := &http.Client{Timeout: 15 * time.Second}
-	req, _ := http.NewRequest("GET", url, nil)
-	req.Header.Set("User-Agent", "okhttp/3.15.0")
-	req.Header.Set("Accept-Encoding", "gzip")
-
-	resp, err := client.Do(req)
+	client := &http.Client{
+		Timeout: 15 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			if len(via) >= 5 {
+				return http.ErrUseLastResponse
+			}
+			return nil
+		},
+	}
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, 0, err
 	}
-	defer resp.Body.Close()
+	req.Header.Set("User-Agent", "okhttp/3.15.0")
+	req.Header.Set("Accept-Encoding", "gzip")
 
+	// 第一轮：禁止重定向，检查302的body是否为加密数据
+	clientNoRedirect := &http.Client{
+		Timeout: 15 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	resp, err := clientNoRedirect.Do(req)
+	if err != nil {
+		return nil, 0, err
+	}
 	body, _ := io.ReadAll(resp.Body)
+	resp.Body.Close()
+
+	// 如果是302且不是加密数据，跟随重定向
+	if (resp.StatusCode == 301 || resp.StatusCode == 302 || resp.StatusCode == 307) &&
+		len(body) < 1000 && !strings.HasPrefix(string(body), "$#") && !parser.IsHexString(string(body)) {
+		resp, err = client.Do(req)
+		if err != nil {
+			return nil, 0, err
+		}
+		defer resp.Body.Close()
+		body, _ = io.ReadAll(resp.Body)
+	} else {
+		defer resp.Body.Close()
+	}
 	if (len(body) > 2 && body[0] == 0x1f && body[1] == 0x8b) || resp.Header.Get("Content-Encoding") == "gzip" {
 		reader, _ := gzip.NewReader(bytes.NewReader(body))
 		if reader != nil {
@@ -508,11 +567,11 @@ func cleanExt(ext interface{}) interface{} {
 	if ext == nil {
 		return nil
 	}
-	
+
 	if extMap, ok := ext.(map[string]interface{}); ok {
 		cleaned := make(map[string]interface{})
 		popupFields := []string{"msg", "logo", "message", "popup", "弹窗", "提示", "公告"}
-		
+
 		for key, value := range extMap {
 			isPopup := false
 			for _, field := range popupFields {
@@ -525,13 +584,13 @@ func cleanExt(ext interface{}) interface{} {
 				cleaned[key] = value
 			}
 		}
-		
+
 		if len(cleaned) == 0 {
 			return nil
 		}
 		return cleaned
 	}
-	
+
 	return ext
 }
 
@@ -618,11 +677,11 @@ func RunAggregation(mode string) {
 		wg.Add(1)
 		go func(idx int) {
 			defer wg.Done()
-			
+
 			Mu.Lock()
 			src := MemorySources[idx]
 			Mu.Unlock()
-			
+
 			if NeedHealthCheck(&src) {
 				result := CheckSourceHealth(&src)
 				Mu.Lock()
@@ -634,11 +693,11 @@ func RunAggregation(mode string) {
 				}
 				Mu.Unlock()
 			}
-			
+
 			var config *models.TVConfig
 			var responseTime int
 			var err error
-			
+
 			if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
 				config, err = GetLocalConfig(src.ID)
 				if err == nil {
@@ -666,7 +725,7 @@ func RunAggregation(mode string) {
 				}
 			}
 			Mu.Unlock()
-			
+
 			if err == nil {
 				resultsMu.Lock()
 				results = append(results, sourceResult{sourceID: src.ID, config: config})
@@ -684,7 +743,8 @@ func RunAggregation(mode string) {
 	var homeMenuSites []models.Site
 	globalConfigSet := false
 	var otherSites []models.Site
-	
+	seenSiteKeys := make(map[string]bool)
+
 	Mu.Lock()
 	homeMenuSourceID := MemoryHomeMenuSource
 	Mu.Unlock()
@@ -702,7 +762,7 @@ func RunAggregation(mode string) {
 			}
 		}
 	}
-	
+
 	for _, r := range results {
 		Mu.Lock()
 		var srcURL string
@@ -713,13 +773,13 @@ func RunAggregation(mode string) {
 			}
 		}
 		Mu.Unlock()
-		
+
 		replaced, skipped := CacheSourceJars(r.sourceID, srcURL, r.config)
 		if skipped > 0 {
 			log.Printf("聚合源有jar缺失: sourceID=%d replaced=%d skipped=%d", r.sourceID, replaced, skipped)
 		}
 		saveSourceCache(r.sourceID, r.config)
-		
+
 		Mu.Lock()
 		var src *models.SourceItem
 		for i := range MemorySources {
@@ -729,13 +789,13 @@ func RunAggregation(mode string) {
 			}
 		}
 		Mu.Unlock()
-		
+
 		if src == nil {
 			continue
 		}
-		
+
 		currentJar := r.config.Spider
-		isHomeMenuSource := (homeMenuSourceID != 0 && r.sourceID == homeMenuSourceID) || 
+		isHomeMenuSource := (homeMenuSourceID != 0 && r.sourceID == homeMenuSourceID) ||
 			(homeMenuSourceID == 0 && r.sourceID == fastestSourceID)
 
 		firstSite := true
@@ -743,17 +803,21 @@ func RunAggregation(mode string) {
 			if shouldFilterSite(s.Name) {
 				continue
 			}
-			
+
 			if !ShouldIncludeSite(&s, src, r.config) {
 				continue
 			}
-			
+
 			s.Key = fmt.Sprintf("fb_%d_%s", src.ID, s.Key)
-			if s.Jar == "" && currentJar != "" && s.Type == 3 {
+			if seenSiteKeys[s.Key] {
+				continue
+			}
+			seenSiteKeys[s.Key] = true
+			if s.Jar == "" && currentJar != "" && models.EqInt(s.Type, 3) {
 				s.Jar = currentJar
 			}
 			s.Ext = cleanExt(s.Ext)
-			
+
 			if isHomeMenuSource {
 				if firstSite {
 					s.Name = "FluxBox聚合源"
@@ -761,7 +825,7 @@ func RunAggregation(mode string) {
 				}
 				homeMenuSites = append(homeMenuSites, s)
 			} else {
-				if s.Searchable == 1 {
+				if models.EqInt(s.Searchable, 1) {
 					otherSites = append(otherSites, s)
 				}
 			}
@@ -770,7 +834,7 @@ func RunAggregation(mode string) {
 		if final.Spider == "" {
 			final.Spider = currentJar
 		}
-		
+
 		if !globalConfigSet || isHomeMenuSource {
 			if len(r.config.Lives) > 0 {
 				final.Lives = r.config.Lives
@@ -800,7 +864,7 @@ func RunAggregation(mode string) {
 			}
 		}
 	}
-	
+
 	allSites = append(homeMenuSites, otherSites...)
 
 	uniqueSites := []models.Site{}
@@ -815,7 +879,7 @@ func RunAggregation(mode string) {
 	homeSiteCount := len(homeMenuSites)
 	var homeUniqueSites []models.Site
 	var otherUniqueSites []models.Site
-	
+
 	if homeSiteCount > 0 {
 		for _, s := range uniqueSites {
 			isHomeSite := false
@@ -899,6 +963,16 @@ func AddSource(c *gin.Context) {
 		return
 	}
 	Mu.Lock()
+	item.URL = strings.TrimSpace(item.URL)
+
+	for _, s := range MemorySources {
+		if strings.TrimSpace(s.URL) == item.URL {
+			c.JSON(400, gin.H{"error": "源URL已存在"})
+			Mu.Unlock()
+			return
+		}
+	}
+
 	item.ID = int(time.Now().UnixNano() / 1e6)
 	item.Enabled = true
 	MemorySources = append(MemorySources, item)
@@ -928,6 +1002,29 @@ func DeleteSource(c *gin.Context) {
 			ClearSourceJarCache(sourceID)
 			DeleteLocalSource(sourceID)
 			c.JSON(200, gin.H{"message": "删除成功"})
+			return
+		}
+	}
+	c.JSON(404, gin.H{"error": "未找到该源"})
+}
+
+// DeleteLocalization Handler: 仅删除本地化文件，不删除源本身
+func DeleteLocalization(c *gin.Context) {
+	idStr := c.Param("id")
+	Mu.Lock()
+	defer Mu.Unlock()
+	for i, s := range MemorySources {
+		if fmt.Sprintf("%d", s.ID) == idStr {
+			sourceID := s.ID
+			DeleteLocalSource(sourceID)
+			MemorySources[i].Localized = false
+			MemorySources[i].LocalStatus = ""
+			MemorySources[i].LocalError = ""
+			if err := saveSourcesToFile(); err != nil {
+				c.JSON(500, gin.H{"error": "保存失败: " + err.Error()})
+				return
+			}
+			c.JSON(200, gin.H{"message": "本地化文件已清除"})
 			return
 		}
 	}
@@ -1181,24 +1278,24 @@ func CheckSingleHealth(c *gin.Context) {
 	Mu.Unlock()
 
 	c.JSON(200, gin.H{
-		"success":      true,
-		"healthScore":  result.HealthScore,
-		"healthStatus": result.HealthStatus,
-		"siteTotal":    result.SiteTotal,
-		"siteCrawler":  result.SiteCrawler,
+		"success":       true,
+		"healthScore":   result.HealthScore,
+		"healthStatus":  result.HealthStatus,
+		"siteTotal":     result.SiteTotal,
+		"siteCrawler":   result.SiteCrawler,
 		"siteCollector": result.SiteCollector,
-		"jarTotal":     result.JarTotal,
-		"jarSuccess":   result.JarSuccess,
-		"jarFailed":    result.JarFailed,
-		"error":        result.Error,
+		"jarTotal":      result.JarTotal,
+		"jarSuccess":    result.JarSuccess,
+		"jarFailed":     result.JarFailed,
+		"error":         result.Error,
 	})
 }
 
 // CheckAllHealth Handler: 检查所有源的健康状态
 func CheckAllHealth(c *gin.Context) {
 	var req struct {
-		IDs []int `json:"ids"`
-		Force bool `json:"force"`
+		IDs   []int `json:"ids"`
+		Force bool  `json:"force"`
 	}
 	c.ShouldBindJSON(&req)
 
@@ -1414,50 +1511,50 @@ func GenerateMultiConfig(c *gin.Context) {
 	var resultsMu sync.Mutex
 
 	for i := range MemorySources {
-			if !MemorySources[i].Enabled {
-				continue
-			}
-			wg.Add(1)
-			go func(idx int) {
-				defer wg.Done()
-				src := MemorySources[idx]
-				
-				if NeedHealthCheck(&src) {
-					result := CheckSourceHealth(&src)
-					Mu.Lock()
-					for i := range MemorySources {
-						if MemorySources[i].ID == src.ID {
-							UpdateSourceHealth(&MemorySources[i], result)
-							break
-						}
+		if !MemorySources[i].Enabled {
+			continue
+		}
+		wg.Add(1)
+		go func(idx int) {
+			defer wg.Done()
+			src := MemorySources[idx]
+
+			if NeedHealthCheck(&src) {
+				result := CheckSourceHealth(&src)
+				Mu.Lock()
+				for i := range MemorySources {
+					if MemorySources[i].ID == src.ID {
+						UpdateSourceHealth(&MemorySources[i], result)
+						break
 					}
-					Mu.Unlock()
 				}
-				
-				var config *models.TVConfig
-				var responseTime int
-				var err error
-				
-				if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
-					config, err = GetLocalConfig(src.ID)
-					if err == nil {
-						responseTime = 0
-					} else {
-						config, responseTime, err = fetchAndParse(src.URL)
-					}
+				Mu.Unlock()
+			}
+
+			var config *models.TVConfig
+			var responseTime int
+			var err error
+
+			if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
+				config, err = GetLocalConfig(src.ID)
+				if err == nil {
+					responseTime = 0
 				} else {
 					config, responseTime, err = fetchAndParse(src.URL)
 				}
-				
-				if err == nil {
-					if ShouldIncludeSource(&src, config) {
-						resultsMu.Lock()
-						validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
-						resultsMu.Unlock()
-					}
+			} else {
+				config, responseTime, err = fetchAndParse(src.URL)
+			}
+
+			if err == nil {
+				if ShouldIncludeSource(&src, config) {
+					resultsMu.Lock()
+					validSources = append(validSources, sourceWithSpeed{source: src, speed: responseTime, config: config})
+					resultsMu.Unlock()
 				}
-			}(i)
-		}
+			}
+		}(i)
+	}
 	wg.Wait()
 
 	Mu.Lock()
@@ -1489,18 +1586,18 @@ func GenerateMultiConfig(c *gin.Context) {
 
 		replaced, skipped := CacheSourceJars(vs.source.ID, vs.source.URL, vs.config)
 		totalJars += replaced
-		
+
 		if skipped > 0 && vs.source.HealthStatus == "healthy" {
 			log.Printf("多仓排除绿灯源(缺失jar): %s", vs.source.Name)
 			continue
 		}
-		
+
 		if skipped > 0 && vs.source.HealthStatus == "warning" {
 			log.Printf("多仓黄灯源保留原始jar URL: %s", vs.source.Name)
 		}
-		
+
 		saveSourceCache(vs.source.ID, vs.config)
-		
+
 		speedStr := fmt.Sprintf("%dms", vs.speed)
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 		videoList = append(videoList, models.VideoSource{
@@ -1559,7 +1656,7 @@ func GenerateMultiConfigInternal() {
 		go func(idx int) {
 			defer wg.Done()
 			src := MemorySources[idx]
-			
+
 			if NeedHealthCheck(&src) {
 				result := CheckSourceHealth(&src)
 				Mu.Lock()
@@ -1571,11 +1668,11 @@ func GenerateMultiConfigInternal() {
 				}
 				Mu.Unlock()
 			}
-			
+
 			var config *models.TVConfig
 			var responseTime int
 			var err error
-			
+
 			if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
 				config, err = GetLocalConfig(src.ID)
 				if err == nil {
@@ -1586,7 +1683,7 @@ func GenerateMultiConfigInternal() {
 			} else {
 				config, responseTime, err = fetchAndParse(src.URL)
 			}
-			
+
 			if err == nil {
 				if ShouldIncludeSource(&src, config) {
 					resultsMu.Lock()
@@ -1616,7 +1713,7 @@ func GenerateMultiConfigInternal() {
 		downloaded, _ := CacheSourceJars(vs.source.ID, vs.source.URL, vs.config)
 		totalJars += downloaded
 		saveSourceCache(vs.source.ID, vs.config)
-		
+
 		speedStr := fmt.Sprintf("%dms", vs.speed)
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 		if vs.speed == 0 && vs.source.Localized {
@@ -1653,9 +1750,9 @@ func CheckAllHealthInternal() {
 		go func(idx int) {
 			defer wg.Done()
 			src := sources[idx]
-			
+
 			result := CheckSourceHealth(&src)
-			
+
 			Mu.Lock()
 			for i := range MemorySources {
 				if MemorySources[i].ID == src.ID {
@@ -1741,7 +1838,7 @@ func HandleHomeAPI(c *gin.Context) {
 			var config models.TVConfig
 			if err := json.Unmarshal(data, &config); err == nil {
 				for _, site := range config.Sites {
-					if site.Type == 0 || site.Type == 1 || site.Type == 3 {
+					if models.EqInt(site.Type, 0) || models.EqInt(site.Type, 1) || models.EqInt(site.Type, 3) {
 						categories = append(categories, Category{
 							TypeID:   site.Key,
 							TypeName: site.Name,
@@ -1847,14 +1944,14 @@ func SaveGlobalConfig(c *gin.Context) {
 
 	Mu.Lock()
 	MemoryGlobalConfig = config
-	
+
 	// 同步更新其他配置
 	MemoryFilterWords = config.FilterWords
 	MemorySchedule.Enabled = config.ScheduleEnabled
 	MemorySchedule.Mode = config.AggMode
 	MemorySchedule.MaxSites = config.MaxSites
 	MemoryHomeMenuSource = config.HomeMenuSource
-	
+
 	saveGlobalConfigToFile()
 	saveFilterWordsToFile()
 	saveScheduleToFile()
@@ -1891,15 +1988,15 @@ func LocalizeSourceHandler(c *gin.Context) {
 // BatchLocalizeHandler Handler: 批量本地化
 func BatchLocalizeHandler(c *gin.Context) {
 	Mu.Lock()
-	var greenUnlocalized []int
+	var greenSources []int
 	for _, s := range MemorySources {
-		if s.Enabled && s.HealthStatus == "healthy" && !s.Localized {
-			greenUnlocalized = append(greenUnlocalized, s.ID)
+		if s.Enabled && s.HealthStatus == "healthy" {
+			greenSources = append(greenSources, s.ID)
 		}
 	}
 	Mu.Unlock()
 
-	if len(greenUnlocalized) == 0 {
+	if len(greenSources) == 0 {
 		c.JSON(200, gin.H{"message": "没有需要本地化的绿色源"})
 		return
 	}
@@ -1907,7 +2004,7 @@ func BatchLocalizeHandler(c *gin.Context) {
 	successCount := 0
 	failCount := 0
 
-	for _, id := range greenUnlocalized {
+	for _, id := range greenSources {
 		err := LocalizeSource(id)
 		if err != nil {
 			failCount++
@@ -1917,9 +2014,9 @@ func BatchLocalizeHandler(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"message":      fmt.Sprintf("批量本地化完成：成功 %d 个，失败 %d 个", successCount, failCount),
-		"success":      successCount,
-		"failed":        failCount,
+		"message": fmt.Sprintf("批量本地化完成：成功 %d 个，失败 %d 个", successCount, failCount),
+		"success": successCount,
+		"failed":  failCount,
 	})
 }
 
@@ -1946,10 +2043,10 @@ func ExportSources(c *gin.Context) {
 	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
 	c.Header("Content-Type", "application/json")
 	c.JSON(200, gin.H{
-		"version":   "1.0",
-		"exported":  time.Now().Format(time.RFC3339),
-		"count":     len(exportList),
-		"sources":   exportList,
+		"version":  "1.0",
+		"exported": time.Now().Format(time.RFC3339),
+		"count":    len(exportList),
+		"sources":  exportList,
 	})
 }
 
@@ -1987,13 +2084,14 @@ func ImportSources(c *gin.Context) {
 
 	urlMap := make(map[string]bool)
 	for _, s := range MemorySources {
-		urlMap[s.URL] = true
+		urlMap[strings.TrimSpace(s.URL)] = true
 	}
 
 	added := 0
 	skipped := 0
 	for _, is := range data.Sources {
-		if urlMap[is.URL] {
+		cleanURL := strings.TrimSpace(is.URL)
+		if urlMap[cleanURL] {
 			skipped++
 			continue
 		}
@@ -2002,7 +2100,7 @@ func ImportSources(c *gin.Context) {
 		newSource := models.SourceItem{
 			ID:           maxID,
 			Name:         is.Name,
-			URL:          is.URL,
+			URL:          cleanURL,
 			Enabled:      is.Enabled,
 			LastStatus:   "pending",
 			LastError:    "",

@@ -45,9 +45,9 @@ func CheckSourceHealth(src *models.SourceItem) *HealthCheckResult {
 
 	result.SiteTotal = len(config.Sites)
 	for _, site := range config.Sites {
-		if site.Type == 3 {
+		if models.EqInt(site.Type, 3) {
 			result.SiteCrawler++
-		} else if site.Type == 0 || site.Type == 1 {
+		} else if models.EqInt(site.Type, 0) || models.EqInt(site.Type, 1) {
 			result.SiteCollector++
 		}
 	}
@@ -62,7 +62,7 @@ func CheckSourceHealth(src *models.SourceItem) *HealthCheckResult {
 	}
 
 	for _, site := range config.Sites {
-		if site.Type == 3 && site.Jar != "" {
+		if models.EqInt(site.Type, 3) && site.Jar != "" {
 			jarURL := resolveJarURL(src.URL, site.Jar)
 			if jarURL != "" {
 				jarURLs[jarURL] = true
@@ -96,25 +96,25 @@ func CheckSourceHealth(src *models.SourceItem) *HealthCheckResult {
 
 	result.HealthScore = 100
 
-	if config.Spider != "" && result.JarFailed > 0 {
+	if config.Spider != "" {
 		spiderJarURL := resolveJarURL(src.URL, config.Spider)
 		if spiderJarURL != "" {
 			spiderJarName := extractJarName(config.Spider)
 			localPath := filepath.Join(getJarCacheDir(src.ID), spiderJarName)
 			if _, err := os.Stat(localPath); os.IsNotExist(err) {
-				result.HealthScore -= 40
-			} else {
-				result.HealthScore -= 10
+				result.HealthScore -= 25
 			}
 		}
 	}
 
 	if result.JarTotal > 0 && result.JarFailed > 0 {
 		failRate := float64(result.JarFailed) / float64(result.JarTotal)
-		if failRate > 0.5 {
-			result.HealthScore -= 20
-		} else {
-			result.HealthScore -= 10
+		if failRate >= 0.7 {
+			result.HealthScore -= 50
+		} else if failRate >= 0.4 {
+			result.HealthScore -= 30
+		} else if failRate >= 0.2 {
+			result.HealthScore -= 15
 		}
 	}
 
@@ -139,38 +139,31 @@ func downloadJarWithMD5(jarURL, localPath string, sourceID int) (success bool, c
 
 			remoteMD5, err := getRemoteJarMD5(jarURL)
 			if err == nil && remoteMD5 != "" && remoteMD5 == localMD5 {
-				log.Printf("jar MD5匹配，跳过下载: %s", localPath)
 				return true, true
 			}
 			if err != nil || remoteMD5 == "" {
-				log.Printf("jar已存在，跳过下载: %s", localPath)
 				return true, true
 			}
 		} else {
-			log.Printf("jar已存在，跳过下载: %s", localPath)
 			return true, true
 		}
 	}
 
 	dir := filepath.Dir(localPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
-		log.Printf("创建目录失败: %v", err)
 		if _, err := os.Stat(localPath); err == nil {
-			log.Printf("使用现有缓存: %s", localPath)
 			return true, true
 		}
 		return false, false
 	}
 
-	client := &http.Client{Timeout: 60 * time.Second}
+	client := &http.Client{Timeout: 5 * time.Second}
 	req, _ := http.NewRequest("GET", jarURL, nil)
 	req.Header.Set("User-Agent", "okhttp/3.15.0")
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("下载失败: %v", err)
 		if _, err := os.Stat(localPath); err == nil {
-			log.Printf("使用现有缓存: %s", localPath)
 			return true, true
 		}
 		return false, false
@@ -178,9 +171,7 @@ func downloadJarWithMD5(jarURL, localPath string, sourceID int) (success bool, c
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		log.Printf("HTTP错误: %d", resp.StatusCode)
 		if _, err := os.Stat(localPath); err == nil {
-			log.Printf("使用现有缓存: %s", localPath)
 			return true, true
 		}
 		return false, false
@@ -188,31 +179,10 @@ func downloadJarWithMD5(jarURL, localPath string, sourceID int) (success bool, c
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("读取响应失败: %v", err)
 		if _, err := os.Stat(localPath); err == nil {
-			log.Printf("使用现有缓存: %s", localPath)
 			return true, true
 		}
 		return false, false
-	}
-
-	oldBakPath := localPath + ".bak"
-	os.Remove(oldBakPath)
-	oldMD5BakPath := localPath + ".md5.bak"
-	os.Remove(oldMD5BakPath)
-
-	if _, err := os.Stat(localPath); err == nil {
-		bakPath := localPath + ".bak"
-		if err := os.Rename(localPath, bakPath); err != nil {
-			log.Printf("备份旧jar失败: %v", err)
-		} else {
-			log.Printf("已备份旧jar: %s", bakPath)
-		}
-
-		oldMD5Path := localPath + ".md5"
-		if _, err := os.Stat(oldMD5Path); err == nil {
-			os.Rename(oldMD5Path, oldMD5Path+".bak")
-		}
 	}
 
 	if err := os.WriteFile(localPath, body, 0644); err != nil {
@@ -254,7 +224,7 @@ func getRemoteJarMD5(jarURL string) (string, error) {
 		}
 	}
 
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{Timeout: 3 * time.Second}
 	req, _ := http.NewRequest("HEAD", jarURL, nil)
 	req.Header.Set("User-Agent", "okhttp/3.15.0")
 
@@ -303,65 +273,42 @@ func UpdateSourceHealth(src *models.SourceItem, result *HealthCheckResult) {
 	src.JarCached = result.JarCached
 	src.LastCheckTime = time.Now().Format(time.RFC3339)
 
-	// 优先本地化模式下：本地化源只更新健康状态，但永远保持启用
-	if MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success" {
+	log.Printf("源 %s 健康状态更新: %s(%d分)", src.Name, result.HealthStatus, result.HealthScore)
+
+	// ========== 第一步：自动禁用逻辑 ==========
+	isLocalizedSuccess := src.Localized && src.LocalStatus == "success"
+
+	if result.HealthStatus == "unhealthy" && MemoryGlobalConfig.AutoDisableUnhealthy {
+		if src.Enabled {
+			src.Enabled = false
+			log.Printf("源 %s [🔴不健康] 已自动禁用", src.Name)
+		}
+	}
+	if result.HealthStatus == "warning" && MemoryGlobalConfig.AutoDisableWarning {
+		if src.Enabled {
+			src.Enabled = false
+			log.Printf("源 %s [🟡警告] 已自动禁用", src.Name)
+		}
+	}
+	if result.HealthStatus == "failed" && MemoryGlobalConfig.AutoDisableFailed {
+		if src.Enabled {
+			src.Enabled = false
+			log.Printf("源 %s [⚫失效] 已自动禁用", src.Name)
+		}
+	}
+
+	// ========== 第二步：自动启用逻辑 ==========
+	if result.HealthStatus == "healthy" && MemoryGlobalConfig.AutoEnableHealthy {
 		if !src.Enabled {
 			src.Enabled = true
-			log.Printf("本地化源 %s 已自动启用 (健康状态:%s)", src.Name, result.HealthStatus)
+			log.Printf("源 %s [✅健康源] 已自动启用", src.Name)
 		}
-		log.Printf("本地化源 %s 健康状态更新: %s(%d分)", src.Name, result.HealthStatus, result.HealthScore)
-		return
 	}
-
-	// 健康的源不应该被自动禁用，直接返回
-	if result.HealthStatus == "healthy" {
-		// healthy的源系统不会自动禁用 → 不做自动启用
-		// （尊重用户手动禁用的选择）
-		return
-	}
-
-	// 健康恢复：只有之前符合自动禁用条件的源才自动恢复
-	// 这样不会干扰用户手动禁用的源
-	if !src.Enabled {
-		shouldDisableNow := false
-		if result.HealthStatus == "unhealthy" && MemoryGlobalConfig.AutoDisableUnhealthy {
-			shouldDisableNow = true
-		}
-		if result.HealthStatus == "warning" && MemoryGlobalConfig.AutoDisableWarning {
-			shouldDisableNow = true
-		}
-		if result.HealthStatus == "failed" && MemoryGlobalConfig.AutoDisableFailed {
-			shouldDisableNow = true
-		}
-		if !shouldDisableNow {
-			// ✅ 关键逻辑：
-			// 这个状态本来【应该被自动禁用】，现在不需要了
-			// → 说明是之前被系统自动禁用的，现在健康恢复了，自动启用
+	if isLocalizedSuccess && MemoryGlobalConfig.AutoEnableLocalized {
+		if !src.Enabled {
 			src.Enabled = true
-			log.Printf("源 %s 健康恢复为%s(%d分)，已自动重新启用", src.Name, result.HealthStatus, result.HealthScore)
-			return
+			log.Printf("源 %s [💾本地化源] 已自动启用", src.Name)
 		}
-	}
-
-	// 根据全局配置决定是否自动禁用
-	shouldDisable := false
-	// 优先本地化模式下，本地化源不自动禁用
-	localizedProtected := MemoryGlobalConfig.MultiPreferLocal && src.Localized && src.LocalStatus == "success"
-	if !localizedProtected {
-		if result.HealthStatus == "unhealthy" && MemoryGlobalConfig.AutoDisableUnhealthy {
-			shouldDisable = true
-		}
-		if result.HealthStatus == "warning" && MemoryGlobalConfig.AutoDisableWarning {
-			shouldDisable = true
-		}
-		if result.HealthStatus == "failed" && MemoryGlobalConfig.AutoDisableFailed {
-			shouldDisable = true
-		}
-	}
-
-	if shouldDisable && src.Enabled {
-		src.Enabled = false
-		log.Printf("源 %s 健康状态为%s(%d分)，已自动禁用", src.Name, result.HealthStatus, result.HealthScore)
 	}
 }
 
@@ -392,11 +339,11 @@ func ShouldIncludeSource(src *models.SourceItem, config *models.TVConfig) bool {
 }
 
 func ShouldIncludeSite(site *models.Site, src *models.SourceItem, config *models.TVConfig) bool {
-	if site.Type == 0 || site.Type == 1 {
+	if models.EqInt(site.Type, 0) || models.EqInt(site.Type, 1) {
 		return true
 	}
 
-	if site.Type == 3 {
+	if models.EqInt(site.Type, 3) {
 		jarPath := site.Jar
 		if jarPath == "" && config.Spider != "" {
 			jarPath = config.Spider

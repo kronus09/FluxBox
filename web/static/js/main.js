@@ -39,9 +39,22 @@ async function addSource() {
 }
 
 async function delSource(id) {
-    if (!confirm('确定删除?')) return;
-    await fetch(`/api/delete/${id}`, { method: 'DELETE' });
-    refresh();
+    layer.confirm('确定要删除这个源吗？', {
+        btn: ['仅删除本地化', '删除整个源', '取消'],
+        title: '删除确认'
+    }, async function(index) {
+        layer.close(index);
+        await fetch(`/api/delete-localization/${id}`, { method: 'DELETE' });
+        refresh();
+        layer.msg('本地化文件已清除', { icon: 1, time: 2000 });
+    }, async function(index) {
+        layer.close(index);
+        await fetch(`/api/delete/${id}`, { method: 'DELETE' });
+        refresh();
+        layer.msg('删除成功', { icon: 1, time: 2000 });
+    }, function(index) {
+        layer.close(index);
+    });
 }
 
 async function aggregate() {

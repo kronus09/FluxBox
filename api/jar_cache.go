@@ -45,9 +45,11 @@ func extractJarName(jarURL string) string {
 }
 
 func resolveJarURL(sourceURL, jarPath string) string {
+	jarPath = strings.Split(jarPath, ";")[0]
+	jarPath = strings.Split(jarPath, "?")[0]
+
 	if strings.HasPrefix(jarPath, "http://") || strings.HasPrefix(jarPath, "https://") {
-		jarURL := strings.Split(jarPath, ";")[0]
-		return jarURL
+		return jarPath
 	}
 
 	u, err := url.Parse(sourceURL)

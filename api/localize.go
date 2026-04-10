@@ -62,6 +62,17 @@ func LocalizeSource(sourceID int) error {
 		return fmt.Errorf("需绿色源才能本地化")
 	}
 
+	log.Printf("开始本地化: [%d] %s", sourceID, source.Name)
+
+	// 先清理旧的本地化文件，保证每次都是干干净净重新开始
+	DeleteLocalSource(sourceID)
+
+	// 强制重置状态，不管之前是pending还是failed，都可以重新开始
+	source.Localized = false
+	source.LocalStatus = ""
+	source.LocalError = ""
+	saveSourcesToFile()
+
 	source.Localized = true
 	source.LocalStatus = "pending"
 	source.LocalError = ""
@@ -73,6 +84,7 @@ func LocalizeSource(sourceID int) error {
 		source.LocalStatus = "failed"
 		source.LocalError = fmt.Sprintf("获取配置失败: %v", err)
 		saveSourcesToFile()
+		log.Printf("本地化失败: [%d] %s, 获取配置失败: %v", sourceID, source.Name, err)
 		return err
 	}
 
@@ -107,50 +119,55 @@ func LocalizeSource(sourceID int) error {
 	}
 
 	for i := range config.Sites {
+		if config.Sites[i].Jar == "" && config.Spider != "" {
+			config.Sites[i].Jar = config.Spider
+		}
+	}
+
+	type jsAsset struct {
+		siteIndex int
+		url       string
+		localPath string
+		isApi     bool
+		assetType string
+		extMap    map[string]interface{}
+	}
+
+	var jsAssets []jsAsset
+	jsCount := 0
+
+	for i := range config.Sites {
 		site := &config.Sites[i]
 
 		if site.Jar != "" {
 			jarURL := resolveAssetURL(source.URL, site.Jar)
 			if jarURL != "" {
-				localPath := filepath.Join(assetDir, "jars", extractAssetName(jarURL))
-				if err := downloadAsset(jarURL, localPath); err != nil {
-					if containsFilterWord(site.Name) || containsFilterWord(jarURL) {
-						filteredSkipped = append(filteredSkipped, fmt.Sprintf("site %s jar(过滤词)", site.Name))
-					} else {
-						realFailed++
-						warnings = append(warnings, fmt.Sprintf("site %s jar: %v", site.Name, err))
-					}
-				} else {
-					downloaded++
-					site.Jar = fmt.Sprintf("__HOST__/asset/%d/jars/%s", sourceID, extractAssetName(jarURL))
-				}
+				site.Jar = jarURL
 			}
 		}
 
-		if site.Type == 3 && isJSURL(site.Api) {
+		if models.EqInt(site.Type, 3) && isJSURL(site.Api) {
 			jsURL := resolveAssetURL(source.URL, site.Api)
 			if jsURL != "" {
-				localPath := filepath.Join(assetDir, "js", extractAssetName(jsURL))
-				if err := downloadAsset(jsURL, localPath); err != nil {
-					if containsFilterWord(site.Name) || containsFilterWord(jsURL) {
-						filteredSkipped = append(filteredSkipped, fmt.Sprintf("site %s api js(过滤词)", site.Name))
-					} else {
-						realFailed++
-						warnings = append(warnings, fmt.Sprintf("site %s api js: %v", site.Name, err))
-					}
-				} else {
-					downloaded++
-					site.Api = fmt.Sprintf("__HOST__/asset/%d/js/%s", sourceID, extractAssetName(jsURL))
-				}
+				jsCount++
+				jsAssets = append(jsAssets, jsAsset{
+					siteIndex: i,
+					url:       jsURL,
+					localPath: filepath.Join(assetDir, "js", extractAssetName(jsURL)),
+					isApi:     true,
+					assetType: "js",
+				})
 			}
 		}
 
 		if site.Ext != nil {
 			extStr := ""
+			var extMap map[string]interface{}
 			switch v := site.Ext.(type) {
 			case string:
 				extStr = v
 			case map[string]interface{}:
+				extMap = v
 				if urlVal, ok := v["url"].(string); ok {
 					extStr = urlVal
 				}
@@ -163,24 +180,78 @@ func LocalizeSource(sourceID int) error {
 					if isJSONURL(extStr) {
 						assetType = "json"
 					}
-					localPath := filepath.Join(assetDir, assetType, extractAssetName(extURL))
-					if err := downloadAsset(extURL, localPath); err != nil {
-						if containsFilterWord(site.Name) || containsFilterWord(extURL) {
-							filteredSkipped = append(filteredSkipped, fmt.Sprintf("site %s ext(过滤词)", site.Name))
-						} else {
-							realFailed++
-							warnings = append(warnings, fmt.Sprintf("site %s ext: %v", site.Name, err))
-						}
+					jsCount++
+					jsAssets = append(jsAssets, jsAsset{
+						siteIndex: i,
+						url:       extURL,
+						localPath: filepath.Join(assetDir, assetType, extractAssetName(extURL)),
+						isApi:     false,
+						assetType: assetType,
+						extMap:    extMap,
+					})
+				}
+			}
+		}
+	}
+
+	if jsCount > 10 {
+		log.Printf("检测到JS/JSON资源 %d 个 (>10)，跳过下载仅补全URL", jsCount)
+		for _, asset := range jsAssets {
+			site := &config.Sites[asset.siteIndex]
+			if asset.isApi {
+				site.Api = asset.url
+			} else {
+				if asset.extMap != nil {
+					asset.extMap["url"] = asset.url
+					site.Ext = asset.extMap
+				} else {
+					site.Ext = asset.url
+				}
+			}
+		}
+	} else {
+		for _, asset := range jsAssets {
+			site := &config.Sites[asset.siteIndex]
+			siteName := site.Name
+			if containsFilterWord(siteName) || containsFilterWord(asset.url) {
+				filteredSkipped = append(filteredSkipped, fmt.Sprintf("site %s %s(过滤词)", siteName, asset.assetType))
+				if asset.isApi {
+					site.Api = asset.url
+				} else {
+					if asset.extMap != nil {
+						asset.extMap["url"] = asset.url
+						site.Ext = asset.extMap
 					} else {
-						downloaded++
-						newURL := fmt.Sprintf("__HOST__/asset/%d/%s/%s", sourceID, assetType, extractAssetName(extURL))
-						switch v := site.Ext.(type) {
-						case string:
-							site.Ext = newURL
-						case map[string]interface{}:
-							v["url"] = newURL
-							site.Ext = v
-						}
+						site.Ext = asset.url
+					}
+				}
+				continue
+			}
+
+			if err := downloadAsset(asset.url, asset.localPath); err != nil {
+				realFailed++
+				warnings = append(warnings, fmt.Sprintf("site %s %s: %v", siteName, asset.assetType, err))
+				if asset.isApi {
+					site.Api = asset.url
+				} else {
+					if asset.extMap != nil {
+						asset.extMap["url"] = asset.url
+						site.Ext = asset.extMap
+					} else {
+						site.Ext = asset.url
+					}
+				}
+			} else {
+				downloaded++
+				newURL := fmt.Sprintf("__HOST__/asset/%d/%s/%s", sourceID, asset.assetType, filepath.Base(asset.localPath))
+				if asset.isApi {
+					site.Api = newURL
+				} else {
+					if asset.extMap != nil {
+						asset.extMap["url"] = newURL
+						site.Ext = asset.extMap
+					} else {
+						site.Ext = newURL
 					}
 				}
 			}
@@ -216,7 +287,7 @@ func LocalizeSource(sourceID int) error {
 	source.Localized = true
 	source.LocalStatus = "success"
 	source.LocalTime = time.Now().Format("2006-01-02")
-	
+
 	if len(warnings) > 0 || len(filteredSkipped) > 0 {
 		var notes []string
 		if len(warnings) > 0 {
@@ -231,7 +302,7 @@ func LocalizeSource(sourceID int) error {
 	}
 	saveSourcesToFile()
 
-	log.Printf("本地化成功: sourceID=%d, downloaded=%d, realFailed=%d, filteredSkipped=%d", sourceID, downloaded, realFailed, len(filteredSkipped))
+	log.Printf("本地化完成: [%d] %s, 成功下载=%d, 失败=%d, 过滤跳过=%d", sourceID, source.Name, downloaded, realFailed, len(filteredSkipped))
 	return nil
 }
 
@@ -259,8 +330,11 @@ func DeleteLocalSource(sourceID int) error {
 }
 
 func resolveAssetURL(sourceURL, assetPath string) string {
+	assetPath = strings.Split(assetPath, ";")[0]
+	assetPath = strings.Split(assetPath, "?")[0]
+
 	if strings.HasPrefix(assetPath, "http://") || strings.HasPrefix(assetPath, "https://") {
-		return strings.Split(assetPath, ";")[0]
+		return assetPath
 	}
 
 	u, err := url.Parse(sourceURL)
@@ -299,7 +373,8 @@ func isJSONURL(url string) bool {
 }
 
 func downloadAsset(url string, localPath string) error {
-	client := &http.Client{Timeout: 30 * time.Second}
+	log.Printf("  下载资源: %s", filepath.Base(localPath))
+	client := &http.Client{Timeout: 8 * time.Second}
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", "okhttp/3.15.0")
 

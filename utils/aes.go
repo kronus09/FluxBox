@@ -31,12 +31,11 @@ func DecryptCBC(dataHex, keyStr, ivStr string) (string, error) {
 
 	// PKCS7UnPadding
 	length := len(decrypted)
-	if length == 0 {
-		return "", nil
-	}
-	unpadding := int(decrypted[length-1])
-	if unpadding > 0 && unpadding <= 16 {
-		decrypted = decrypted[:(length - unpadding)]
+	if length > 0 {
+		unpadding := int(decrypted[length-1])
+		if unpadding > 0 && unpadding <= 16 && unpadding <= length {
+			decrypted = decrypted[:(length - unpadding)]
+		}
 	}
 
 	return strings.TrimSpace(string(decrypted)), nil
@@ -44,10 +43,21 @@ func DecryptCBC(dataHex, keyStr, ivStr string) (string, error) {
 
 // DecryptECB 同步逻辑
 func DecryptECB(dataHex, keyStr string) (string, error) {
-	data, _ := hex.DecodeString(strings.TrimSpace(dataHex))
+	data, err := hex.DecodeString(strings.TrimSpace(dataHex))
+	if err != nil {
+		return "", err
+	}
+
+	if len(data)%16 != 0 {
+		data = data[:len(data)-len(data)%16]
+	}
+
 	key := make([]byte, 16)
 	copy(key, []byte(strings.TrimSpace(keyStr)))
-	block, _ := aes.NewCipher(key)
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
 	decrypted := make([]byte, len(data))
 	size := block.BlockSize()
 	for bs, be := 0, size; bs < len(data); bs, be = bs+size, be+size {
@@ -55,9 +65,11 @@ func DecryptECB(dataHex, keyStr string) (string, error) {
 	}
 	// 去填充
 	length := len(decrypted)
-	unpadding := int(decrypted[length-1])
-	if unpadding > 0 && unpadding <= 16 {
-		decrypted = decrypted[:(length - unpadding)]
+	if length > 0 {
+		unpadding := int(decrypted[length-1])
+		if unpadding > 0 && unpadding <= 16 && unpadding <= length {
+			decrypted = decrypted[:(length - unpadding)]
+		}
 	}
 	return strings.TrimSpace(string(decrypted)), nil
 }
