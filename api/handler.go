@@ -1579,7 +1579,7 @@ func GenerateMultiConfig(c *gin.Context) {
 			name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 			videoList = append(videoList, models.VideoSource{
 				Name: name,
-				URL:  fmt.Sprintf("/source/%d", vs.source.ID),
+				URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
 			})
 			continue
 		}
@@ -1602,7 +1602,7 @@ func GenerateMultiConfig(c *gin.Context) {
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
-			URL:  fmt.Sprintf("/source/%d", vs.source.ID),
+			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
 		})
 	}
 
@@ -1721,7 +1721,7 @@ func GenerateMultiConfigInternal() {
 		}
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
-			URL:  fmt.Sprintf("/source/%d", vs.source.ID),
+			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
 		})
 	}
 
