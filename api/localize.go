@@ -113,7 +113,7 @@ func LocalizeSource(sourceID int) error {
 				}
 			} else {
 				downloaded++
-				config.Spider = fmt.Sprintf("/asset/%d/jars/%s", sourceID, extractAssetName(jarURL))
+				config.Spider = fmt.Sprintf("__HOST__/asset/%d/jars/%s", sourceID, extractAssetName(jarURL))
 			}
 		}
 	}
@@ -243,7 +243,7 @@ func LocalizeSource(sourceID int) error {
 				}
 			} else {
 				downloaded++
-				newURL := fmt.Sprintf("/asset/%d/%s/%s", sourceID, asset.assetType, filepath.Base(asset.localPath))
+				newURL := fmt.Sprintf("__HOST__/asset/%d/%s/%s", sourceID, asset.assetType, filepath.Base(asset.localPath))
 				if asset.isApi {
 					site.Api = newURL
 				} else {

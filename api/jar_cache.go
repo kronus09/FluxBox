@@ -25,7 +25,7 @@ func getJarCacheDir(sourceID int) string {
 
 func getJarServiceURL(sourceID int, jarName string) string {
 	encodedName := url.PathEscape(jarName)
-	return fmt.Sprintf("/jar/%d/%s", sourceID, encodedName)
+	return fmt.Sprintf("__HOST__/jar/%d/%s", sourceID, encodedName)
 }
 
 func extractJarName(jarURL string) string {
