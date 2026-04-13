@@ -25,7 +25,7 @@ func getJarCacheDir(sourceID int) string {
 
 func getJarServiceURL(sourceID int, jarName string) string {
 	encodedName := url.PathEscape(jarName)
-	return fmt.Sprintf("__HOST__/jar/%d/%s", sourceID, encodedName)
+	return fmt.Sprintf("/jar/%d/%s", sourceID, encodedName)
 }
 
 func extractJarName(jarURL string) string {
@@ -109,7 +109,7 @@ func downloadJar(jarURL, localPath string) error {
 		return err
 	}
 
-	client := &http.Client{Timeout: 60 * time.Second}
+	client := GetHTTPClient(60 * time.Second)
 	req, _ := http.NewRequest("GET", jarURL, nil)
 	req.Header.Set("User-Agent", "okhttp/3.15.0")
 
@@ -151,7 +151,7 @@ func CacheSourceJars(sourceID int, sourceURL string, config *models.TVConfig) (i
 	skipped := 0
 
 	if config.Spider != "" {
-		if strings.HasPrefix(config.Spider, "__HOST__/asset/") {
+		if strings.Contains(config.Spider, "/asset/") {
 			replaced++
 		} else {
 			jarURL := resolveJarURL(sourceURL, config.Spider)
@@ -171,7 +171,7 @@ func CacheSourceJars(sourceID int, sourceURL string, config *models.TVConfig) (i
 
 	for i := range config.Sites {
 		if config.Sites[i].Jar != "" {
-			if strings.HasPrefix(config.Sites[i].Jar, "__HOST__/asset/") {
+			if strings.Contains(config.Sites[i].Jar, "/asset/") {
 				replaced++
 			} else {
 				jarURL := resolveJarURL(sourceURL, config.Sites[i].Jar)

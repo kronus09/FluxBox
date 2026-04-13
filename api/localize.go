@@ -113,7 +113,7 @@ func LocalizeSource(sourceID int) error {
 				}
 			} else {
 				downloaded++
-				config.Spider = fmt.Sprintf("__HOST__/asset/%d/jars/%s", sourceID, extractAssetName(jarURL))
+				config.Spider = fmt.Sprintf("/asset/%d/jars/%s", sourceID, extractAssetName(jarURL))
 			}
 		}
 	}
@@ -243,7 +243,7 @@ func LocalizeSource(sourceID int) error {
 				}
 			} else {
 				downloaded++
-				newURL := fmt.Sprintf("__HOST__/asset/%d/%s/%s", sourceID, asset.assetType, filepath.Base(asset.localPath))
+				newURL := fmt.Sprintf("/asset/%d/%s/%s", sourceID, asset.assetType, filepath.Base(asset.localPath))
 				if asset.isApi {
 					site.Api = newURL
 				} else {
@@ -330,11 +330,21 @@ func DeleteLocalSource(sourceID int) error {
 }
 
 func resolveAssetURL(sourceURL, assetPath string) string {
-	assetPath = strings.Split(assetPath, ";")[0]
-	assetPath = strings.Split(assetPath, "?")[0]
-
 	if strings.HasPrefix(assetPath, "http://") || strings.HasPrefix(assetPath, "https://") {
 		return assetPath
+	}
+
+	basePath := assetPath
+	params := ""
+	if strings.Contains(assetPath, ";") {
+		parts := strings.SplitN(assetPath, ";", 2)
+		basePath = parts[0]
+		params = ";" + parts[1]
+	}
+	if strings.Contains(basePath, "?") {
+		parts := strings.SplitN(basePath, "?", 2)
+		basePath = parts[0]
+		params = "?" + parts[1] + params
 	}
 
 	u, err := url.Parse(sourceURL)
@@ -343,10 +353,11 @@ func resolveAssetURL(sourceURL, assetPath string) string {
 	}
 
 	base := path.Dir(u.Path)
-	assetPath = strings.TrimPrefix(assetPath, "./")
+	basePath = strings.TrimPrefix(basePath, "./")
 
-	u.Path = path.Join(base, assetPath)
-	return u.String()
+	u.Path = path.Join(base, basePath)
+	u.RawQuery = ""
+	return u.String() + params
 }
 
 func extractAssetName(assetURL string) string {
@@ -374,7 +385,7 @@ func isJSONURL(url string) bool {
 
 func downloadAsset(url string, localPath string) error {
 	log.Printf("  下载资源: %s", filepath.Base(localPath))
-	client := &http.Client{Timeout: 8 * time.Second}
+	client := GetHTTPClient(8 * time.Second)
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", "okhttp/3.15.0")
 

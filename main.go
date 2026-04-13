@@ -38,6 +38,7 @@ func replaceHostInConfig(configJSON []byte, baseURL string) []byte {
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	api.InitData()
+	api.InitSecureHTTPClient()
 
 	r := gin.New()
 	r.Use(gin.Recovery())

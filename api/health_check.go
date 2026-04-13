@@ -31,6 +31,8 @@ type HealthCheckResult struct {
 }
 
 func CheckSourceHealth(src *models.SourceItem) *HealthCheckResult {
+	log.Printf("🔍 开始健康检查: [%s] %s", src.Name, src.URL)
+
 	result := &HealthCheckResult{
 		SourceID: src.ID,
 	}

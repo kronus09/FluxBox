@@ -153,6 +153,10 @@ func InitData() {
 			HealthScheduleFreq:    "daily",
 			HealthScheduleTime:    "04:00",
 			HealthScheduleDays:    []int{1, 2, 3, 4, 5},
+			AutoHealthCheckOnAdd:  true,
+			AutoLocalizeOnAdd:     false,
+			NetworkEnableDoH:      false,
+			NetworkDoHProvider:    "aliyun",
 		}
 		MemoryFilterWords = MemoryGlobalConfig.FilterWords
 		saveGlobalConfigToFile()
@@ -394,14 +398,12 @@ func shouldFilterSite(name string) bool {
 func fetchAndParse(url string) (*models.TVConfig, int, error) {
 	url = strings.TrimSpace(url)
 	start := time.Now()
-	client := &http.Client{
-		Timeout: 15 * time.Second,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			if len(via) >= 5 {
-				return http.ErrUseLastResponse
-			}
-			return nil
-		},
+	client := GetHTTPClient(15 * time.Second)
+	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if len(via) >= 5 {
+			return http.ErrUseLastResponse
+		}
+		return nil
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -411,12 +413,7 @@ func fetchAndParse(url string) (*models.TVConfig, int, error) {
 	req.Header.Set("Accept-Encoding", "gzip")
 
 	// 第一轮：禁止重定向，检查302的body是否为加密数据
-	clientNoRedirect := &http.Client{
-		Timeout: 15 * time.Second,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
+	clientNoRedirect := GetHTTPClientNoRedirect(15 * time.Second)
 	resp, err := clientNoRedirect.Do(req)
 	if err != nil {
 		return nil, 0, err
@@ -624,7 +621,7 @@ func testSiteSpeed(apiUrl string) int {
 		return 99999
 	}
 	start := time.Now()
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := GetHTTPClient(5 * time.Second)
 	req, _ := http.NewRequest("GET", apiUrl, nil)
 	req.Header.Set("User-Agent", "okhttp/3.15.0")
 
@@ -1313,7 +1310,6 @@ func CheckAllHealth(c *gin.Context) {
 	}
 
 	results := make([]HealthResult, 0)
-	var wg sync.WaitGroup
 	var resultsMu sync.Mutex
 
 	idsToCheck := req.IDs
@@ -1324,6 +1320,8 @@ func CheckAllHealth(c *gin.Context) {
 		}
 		Mu.Unlock()
 	}
+
+	sem := make(chan struct{}, 5)
 
 	for _, id := range idsToCheck {
 		Mu.Lock()
@@ -1340,9 +1338,9 @@ func CheckAllHealth(c *gin.Context) {
 			continue
 		}
 
-		wg.Add(1)
+		sem <- struct{}{}
 		go func(source *models.SourceItem) {
-			defer wg.Done()
+			defer func() { <-sem }()
 
 			result := CheckSourceHealth(source)
 
@@ -1371,7 +1369,9 @@ func CheckAllHealth(c *gin.Context) {
 			resultsMu.Unlock()
 		}(src)
 	}
-	wg.Wait()
+	for i := 0; i < cap(sem); i++ {
+		sem <- struct{}{}
+	}
 
 	Mu.Lock()
 	saveSourcesToFile()
@@ -1579,7 +1579,7 @@ func GenerateMultiConfig(c *gin.Context) {
 			name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 			videoList = append(videoList, models.VideoSource{
 				Name: name,
-				URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
+				URL:  fmt.Sprintf("/source/%d", vs.source.ID),
 			})
 			continue
 		}
@@ -1602,7 +1602,7 @@ func GenerateMultiConfig(c *gin.Context) {
 		name := fmt.Sprintf("🚀 %s (%s)", vs.source.Name, speedStr)
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
-			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
+			URL:  fmt.Sprintf("/source/%d", vs.source.ID),
 		})
 	}
 
@@ -1721,7 +1721,7 @@ func GenerateMultiConfigInternal() {
 		}
 		videoList = append(videoList, models.VideoSource{
 			Name: name,
-			URL:  fmt.Sprintf("__HOST__/source/%d", vs.source.ID),
+			URL:  fmt.Sprintf("/source/%d", vs.source.ID),
 		})
 	}
 
@@ -1738,18 +1738,17 @@ func GenerateMultiConfigInternal() {
 
 // CheckAllHealthInternal 内部调用的健康检查函数
 func CheckAllHealthInternal() {
-	var wg sync.WaitGroup
-
 	Mu.Lock()
 	sources := make([]models.SourceItem, len(MemorySources))
 	copy(sources, MemorySources)
 	Mu.Unlock()
 
+	sem := make(chan struct{}, 5)
+
 	for i := range sources {
-		wg.Add(1)
-		go func(idx int) {
-			defer wg.Done()
-			src := sources[idx]
+		sem <- struct{}{}
+		go func(src models.SourceItem) {
+			defer func() { <-sem }()
 
 			result := CheckSourceHealth(&src)
 
@@ -1761,9 +1760,11 @@ func CheckAllHealthInternal() {
 				}
 			}
 			Mu.Unlock()
-		}(i)
+		}(sources[i])
 	}
-	wg.Wait()
+	for i := 0; i < cap(sem); i++ {
+		sem <- struct{}{}
+	}
 
 	Mu.Lock()
 	saveSourcesToFile()

@@ -179,4 +179,13 @@ type GlobalConfig struct {
 	HealthScheduleFreq    string `json:"health_schedule_freq"`    // daily / weekly
 	HealthScheduleTime    string `json:"health_schedule_time"`    // HH:mm
 	HealthScheduleDays    []int  `json:"health_schedule_days"`    // 周几
+
+	// 自动处理
+	AutoHealthCheckOnAdd bool `json:"auto_health_check_on_add"` // 添加源时自动健康检查
+	AutoLocalizeOnAdd    bool `json:"auto_localize_on_add"`     // 添加源时自动本地化
+
+	// 网络设置
+	NetworkEnableDoH    bool   `json:"network_enable_doh"`     // 启用加密DNS防污染
+	NetworkDoHProvider  string `json:"network_doh_provider"`   // aliyun / tencent / 360 / custom
+	NetworkDoHCustomURL string `json:"network_doh_custom_url"` // 自定义DoH地址
 }
